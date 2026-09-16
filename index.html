@@ -150,23 +150,20 @@
 
   /* ---------- About ---------- */
   .about-grid{
-    display: grid;
-    grid-template-columns: 1fr 1.4fr;
-    gap: 50px;
+    display: block;
   }
   .about-grid .tag{
-    align-self: start;
-    font-size: 1.15rem;
-    font-weight: 500;
-    letter-spacing: 0.01em;
+    display: block;
+    font-size: 1.9rem;
+    font-weight: 600;
+    letter-spacing: 0;
+    font-family: 'Space Grotesk', sans-serif;
+    color: var(--text);
+    margin-bottom: 28px;
   }
   .about-grid p{ color: var(--muted); max-width: 62ch; }
   .about-grid p + p{ margin-top: 16px; }
   .about-grid strong{ color: var(--text); font-weight: 600; }
-
-  @media (max-width: 720px){
-    .about-grid{ grid-template-columns: 1fr; gap: 20px; }
-  }
 
   /* ---------- Projects (detection card motif) ---------- */
   .project-grid{
@@ -302,7 +299,6 @@
   <div class="wrap">
     <div class="section-head">
       <h2>Featured Projects</h2>
-      <span class="tag">work</span>
     </div>
 
     <div class="project-grid">
@@ -382,7 +378,6 @@
   <div class="wrap">
     <div class="section-head">
       <h2>Tech Stack</h2>
-      <span class="tag">tools</span>
     </div>
 
     <div class="stack-group">
