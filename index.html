@@ -7,7 +7,7 @@
 
     <meta
         name="description"
-        content="Shahar Eliyahu - Software Engineer portfolio featuring AI, Machine Learning, Computer Vision, Big Data, and software projects."
+        content="Shahar Eliyahu - Software Engineer portfolio featuring projects in Artificial Intelligence, Machine Learning, Computer Vision, Big Data, and software engineering."
     >
 
     <title>Shahar Eliyahu | Software Engineer</title>
@@ -16,28 +16,31 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
     <link
-        href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
         rel="stylesheet"
     >
 
     <link rel="stylesheet" href="style.css">
-
     <script src="script.js" defer></script>
 </head>
 
 <body>
 
 <nav class="navbar">
-    <div class="wrap nav-content">
+    <div class="container nav-inner">
 
-        <a class="nav-logo" href="#home">
+        <a class="logo" href="#home">
             Shahar Eliyahu
         </a>
+
+        <button class="menu-button" aria-label="Open navigation">
+            ☰
+        </button>
 
         <div class="nav-links">
             <a href="#about">About</a>
             <a href="#projects">Projects</a>
-            <a href="#stack">Tech Stack</a>
+            <a href="#skills">Skills</a>
             <a href="#contact">Contact</a>
         </div>
 
@@ -47,184 +50,84 @@
 
 <main>
 
-    <header id="home" class="hero">
+    <!-- HERO -->
 
-        <div class="wrap hero-grid">
+    <section id="home" class="hero">
 
-            <div class="hero-content reveal">
+        <div class="container hero-content reveal">
 
-                <div class="eyebrow">
-                    Software Engineering · Afeka Academic College
-                </div>
+            <p class="hero-label">
+                SOFTWARE ENGINEER
+            </p>
 
-                <h1>Shahar Eliyahu</h1>
+            <h1>
+                Shahar Eliyahu
+            </h1>
 
-                <div class="role">
-                    Software Engineer
-                </div>
+            <p class="hero-subtitle">
+                Interested in Artificial Intelligence, Machine Learning,
+                and building practical systems that solve real-world problems.
+            </p>
 
-                <p class="lede">
-                    Interested in Artificial Intelligence, Machine Learning,
-                    and intelligent systems, with a focus on practical projects
-                    and real-world problem solving.
-                </p>
+            <div class="hero-buttons">
 
-                <div class="hero-actions">
+                <a class="button primary" href="#projects">
+                    View Projects
+                </a>
 
-                    <a
-                        class="btn primary"
-                        href="https://github.com/shahar-eliyahu"
-                        target="_blank"
-                        rel="noopener"
-                    >
-                        GitHub
-                        <span>↗</span>
-                    </a>
+                <a
+                    class="button"
+                    href="https://github.com/shahar-eliyahu"
+                    target="_blank"
+                    rel="noopener"
+                >
+                    GitHub ↗
+                </a>
 
-                    <a
-                        class="btn"
-                        href="https://www.linkedin.com/in/shahar-eliyahu1"
-                        target="_blank"
-                        rel="noopener"
-                    >
-                        LinkedIn
-                        <span>↗</span>
-                    </a>
-
-                    <a
-                        class="btn"
-                        href="mailto:shahar25806@gmail.com"
-                    >
-                        Email
-                    </a>
-
-                </div>
-
-            </div>
-
-
-            <div class="hero-visual reveal">
-
-                <div class="system-card">
-
-                    <div class="system-header">
-
-                        <span>portfolio.system</span>
-
-                        <span class="system-status">
-                            <span class="status-dot"></span>
-                            active
-                        </span>
-
-                    </div>
-
-
-                    <div class="system-main">
-
-                        <div class="system-row">
-                            <span class="system-number">01</span>
-
-                            <div>
-                                <span class="system-label">
-                                    Artificial Intelligence
-                                </span>
-
-                                <span class="system-description">
-                                    Machine learning and intelligent systems
-                                </span>
-                            </div>
-                        </div>
-
-
-                        <div class="system-row">
-                            <span class="system-number">02</span>
-
-                            <div>
-                                <span class="system-label">
-                                    Computer Vision
-                                </span>
-
-                                <span class="system-description">
-                                    Detection, data pipelines and evaluation
-                                </span>
-                            </div>
-                        </div>
-
-
-                        <div class="system-row">
-                            <span class="system-number">03</span>
-
-                            <div>
-                                <span class="system-label">
-                                    Data & Streaming
-                                </span>
-
-                                <span class="system-description">
-                                    Real-time processing and analytics
-                                </span>
-                            </div>
-                        </div>
-
-
-                        <div class="system-row">
-                            <span class="system-number">04</span>
-
-                            <div>
-                                <span class="system-label">
-                                    Software Systems
-                                </span>
-
-                                <span class="system-description">
-                                    Practical end-to-end applications
-                                </span>
-                            </div>
-                        </div>
-
-                    </div>
-
-
-                    <div class="system-footer">
-                        <span>software_engineer</span>
-                        <span>2026</span>
-                    </div>
-
-                </div>
+                <a
+                    class="button"
+                    href="https://www.linkedin.com/in/shahar-eliyahu1"
+                    target="_blank"
+                    rel="noopener"
+                >
+                    LinkedIn ↗
+                </a>
 
             </div>
 
         </div>
 
-    </header>
+        <div class="hero-decoration hero-decoration-one"></div>
+        <div class="hero-decoration hero-decoration-two"></div>
+
+    </section>
 
 
-    <section id="about">
+    <!-- ABOUT -->
 
-        <div class="wrap">
+    <section id="about" class="section">
 
-            <div class="section-heading reveal">
+        <div class="container">
 
-                <span class="section-number">01</span>
+            <div class="section-title reveal">
+                <span>01</span>
 
                 <div>
-                    <p class="section-label">ABOUT</p>
+                    <p>ABOUT</p>
                     <h2>About Me</h2>
                 </div>
-
             </div>
 
 
-            <div class="about-layout">
+            <div class="about-grid">
 
-                <div class="about-text reveal">
+                <div class="about-main reveal">
 
                     <p>
-                        I studied
-                        <strong>Software Engineering</strong>
-                        at Afeka Academic College, where I developed a strong
-                        interest in
-                        <strong>Artificial Intelligence</strong>
-                        and
-                        <strong>Machine Learning</strong>.
+                        I studied <strong>Software Engineering</strong> at
+                        Afeka Academic College, where I developed a strong
+                        interest in <strong>Artificial Intelligence</strong>
+                        and <strong>Machine Learning</strong>.
                     </p>
 
                     <p>
@@ -234,38 +137,29 @@
 
                     <p>
                         I enjoy solving technical problems that combine
-                        software engineering, data, and practical
-                        implementation, with an emphasis on building systems
-                        that can work in real-world environments.
+                        software engineering, data, and practical implementation,
+                        with an emphasis on systems that can operate in
+                        real-world environments.
                     </p>
 
                 </div>
 
 
-                <div class="about-points reveal">
+                <div class="about-side reveal">
 
-                    <div class="about-point">
-                        <span>01</span>
-                        <div>
-                            <strong>Build</strong>
-                            <p>Practical software and intelligent systems.</p>
-                        </div>
+                    <div class="about-item">
+                        <span>Focus</span>
+                        <strong>AI & Machine Learning</strong>
                     </div>
 
-                    <div class="about-point">
-                        <span>02</span>
-                        <div>
-                            <strong>Experiment</strong>
-                            <p>Train, evaluate, compare, and improve models.</p>
-                        </div>
+                    <div class="about-item">
+                        <span>Interests</span>
+                        <strong>Computer Vision · Intelligent Systems</strong>
                     </div>
 
-                    <div class="about-point">
-                        <span>03</span>
-                        <div>
-                            <strong>Solve</strong>
-                            <p>Apply technology to real-world problems.</p>
-                        </div>
+                    <div class="about-item">
+                        <span>Approach</span>
+                        <strong>Practical Problem Solving</strong>
                     </div>
 
                 </div>
@@ -277,50 +171,55 @@
     </section>
 
 
-    <section id="projects">
+    <!-- PROJECTS -->
 
-        <div class="wrap">
+    <section id="projects" class="section projects-section">
 
-            <div class="section-heading reveal">
+        <div class="container">
 
-                <span class="section-number">02</span>
+            <div class="section-title reveal">
+                <span>02</span>
 
                 <div>
-                    <p class="section-label">SELECTED WORK</p>
+                    <p>SELECTED WORK</p>
                     <h2>Featured Projects</h2>
                 </div>
-
             </div>
 
 
-            <div class="project-grid">
+            <!-- EASYFILL -->
 
+            <article class="project-row reveal">
 
-                <article class="project-card featured reveal">
-
-                    <div class="project-top">
-
-                        <span class="project-index">
-                            PROJECT / 01
-                        </span>
-
-                        <span class="project-type">
-                            Android
-                        </span>
-
+                <div class="project-visual easyfill-visual">
+                    <div class="visual-label">
+                        EASYFILL
                     </div>
+
+                    <div class="visual-center">
+                        <span>PTSD</span>
+                        <strong>Adaptive Support</strong>
+                    </div>
+                </div>
+
+
+                <div class="project-content">
+
+                    <p class="project-number">
+                        PROJECT 01
+                    </p>
 
                     <h3>EasyFill</h3>
 
-                    <p>
+                    <p class="project-description">
                         Android application designed to support people affected
                         by PTSD during form filling. The system analyzes
                         multimodal distress signals in real time, adapts the
-                        interface to the user's state, and offers supportive
+                        interface to the user's state, and provides supportive
                         prompts and voice-based interaction.
                     </p>
 
-                    <div class="project-tags">
+                    <div class="project-tech">
                         <span>Android</span>
                         <span>Kotlin</span>
                         <span>Multimodal Signals</span>
@@ -333,37 +232,51 @@
                         target="_blank"
                         rel="noopener"
                     >
-                        View repository
-                        <span>↗</span>
+                        View Project ↗
                     </a>
 
-                </article>
+                </div>
+
+            </article>
 
 
-                <article class="project-card featured reveal">
+            <!-- COMPUTER VISION -->
 
-                    <div class="project-top">
+            <article class="project-row reverse reveal">
 
-                        <span class="project-index">
-                            PROJECT / 02
-                        </span>
+                <div class="project-visual vision-visual">
 
-                        <span class="project-type">
-                            Computer Vision
-                        </span>
+                    <div class="detection-box box-one"></div>
+                    <div class="detection-box box-two"></div>
 
+                    <div class="visual-label">
+                        COMPUTER VISION
                     </div>
+
+                    <div class="visual-center">
+                        <span>YOLO</span>
+                        <strong>Object Detection</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="project-content">
+
+                    <p class="project-number">
+                        PROJECT 02
+                    </p>
 
                     <h3>Computer Vision Final Project</h3>
 
-                    <p>
+                    <p class="project-description">
                         End-to-end object detection project for person and
                         vehicle detection using YOLO. Includes semi-automatic
                         dataset construction with Florence-2, model training,
                         augmentation experiments, and performance evaluation.
                     </p>
 
-                    <div class="project-tags">
+                    <div class="project-tech">
                         <span>YOLO</span>
                         <span>Florence-2</span>
                         <span>PyTorch</span>
@@ -376,38 +289,55 @@
                         target="_blank"
                         rel="noopener"
                     >
-                        View repository
-                        <span>↗</span>
+                        View Project ↗
                     </a>
 
-                </article>
+                </div>
+
+            </article>
 
 
-                <article class="project-card reveal">
+            <!-- BIG DATA -->
 
-                    <div class="project-top">
+            <article class="project-row reveal">
 
-                        <span class="project-index">
-                            PROJECT / 03
-                        </span>
+                <div class="project-visual data-visual">
 
-                        <span class="project-type">
-                            Big Data
-                        </span>
+                    <div class="stream-line line-one"></div>
+                    <div class="stream-line line-two"></div>
+                    <div class="stream-line line-three"></div>
 
+                    <div class="visual-label">
+                        BIG DATA
                     </div>
+
+                    <div class="visual-center">
+                        <span>STREAM</span>
+                        <strong>Real-Time Analytics</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="project-content">
+
+                    <p class="project-number">
+                        PROJECT 03
+                    </p>
 
                     <h3>Real-Time Retail Trend Detection</h3>
 
-                    <p>
+                    <p class="project-description">
                         Big Data pipeline for detecting emerging e-commerce
                         product trends using Apache Kafka, Spark Structured
-                        Streaming, and Machine Learning.
+                        Streaming, and Machine Learning, including stateful
+                        processing, feature engineering, and Random Forest
+                        inference.
                     </p>
 
-                    <div class="project-tags">
-                        <span>Kafka</span>
-                        <span>Spark</span>
+                    <div class="project-tech">
+                        <span>Apache Kafka</span>
+                        <span>Apache Spark</span>
                         <span>PySpark</span>
                         <span>Random Forest</span>
                     </div>
@@ -418,36 +348,48 @@
                         target="_blank"
                         rel="noopener"
                     >
-                        View repository
-                        <span>↗</span>
+                        View Project ↗
                     </a>
 
-                </article>
+                </div>
+
+            </article>
 
 
-                <article class="project-card reveal">
+            <!-- NLP -->
 
-                    <div class="project-top">
+            <article class="project-row reverse reveal">
 
-                        <span class="project-index">
-                            PROJECT / 04
-                        </span>
+                <div class="project-visual nlp-visual">
 
-                        <span class="project-type">
-                            NLP
-                        </span>
-
+                    <div class="visual-label">
+                        NATURAL LANGUAGE PROCESSING
                     </div>
+
+                    <div class="visual-center">
+                        <span>NLP</span>
+                        <strong>Sentiment Analysis</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="project-content">
+
+                    <p class="project-number">
+                        PROJECT 04
+                    </p>
 
                     <h3>NLP Final Project</h3>
 
-                    <p>
-                        Sentiment analysis on the IMDb dataset comparing
+                    <p class="project-description">
+                        Sentiment analysis project on the IMDb dataset comparing
                         Word2Vec-based representations, LSTM networks, and
-                        DistilBERT.
+                        DistilBERT, including preprocessing, training,
+                        evaluation, and model comparison.
                     </p>
 
-                    <div class="project-tags">
+                    <div class="project-tech">
                         <span>Word2Vec</span>
                         <span>LSTM</span>
                         <span>DistilBERT</span>
@@ -460,37 +402,48 @@
                         target="_blank"
                         rel="noopener"
                     >
-                        View repository
-                        <span>↗</span>
+                        View Project ↗
                     </a>
 
-                </article>
+                </div>
+
+            </article>
 
 
-                <article class="project-card featured reveal">
+            <!-- CARKEEP -->
 
-                    <div class="project-top">
+            <article class="project-row reveal">
 
-                        <span class="project-index">
-                            PROJECT / 05
-                        </span>
+                <div class="project-visual carkeep-visual">
 
-                        <span class="project-type">
-                            Flutter
-                        </span>
-
+                    <div class="visual-label">
+                        MOBILE APPLICATION
                     </div>
+
+                    <div class="visual-center">
+                        <span>CARKEEP</span>
+                        <strong>Vehicle Management</strong>
+                    </div>
+
+                </div>
+
+
+                <div class="project-content">
+
+                    <p class="project-number">
+                        PROJECT 05
+                    </p>
 
                     <h3>CarKeep</h3>
 
-                    <p>
+                    <p class="project-description">
                         Flutter application for managing personal and shared
-                        vehicles. Supports vehicle roles, maintenance history,
+                        vehicles, including user roles, maintenance history,
                         documents, expiration tracking, and shared updates
                         between users.
                     </p>
 
-                    <div class="project-tags">
+                    <div class="project-tech">
                         <span>Flutter</span>
                         <span>Dart</span>
                         <span>Firebase</span>
@@ -503,92 +456,84 @@
                         target="_blank"
                         rel="noopener"
                     >
-                        View repository
-                        <span>↗</span>
+                        View Project ↗
                     </a>
 
-                </article>
+                </div>
 
-            </div>
+            </article>
 
         </div>
 
     </section>
 
 
-    <section id="stack">
+    <!-- SKILLS -->
 
-        <div class="wrap">
+    <section id="skills" class="section">
 
-            <div class="section-heading reveal">
+        <div class="container">
 
-                <span class="section-number">03</span>
+            <div class="section-title reveal">
+
+                <span>03</span>
 
                 <div>
-                    <p class="section-label">TECHNOLOGIES</p>
+                    <p>TOOLS</p>
                     <h2>Tech Stack</h2>
                 </div>
 
             </div>
 
 
-            <div class="stack-grid">
+            <div class="skills-grid">
 
-
-                <div class="stack-card reveal">
-
+                <div class="skill-category reveal">
                     <h3>AI & Machine Learning</h3>
 
-                    <div class="chips">
+                    <div>
                         <span>PyTorch</span>
                         <span>TensorFlow</span>
                         <span>OpenCV</span>
                         <span>Scikit-learn</span>
                     </div>
-
                 </div>
 
 
-                <div class="stack-card reveal">
-
+                <div class="skill-category reveal">
                     <h3>Languages</h3>
 
-                    <div class="chips">
+                    <div>
                         <span>Python</span>
                         <span>Kotlin</span>
                         <span>Java</span>
                         <span>Dart</span>
                     </div>
-
                 </div>
 
 
-                <div class="stack-card reveal">
-
+                <div class="skill-category reveal">
                     <h3>Data & Streaming</h3>
 
-                    <div class="chips">
+                    <div>
                         <span>Apache Spark</span>
-                        <span>Apache Kafka</span>
                         <span>PySpark</span>
+                        <span>Apache Kafka</span>
                         <span>Pandas</span>
                     </div>
-
                 </div>
 
 
-                <div class="stack-card reveal">
-
+                <div class="skill-category reveal">
                     <h3>Development</h3>
 
-                    <div class="chips">
+                    <div>
                         <span>Android</span>
                         <span>Flutter</span>
                         <span>Firebase</span>
                         <span>Git</span>
                         <span>GitHub</span>
                     </div>
-
                 </div>
 
             </div>
@@ -598,53 +543,49 @@
     </section>
 
 
-    <section id="contact" class="contact-section">
+    <!-- CONTACT -->
 
-        <div class="wrap contact-layout reveal">
+    <section id="contact" class="contact">
 
-            <div>
+        <div class="container contact-content reveal">
 
-                <p class="section-label">
-                    CONTACT
-                </p>
+            <p class="contact-label">
+                CONTACT
+            </p>
 
-                <h2>
-                    Let's connect.
-                </h2>
+            <h2>
+                Let's build something useful.
+            </h2>
 
-                <p>
-                    Feel free to reach out or explore my work through
-                    GitHub and LinkedIn.
-                </p>
+            <p>
+                Feel free to contact me or explore more of my work.
+            </p>
 
-            </div>
-
-
-            <div class="contact-actions">
+            <div class="contact-buttons">
 
                 <a
+                    class="button light"
                     href="mailto:shahar25806@gmail.com"
-                    class="btn primary"
                 >
                     Email Me
                 </a>
 
                 <a
-                    href="https://www.linkedin.com/in/shahar-eliyahu1"
-                    target="_blank"
-                    rel="noopener"
-                    class="btn"
-                >
-                    LinkedIn ↗
-                </a>
-
-                <a
+                    class="button dark-outline"
                     href="https://github.com/shahar-eliyahu"
                     target="_blank"
                     rel="noopener"
-                    class="btn"
                 >
                     GitHub ↗
+                </a>
+
+                <a
+                    class="button dark-outline"
+                    href="https://www.linkedin.com/in/shahar-eliyahu1"
+                    target="_blank"
+                    rel="noopener"
+                >
+                    LinkedIn ↗
                 </a>
 
             </div>
@@ -658,7 +599,7 @@
 
 <footer>
 
-    <div class="wrap footer-content">
+    <div class="container footer-inner">
 
         <span>
             © 2026 Shahar Eliyahu
@@ -673,5 +614,4 @@
 </footer>
 
 </body>
-
 </html>
