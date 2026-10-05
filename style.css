@@ -1635,7 +1635,7 @@ footer {
 
 /* REVEAL */
 
-.reveal {
+.js .reveal {
     opacity: 0;
 
     transform: translateY(25px);
@@ -1647,7 +1647,7 @@ footer {
     transition-delay: var(--delay, 0s);
 }
 
-.reveal.visible {
+.js .reveal.visible {
     opacity: 1;
 
     transform: translateY(0);
@@ -1866,9 +1866,14 @@ footer {
         margin-bottom: 100px;
     }
 
-    .project-row.reverse .project-visual,
+    .project-row .project-content,
     .project-row.reverse .project-content {
-        order: initial;
+        order: 1;
+    }
+
+    .project-row .project-visual,
+    .project-row.reverse .project-visual {
+        order: 2;
     }
 
     .project-visual {
@@ -1991,7 +1996,7 @@ footer {
         transition: none !important;
     }
 
-    .reveal {
+    .js .reveal {
         opacity: 1;
         transform: none;
     }
