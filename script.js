@@ -1,20 +1,21 @@
-// Sticky navbar shadow
-const navbar = document.querySelector(".navbar");
-
-function updateNavbar() {
-    if (window.scrollY > 20) {
-        navbar.classList.add("scrolled");
-    } else {
-        navbar.classList.remove("scrolled");
-    }
-}
-
-window.addEventListener("scroll", updateNavbar);
-
-updateNavbar();
+const menuButton = document.querySelector(".menu-button");
+const navLinksContainer = document.querySelector(".nav-links");
+const navLinks = document.querySelectorAll(".nav-links a");
 
 
-// Reveal elements while scrolling
+// Mobile navigation
+menuButton.addEventListener("click", () => {
+    navLinksContainer.classList.toggle("open");
+});
+
+navLinks.forEach((link) => {
+    link.addEventListener("click", () => {
+        navLinksContainer.classList.remove("open");
+    });
+});
+
+
+// Reveal content on scroll
 const revealElements = document.querySelectorAll(".reveal");
 
 const revealObserver = new IntersectionObserver(
@@ -36,13 +37,9 @@ revealElements.forEach((element) => {
 });
 
 
-// Highlight current navbar section
+// Highlight active navigation section
 const sections = document.querySelectorAll(
-    "header[id], section[id]"
-);
-
-const navLinks = document.querySelectorAll(
-    ".nav-links a"
+    "section[id]"
 );
 
 const sectionObserver = new IntersectionObserver(
@@ -55,16 +52,17 @@ const sectionObserver = new IntersectionObserver(
             navLinks.forEach((link) => {
                 link.classList.remove("active");
 
-                const target = link.getAttribute("href");
-
-                if (target === `#${entry.target.id}`) {
+                if (
+                    link.getAttribute("href")
+                    === `#${entry.target.id}`
+                ) {
                     link.classList.add("active");
                 }
             });
         });
     },
     {
-        rootMargin: "-30% 0px -60% 0px",
+        rootMargin: "-35% 0px -55% 0px",
     }
 );
 
