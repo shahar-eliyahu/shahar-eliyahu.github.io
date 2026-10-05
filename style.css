@@ -1861,23 +1861,42 @@ footer {
     .project-row.reverse {
         grid-template-columns: 1fr;
 
-        gap: 45px;
+        gap: 0;
 
-        margin-bottom: 100px;
-    }
+        margin-bottom: 48px;
 
-    .project-row .project-content,
-    .project-row.reverse .project-content {
-        order: 1;
+        border: 1px solid var(--border);
+
+        background: var(--surface);
+
+        box-shadow: 0 20px 50px rgba(19, 33, 59, 0.07);
     }
 
     .project-row .project-visual,
     .project-row.reverse .project-visual {
-        order: 2;
+        order: 1;
+
+        min-height: 260px;
+
+        border: 0;
+        border-bottom: 1px solid var(--border);
+
+        box-shadow: none;
     }
 
-    .project-visual {
-        min-height: 350px;
+    .project-row .project-content,
+    .project-row.reverse .project-content {
+        order: 2;
+
+        padding: 32px 28px 36px;
+    }
+
+    .project-content h3 {
+        margin-bottom: 14px;
+    }
+
+    .visual-center strong {
+        font-size: clamp(1.7rem, 6vw, 2.4rem);
     }
 }
 
@@ -1952,8 +1971,18 @@ footer {
         margin-bottom: 55px;
     }
 
-    .project-visual {
-        min-height: 290px;
+    .project-row .project-visual,
+    .project-row.reverse .project-visual {
+        min-height: 220px;
+    }
+
+    .project-row .project-content,
+    .project-row.reverse .project-content {
+        padding: 26px 22px 30px;
+    }
+
+    .project-link {
+        margin-top: 24px;
     }
 
     .ef-fields,
