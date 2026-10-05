@@ -30,14 +30,20 @@
     <div class="container nav-inner">
 
         <a class="logo" href="#home">
+            <span class="logo-mark">SE</span>
             Shahar Eliyahu
         </a>
 
-        <button class="menu-button" aria-label="Open navigation">
+        <button
+            class="menu-button"
+            aria-label="Open navigation"
+            aria-expanded="false"
+            aria-controls="nav-links"
+        >
             ☰
         </button>
 
-        <div class="nav-links">
+        <div class="nav-links" id="nav-links">
             <a href="#about">About</a>
             <a href="#projects">Projects</a>
             <a href="#skills">Skills</a>
@@ -45,6 +51,8 @@
         </div>
 
     </div>
+
+    <div class="scroll-progress" aria-hidden="true"></div>
 </nav>
 
 
@@ -54,22 +62,46 @@
 
     <section id="home" class="hero">
 
-        <div class="container hero-content reveal">
+        <div class="hero-grid" aria-hidden="true"></div>
+        <div class="hero-spotlight" aria-hidden="true"></div>
+        <div class="hero-blob hero-blob-one" aria-hidden="true"></div>
+        <div class="hero-blob hero-blob-two" aria-hidden="true"></div>
 
-            <p class="hero-label">
+        <div class="container hero-content" data-stagger>
+
+            <p class="hero-label reveal">
+                <span class="status-dot"></span>
                 SOFTWARE ENGINEER
             </p>
 
-            <h1>
-                Shahar Eliyahu
-            </h1>
+            <div class="hero-name reveal">
 
-            <p class="hero-subtitle">
+                <h1>
+                    Shahar<br>Eliyahu
+                </h1>
+
+                <div class="name-box" aria-hidden="true">
+                    <div class="box-frame">
+                        <i class="corner tl"></i>
+                        <i class="corner tr"></i>
+                        <i class="corner bl"></i>
+                        <i class="corner br"></i>
+                    </div>
+
+                    <span class="name-box-label">
+                        software_engineer
+                        <b class="confidence">0.97</b>
+                    </span>
+                </div>
+
+            </div>
+
+            <p class="hero-subtitle reveal">
                 Interested in Artificial Intelligence, Machine Learning,
                 and building practical systems that solve real-world problems.
             </p>
 
-            <div class="hero-buttons">
+            <div class="hero-buttons reveal">
 
                 <a class="button primary" href="#projects">
                     View Projects
@@ -97,9 +129,6 @@
 
         </div>
 
-        <div class="hero-decoration hero-decoration-one"></div>
-        <div class="hero-decoration hero-decoration-two"></div>
-
     </section>
 
 
@@ -119,7 +148,7 @@
             </div>
 
 
-            <div class="about-grid">
+            <div class="about-grid" data-stagger>
 
                 <div class="about-main reveal">
 
@@ -192,14 +221,34 @@
             <article class="project-row reveal">
 
                 <div class="project-visual easyfill-visual">
+
                     <div class="visual-label">
                         EASYFILL
                     </div>
+
+                    <div class="ef-fields" aria-hidden="true">
+                        <span class="ef-field"></span>
+                        <span class="ef-field"></span>
+                        <span class="ef-field short"></span>
+                    </div>
+
+                    <svg
+                        class="ef-pulse"
+                        viewBox="0 0 400 80"
+                        preserveAspectRatio="none"
+                        aria-hidden="true"
+                    >
+                        <path
+                            pathLength="1"
+                            d="M0 40 H140 L155 40 L165 14 L178 66 L190 24 L200 40 H260 L268 32 L276 40 H400"
+                        />
+                    </svg>
 
                     <div class="visual-center">
                         <span>PTSD</span>
                         <strong>Adaptive Support</strong>
                     </div>
+
                 </div>
 
 
@@ -232,7 +281,7 @@
                         target="_blank"
                         rel="noopener"
                     >
-                        View Project ↗
+                        View Project <span>↗</span>
                     </a>
 
                 </div>
@@ -246,8 +295,10 @@
 
                 <div class="project-visual vision-visual">
 
-                    <div class="detection-box box-one"></div>
-                    <div class="detection-box box-two"></div>
+                    <div class="scan-line" aria-hidden="true"></div>
+
+                    <div class="detection-box box-one" data-label="person 0.94"></div>
+                    <div class="detection-box box-two" data-label="vehicle 0.88"></div>
 
                     <div class="visual-label">
                         COMPUTER VISION
@@ -289,7 +340,7 @@
                         target="_blank"
                         rel="noopener"
                     >
-                        View Project ↗
+                        View Project <span>↗</span>
                     </a>
 
                 </div>
@@ -306,6 +357,14 @@
                     <div class="stream-line line-one"></div>
                     <div class="stream-line line-two"></div>
                     <div class="stream-line line-three"></div>
+
+                    <div class="data-bars" aria-hidden="true">
+                        <span style="--h: 35%; --d: 0s"></span>
+                        <span style="--h: 55%; --d: 0.2s"></span>
+                        <span style="--h: 45%; --d: 0.4s"></span>
+                        <span style="--h: 80%; --d: 0.6s"></span>
+                        <span style="--h: 100%; --d: 0.8s"></span>
+                    </div>
 
                     <div class="visual-label">
                         BIG DATA
@@ -348,7 +407,7 @@
                         target="_blank"
                         rel="noopener"
                     >
-                        View Project ↗
+                        View Project <span>↗</span>
                     </a>
 
                 </div>
@@ -361,6 +420,14 @@
             <article class="project-row reverse reveal">
 
                 <div class="project-visual nlp-visual">
+
+                    <div class="tokens" aria-hidden="true">
+                        <span class="token pos" style="--x: 10%; --y: 22%; --d: 0s">brilliant</span>
+                        <span class="token neg" style="--x: 64%; --y: 16%; --d: 1.2s">boring</span>
+                        <span class="token pos" style="--x: 70%; --y: 74%; --d: 2.4s">masterpiece</span>
+                        <span class="token neg" style="--x: 12%; --y: 78%; --d: 3.6s">waste</span>
+                        <span class="token pos" style="--x: 40%; --y: 86%; --d: 4.8s">loved it</span>
+                    </div>
 
                     <div class="visual-label">
                         NATURAL LANGUAGE PROCESSING
@@ -402,7 +469,7 @@
                         target="_blank"
                         rel="noopener"
                     >
-                        View Project ↗
+                        View Project <span>↗</span>
                     </a>
 
                 </div>
@@ -415,6 +482,14 @@
             <article class="project-row reveal">
 
                 <div class="project-visual carkeep-visual">
+
+                    <div class="ck-badges" aria-hidden="true">
+                        <span>Service ✓</span>
+                        <span>Test ✓</span>
+                        <span class="due">Insurance · 14d</span>
+                    </div>
+
+                    <div class="road" aria-hidden="true"></div>
 
                     <div class="visual-label">
                         MOBILE APPLICATION
@@ -456,7 +531,7 @@
                         target="_blank"
                         rel="noopener"
                     >
-                        View Project ↗
+                        View Project <span>↗</span>
                     </a>
 
                 </div>
@@ -486,7 +561,7 @@
             </div>
 
 
-            <div class="skills-grid">
+            <div class="skills-grid" data-stagger>
 
                 <div class="skill-category reveal">
                     <h3>AI & Machine Learning</h3>
@@ -546,6 +621,8 @@
     <!-- CONTACT -->
 
     <section id="contact" class="contact">
+
+        <div class="contact-glow" aria-hidden="true"></div>
 
         <div class="container contact-content reveal">
 
