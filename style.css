@@ -1282,6 +1282,95 @@ button:focus-visible {
 }
 
 
+/* PACMAN AI VISUAL */
+
+.pacai-visual {
+    background:
+        linear-gradient(
+            150deg,
+            #111d31,
+            #1d3557
+        );
+
+    color: white;
+}
+
+.pacai-visual .visual-label {
+    color: #b8c8dc;
+}
+
+.pac-maze {
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+}
+
+.pac-walls rect {
+    fill: rgba(255, 255, 255, 0.09);
+}
+
+.pac-coins circle {
+    fill: var(--orange);
+
+    opacity: 0.85;
+}
+
+.pac-path {
+    fill: none;
+
+    stroke: #e0283a;
+    stroke-width: 4;
+    stroke-linecap: round;
+    stroke-dasharray: 0.1 14;
+
+    opacity: 0.8;
+
+    animation: pac-plan 1.2s linear infinite;
+}
+
+.pac-chaser-edge {
+    fill: #121d32;
+}
+
+.pac-chaser-body {
+    fill: #e0283a;
+}
+
+.pac-runner-body {
+    fill: var(--blue-bright);
+}
+
+.pac-halo {
+    fill: rgba(224, 40, 58, 0.22);
+
+    transform-box: fill-box;
+    transform-origin: center;
+
+    animation: pac-halo 1.8s ease-in-out infinite;
+}
+
+@keyframes pac-plan {
+    to {
+        stroke-dashoffset: -14.1;
+    }
+}
+
+@keyframes pac-halo {
+    0%, 100% {
+        transform: scale(0.85);
+        opacity: 0.6;
+    }
+
+    50% {
+        transform: scale(1.1);
+        opacity: 1;
+    }
+}
+
+
 /* PROJECT CONTENT */
 
 .project-number {
