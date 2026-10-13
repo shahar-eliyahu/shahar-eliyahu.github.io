@@ -1371,6 +1371,103 @@ button:focus-visible {
 }
 
 
+/* TACTICAL AI BATTLE VISUAL */
+
+.battle-visual {
+    background:
+        linear-gradient(
+            160deg,
+            #f3efe2,
+            #e6e0cc
+        );
+}
+
+.battle-map {
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+}
+
+.bt-rocks rect {
+    fill: #8a8d96;
+}
+
+.bt-trees circle {
+    fill: #4f8a58;
+}
+
+.bt-cone {
+    fill: rgba(74, 127, 208, 0.2);
+}
+
+.bt-tracer {
+    stroke: var(--blue-bright);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-dasharray: 26 220;
+
+    animation: bt-shot 1.6s linear infinite;
+}
+
+.bt-blast {
+    fill: rgba(232, 120, 30, 0.18);
+
+    stroke: #d9481c;
+    stroke-width: 2;
+
+    transform-box: fill-box;
+    transform-origin: center;
+
+    animation: bt-blast 2.4s ease-out infinite;
+}
+
+.bt-team-blue circle {
+    fill: var(--blue-bright);
+
+    stroke: white;
+    stroke-width: 3;
+}
+
+.bt-team-orange circle {
+    fill: #e8741f;
+
+    stroke: white;
+    stroke-width: 3;
+}
+
+.battle-visual .bt-cmd-ring {
+    fill: none;
+
+    stroke: #f2c94c;
+    stroke-width: 4;
+}
+
+@keyframes bt-shot {
+    from {
+        stroke-dashoffset: 26;
+    }
+
+    to {
+        stroke-dashoffset: -220;
+    }
+}
+
+@keyframes bt-blast {
+    0% {
+        transform: scale(0.3);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1.15);
+        opacity: 0;
+    }
+}
+
+
 /* PROJECT CONTENT */
 
 .project-number {
