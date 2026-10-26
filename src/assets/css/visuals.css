@@ -15,7 +15,7 @@
             color-mix(in srgb, var(--color-primary) 16%, transparent),
             transparent 33%
         ),
-        var(--viz-light);
+        var(--viz-card);
 }
 
 .ef-fields {
@@ -37,6 +37,8 @@
     height: 10px;
 
     overflow: hidden;
+
+    border-radius: var(--radius-pill);
 
     background: var(--color-primary-soft);
 }
@@ -389,7 +391,7 @@
             color-mix(in srgb, var(--color-accent) 14%, transparent),
             transparent 40%
         ),
-        var(--viz-light);
+        var(--viz-card);
 }
 
 .token {
@@ -401,8 +403,9 @@
     padding: 4px 10px;
 
     border: 1px solid currentColor;
+    border-radius: var(--radius-sm);
 
-    background: var(--viz-light);
+    background: var(--viz-chip);
 
     font-family: var(--font-mono);
 
@@ -414,7 +417,7 @@
 }
 
 .token.pos {
-    color: var(--color-primary);
+    color: var(--color-primary-bright);
 }
 
 .token.neg {
@@ -447,7 +450,7 @@
     background:
         linear-gradient(
             155deg,
-            var(--viz-light),
+            var(--viz-card),
             var(--viz-carkeep-bg-end)
         );
 }
@@ -470,9 +473,10 @@
 .ck-badges span {
     padding: 5px 10px;
 
-    border: 1px solid var(--color-border);
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-sm);
 
-    background: var(--viz-light);
+    background: var(--viz-chip);
 
     color: var(--color-text-muted);
 

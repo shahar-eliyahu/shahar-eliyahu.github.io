@@ -104,7 +104,9 @@
 }
 
 .hero-label {
-    display: inline-flex;
+    display: flex;
+
+    width: fit-content;
 
     gap: 10px;
 
@@ -115,6 +117,7 @@
     align-items: center;
 
     border: 1px solid color-mix(in srgb, var(--color-accent) 35%, transparent);
+    border-radius: var(--radius-pill);
 
     background: color-mix(in srgb, var(--color-surface) 60%, transparent);
 
@@ -153,7 +156,7 @@
 
     font-family: var(--font-display);
 
-    font-size: clamp(4rem, 9vw, 8.5rem);
+    font-size: var(--text-h1);
 
     font-weight: 600;
 
@@ -293,7 +296,7 @@
 
     color: var(--color-text-muted);
 
-    font-size: 1.08rem;
+    font-size: var(--text-lg);
 }
 
 .about-main p + p {
@@ -405,6 +408,7 @@
     overflow: hidden;
 
     border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
 
     background: var(--color-surface);
 
@@ -553,11 +557,13 @@
 
     font-family: var(--font-display);
 
-    font-size: clamp(2rem, 4vw, 3rem);
+    font-size: var(--text-h3);
 
     font-weight: 600;
 
     line-height: 1.08;
+
+    letter-spacing: var(--tracking-tight);
 }
 
 .project-description {
@@ -582,6 +588,7 @@
     padding: 6px 10px;
 
     border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
 
     background: var(--color-surface);
 
@@ -605,7 +612,7 @@
 
     margin-top: 32px;
 
-    color: var(--color-primary);
+    color: var(--color-link);
 
     font-weight: 600;
 
@@ -625,7 +632,7 @@
 }
 
 .project-link:hover {
-    border-color: var(--color-primary);
+    border-color: var(--color-link);
 }
 
 .project-link:hover span {
@@ -651,6 +658,7 @@
     overflow: hidden;
 
     border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
 
     background: var(--color-surface);
 
@@ -708,6 +716,8 @@
 .skill-category span {
     padding: 7px 11px;
 
+    border-radius: var(--radius-sm);
+
     background: var(--color-bg);
 
     border: 1px solid var(--color-border);
@@ -726,6 +736,8 @@
     padding: 140px 0;
 
     overflow: hidden;
+
+    border-top: 1px solid var(--color-inverse-divider);
 
     background: var(--color-inverse-bg);
 
@@ -805,6 +817,8 @@
     line-height: 0.98;
 
     letter-spacing: -0.04em;
+
+    text-wrap: balance;
 }
 
 .contact-content > p:not(.contact-label) {
@@ -834,7 +848,7 @@
 }
 
 .button.light:hover {
-    color: var(--color-primary);
+    color: var(--color-primary-deep);
 
     box-shadow: var(--shadow-inverse);
 }
@@ -965,7 +979,10 @@ footer {
 
         margin-bottom: 48px;
 
+        overflow: hidden;
+
         border: 1px solid var(--color-border);
+        border-radius: var(--radius-lg);
 
         background: var(--color-surface);
 
@@ -980,6 +997,7 @@ footer {
 
         border: 0;
         border-bottom: 1px solid var(--color-border);
+        border-radius: 0;
 
         box-shadow: none;
     }

@@ -1,9 +1,9 @@
 /*
- * DESIGN TOKENS
+ * DESIGN TOKENS: Dark Tech theme
  *
- * The single source of truth for colors, fonts, shadows and motion.
- * Components only reference the semantic tokens (section 2+), never the
- * palette directly, so a new theme only needs to remap section 2.
+ * The single source of truth for colors, type, spacing, radii, shadows
+ * and motion. Components only reference the semantic tokens (section 2+),
+ * never the palette directly, so a new theme only needs to remap section 2.
  *
  * Transparent variants are derived in place with
  *     color-mix(in srgb, var(--token) N%, transparent)
@@ -12,96 +12,131 @@
 
 :root {
 
+    color-scheme: dark;
+
+
     /* 1. PALETTE */
 
     --palette-white: #ffffff;
     --palette-black: #000000;
 
-    --palette-slate-50: #f4f7fb;
-    --palette-slate-100: #eef3f9;
-    --palette-slate-200: #d9e2ee;
-    --palette-slate-300: #b9c8db;
-    --palette-slate-400: #9aabc0;
-    --palette-slate-500: #64748b;
+    /* Navy scale (backgrounds, surfaces, borders) */
+    --palette-navy-1000: #070b16;
+    --palette-navy-950: #0b1020;
+    --palette-navy-900: #0e1428;
+    --palette-navy-850: #111930;
+    --palette-navy-800: #141d35;
+    --palette-navy-750: #1a2442;
+    --palette-navy-700: #222c4a;
+    --palette-navy-600: #2e3a5f;
+    --palette-navy-500: #3d4b75;
 
-    --palette-navy-900: #121d32;
-    --palette-navy-800: #13213b;
-    --palette-navy-700: #26344c;
-    --palette-navy-400: #69768a;
-    --palette-navy-300: #9daabc;
-    --palette-navy-200: #b4c0d0;
+    /* Cool grays (text) */
+    --palette-gray-50: #e8eeff;
+    --palette-gray-300: #b4bfda;
+    --palette-gray-400: #9aa6c4;
+    --palette-gray-500: #7d89a8;
 
-    --palette-blue-800: #234c83;
-    --palette-blue-700: #315f9f;
-    --palette-blue-500: #4a7fd0;
-    --palette-blue-300: #9cb9dc;
-    --palette-blue-50: #e8f0fb;
+    /* Blue */
+    --palette-blue-300: #93c5fd;
+    --palette-blue-400: #60a5fa;
+    --palette-blue-500: #3b82f6;
+    --palette-blue-600: #2563eb;
+    --palette-blue-700: #1d4ed8;
+    --palette-blue-950: #1d2c55;
 
-    --palette-orange-500: #d68b16;
+    /* Violet */
+    --palette-violet-300: #c4b5fd;
+    --palette-violet-400: #a78bfa;
+    --palette-violet-500: #8b5cf6;
+    --palette-violet-600: #7c3aed;
 
 
-    /* 2. SEMANTIC COLORS (light theme) */
+    /* 2. SEMANTIC COLORS */
 
-    --color-bg: var(--palette-slate-50);
-    --color-bg-alt: var(--palette-slate-100);
-    --color-surface: var(--palette-white);
+    /* Backgrounds & surfaces */
+    --color-bg: var(--palette-navy-950);
+    --color-bg-alt: var(--palette-navy-900);
+    --color-surface: var(--palette-navy-800);
+    --color-surface-raised: var(--palette-navy-750);
 
-    --color-text: var(--palette-navy-800);
-    --color-text-muted: var(--palette-slate-500);
+    /* Text */
+    --color-text: var(--palette-gray-50);
+    --color-text-muted: var(--palette-gray-400);
+    --color-text-subtle: var(--palette-gray-500);
 
-    --color-primary: var(--palette-blue-700);
-    --color-primary-hover: var(--palette-blue-800);
-    --color-primary-bright: var(--palette-blue-500);
-    --color-primary-soft: var(--palette-blue-50);
+    /* Primary (blue): fills, lines, glows */
+    --color-primary: var(--palette-blue-500);
+    --color-primary-hover: var(--palette-blue-400);
+    --color-primary-bright: var(--palette-blue-400);
+    --color-primary-deep: var(--palette-blue-700);
+    --color-primary-soft: var(--palette-blue-950);
     --color-on-primary: var(--palette-white);
 
-    --color-accent: var(--palette-orange-500);
-    --color-on-accent: var(--palette-navy-900);
+    /* Text links and interactive text on dark backgrounds */
+    --color-link: var(--palette-blue-400);
 
-    --color-border: var(--palette-slate-200);
-    --color-border-strong: var(--palette-slate-300);
-    --color-border-control: var(--palette-slate-400);
+    /* Secondary accent (violet): markers, labels, detection boxes */
+    --color-accent: var(--palette-violet-400);
+    --color-accent-strong: var(--palette-violet-500);
+    --color-on-accent: var(--palette-navy-950);
 
-    --color-shadow: var(--palette-navy-800);
+    /* Lines */
+    --color-border: var(--palette-navy-700);
+    --color-border-strong: var(--palette-navy-600);
+    --color-border-control: var(--palette-navy-500);
+
+    --color-focus: var(--palette-blue-300);
+
+    --color-shadow: var(--palette-black);
     --color-highlight: var(--palette-white);
 
-    /* Dark ("inverse") areas: contact, footer, logo mark */
-    --color-inverse-bg: var(--palette-navy-900);
-    --color-inverse-text: var(--palette-white);
-    --color-inverse-text-muted: var(--palette-navy-200);
-    --color-inverse-text-subtle: var(--palette-navy-300);
+    /* Deepest areas: contact, footer */
+    --color-inverse-bg: var(--palette-navy-1000);
+    --color-inverse-text: var(--palette-gray-50);
+    --color-inverse-text-muted: var(--palette-gray-300);
+    --color-inverse-text-subtle: var(--palette-gray-400);
     --color-inverse-label: var(--palette-blue-300);
-    --color-inverse-border: var(--palette-navy-400);
-    --color-inverse-divider: var(--palette-navy-700);
+    --color-inverse-border: var(--palette-navy-500);
+    --color-inverse-divider: var(--palette-navy-800);
     --color-inverse-shadow: var(--palette-black);
+
+    /* Gradients */
+    --gradient-brand: linear-gradient(135deg, var(--palette-blue-600), var(--palette-violet-600));
+    --gradient-accent-line: linear-gradient(90deg, var(--color-primary), var(--color-accent-strong));
+    --gradient-ambient:
+        radial-gradient(1100px 620px at 88% -8%, color-mix(in srgb, var(--color-primary) 9%, transparent), transparent 70%),
+        radial-gradient(900px 560px at -12% 34%, color-mix(in srgb, var(--color-accent-strong) 6%, transparent), transparent 70%);
 
 
     /* 3. PROJECT ILLUSTRATIONS
      * Scene-specific colors used only by the animated project visuals. */
 
-    --viz-light: var(--palette-white);
+    --viz-light: var(--palette-gray-50);
+    --viz-card: var(--palette-navy-800);
+    --viz-chip: var(--palette-navy-750);
 
-    --viz-dark-bg: #111d31;
-    --viz-dark-label: #b8c8dc;
+    --viz-dark-bg: #0d1630;
+    --viz-dark-label: var(--palette-gray-400);
 
-    --viz-vision-bg-end: #24446f;
+    --viz-vision-bg-end: #1a2f5c;
 
-    --viz-data-bg-start: #f9fbfe;
-    --viz-data-bg-end: #dfeaf8;
+    --viz-data-bg-start: #111a32;
+    --viz-data-bg-end: #182647;
 
-    --viz-carkeep-bg-end: #e5edf6;
+    --viz-carkeep-bg-end: #18233f;
 
-    --viz-pacman-bg-end: #1d3557;
-    --viz-pacman-ghost: #e0283a;
-    --viz-pacman-ghost-edge: var(--palette-navy-900);
+    --viz-pacman-bg-end: #18284d;
+    --viz-pacman-ghost: #f0475b;
+    --viz-pacman-ghost-edge: var(--palette-navy-950);
 
-    --viz-battle-bg-start: #f3efe2;
-    --viz-battle-bg-end: #e6e0cc;
-    --viz-battle-rock: #8a8d96;
-    --viz-battle-tree: #4f8a58;
-    --viz-battle-blast: #e8781e;
-    --viz-battle-blast-edge: #d9481c;
-    --viz-battle-team-b: #e8741f;
+    --viz-battle-bg-start: #1a2236;
+    --viz-battle-bg-end: #232b3f;
+    --viz-battle-rock: #4b5574;
+    --viz-battle-tree: #3f7d5a;
+    --viz-battle-blast: #f08a3c;
+    --viz-battle-blast-edge: #f26b3a;
+    --viz-battle-team-b: #f08a3c;
     --viz-battle-commander: #f2c94c;
 
 
@@ -111,21 +146,61 @@
     --font-display: "Space Grotesk", sans-serif;
     --font-mono: "IBM Plex Mono", monospace;
 
+    --text-xs: 0.72rem;
+    --text-sm: 0.875rem;
+    --text-base: 1rem;
+    --text-lg: 1.08rem;
 
-    /* 5. SHADOWS */
+    --text-h1: clamp(4rem, 9vw, 8.5rem);
+    --text-h2: clamp(2.5rem, 5vw, 4rem);
+    --text-h3: clamp(2rem, 4vw, 3rem);
 
-    --shadow-nav: 0 10px 30px color-mix(in srgb, var(--color-shadow) 6%, transparent);
-    --shadow-card: 0 25px 60px color-mix(in srgb, var(--color-shadow) 7%, transparent);
-    --shadow-card-hover: 0 35px 80px color-mix(in srgb, var(--color-shadow) 14%, transparent);
-    --shadow-card-stacked: 0 20px 50px color-mix(in srgb, var(--color-shadow) 7%, transparent);
-    --shadow-primary: 0 14px 30px color-mix(in srgb, var(--color-primary) 32%, transparent);
-    --shadow-inverse: 0 14px 30px color-mix(in srgb, var(--color-inverse-shadow) 30%, transparent);
+    --leading-tight: 1.05;
+    --leading-body: 1.65;
+
+    --tracking-tight: -0.03em;
+    --tracking-label: 0.12em;
 
 
-    /* 6. LAYOUT & MOTION */
+    /* 5. SPACING */
+
+    --space-1: 4px;
+    --space-2: 8px;
+    --space-3: 12px;
+    --space-4: 16px;
+    --space-5: 24px;
+    --space-6: 32px;
+    --space-7: 48px;
+    --space-8: 80px;
+    --space-9: 130px;
+
+
+    /* 6. RADII */
+
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 16px;
+    --radius-pill: 999px;
+
+
+    /* 7. SHADOWS */
+
+    --shadow-nav: 0 10px 30px color-mix(in srgb, var(--color-shadow) 35%, transparent);
+    --shadow-card: 0 25px 60px color-mix(in srgb, var(--color-shadow) 35%, transparent);
+    --shadow-card-hover:
+        0 35px 80px color-mix(in srgb, var(--color-shadow) 45%, transparent),
+        0 0 0 1px color-mix(in srgb, var(--color-primary) 22%, transparent);
+    --shadow-card-stacked: 0 20px 50px color-mix(in srgb, var(--color-shadow) 35%, transparent);
+    --shadow-primary: 0 12px 32px color-mix(in srgb, var(--color-primary) 35%, transparent);
+    --shadow-inverse: 0 14px 30px color-mix(in srgb, var(--color-inverse-shadow) 40%, transparent);
+
+
+    /* 8. LAYOUT & MOTION */
 
     --max-width: 1180px;
     --nav-height: 80px;
 
     --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --duration-fast: 0.2s;
+    --duration-base: 0.35s;
 }

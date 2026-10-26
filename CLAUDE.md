@@ -123,15 +123,39 @@ Skills ↔ projects: link skills to projects with `projectsUsing`. Never maintai
 
 ## Theme tokens (`src/assets/css/tokens.css`)
 
-1. `--palette-*`: raw colors.
-2. Semantic roles used by components: `--color-bg`, `--color-surface`, `--color-text(-muted)`,
-   `--color-primary(-hover/-bright/-soft)`, `--color-accent`, `--color-border(-strong/-control)`,
-   `--color-inverse-*` (dark contact/footer areas), and others.
+1. `--palette-*`: raw colors (navy scale, cool grays, blue, violet).
+2. Semantic colors used by components: `--color-bg(-alt)`, `--color-surface(-raised)`,
+   `--color-text(-muted/-subtle)`, `--color-primary(-hover/-bright/-deep/-soft)`, `--color-link`,
+   `--color-accent(-strong)`, `--color-on-*`, `--color-border(-strong/-control)`, `--color-focus`,
+   `--color-inverse-*` (deepest areas: contact, footer), and gradients `--gradient-brand`,
+   `--gradient-accent-line`, `--gradient-ambient`.
 3. `--viz-*`: scene colors for the project illustrations.
-4. Fonts (`--font-body/-display/-mono`), shadows (`--shadow-*`), `--max-width`, `--nav-height`, `--ease-out`.
+4. Typography (`--font-*`, `--text-*`, `--leading-*`, `--tracking-*`), spacing (`--space-1…9`),
+   radii (`--radius-sm/md/lg/pill`), shadows (`--shadow-*`), layout and motion (`--max-width`,
+   `--nav-height`, `--ease-out`, `--duration-*`).
 
 Components must only use semantic tokens, never hex or rgba literals. Transparency:
-`color-mix(in srgb, var(--token) N%, transparent)`. A new theme remaps layer 2.
+`color-mix(in srgb, var(--token) N%, transparent)`. A new theme remaps layer 2 (and `--viz-*`).
+Older rules still use literal sizes and spacing. Move them to the tokens when a component is
+redesigned (Phase 3B), not as a separate churn pass.
+
+## Dark theme decisions (Phase 3A)
+
+- Palette: background `#0b1020`, surfaces `#141d35` / `#1a2442`, text `#e8eeff`,
+  muted `#9aa6c4`. Blue `#3b82f6` (links use the lighter `#60a5fa` for contrast), violet
+  `#a78bfa` / `#8b5cf6`. `color-scheme: dark` is set, plus `<meta name="theme-color">`.
+- Accent roles: **blue = actions and links**, **violet = markers** (section and project numbers,
+  hero label, detection boxes). The brand gradient (blue-600 → violet-600) appears only on
+  the primary button, the logo mark, the scroll bar and nav underline.
+- Depth comes from layered navy surfaces, 1px borders, soft black shadows and two faint fixed
+  ambient radial gradients on `body`. No particles, no animated backgrounds, glow only on hover.
+- Radii: cards 16px, buttons 10px, tags 6px, hero label pill. Detection boxes stay square on
+  purpose (bounding-box motif).
+- All 7 illustrations were recolored through `--viz-*` tokens (dark cards). Their shapes and
+  animations are unchanged.
+- Contrast: every text element is at least 6.7:1 (WCAG AA); the focus ring is `#93c5fd`, 2px.
+- Fixed a long-standing bug: `.hero-label` was `inline-flex` and sat beside the name on wide
+  screens. It's now block-level (`flex` + `fit-content`).
 
 ## Validation workflow
 
@@ -147,15 +171,20 @@ Components must only use semantic tokens, never hex or rgba literals. Transparen
 
 - **Phase 1 (done, commit `a66e52e`):** migrated to Eleventy with no visual change. Design tokens,
   layouts, partials, data files.
-- **Phase 2 (implemented, awaiting owner approval / commit):** project content model,
-  categories, featured projects, media fallback, validation, docs.
+- **Phase 2 (done, commit `8c9ec85`):** project content model, categories, featured
+  projects, media fallback, validation, docs.
+- **Phase 3A (in progress, awaiting owner review):** dark visual foundation. Tokens, typography,
+  surfaces and recolored illustrations, with no layout or structure changes.
 - `main` still serves the old hand-written site. This branch has no root `index.html`, so
   **merging before the Actions deploy exists would break the live site.**
 
 ## Roadmap
 
-3. **Dark design system:** dark navy/charcoal backgrounds, blue (#5B8CFF) and purple (#9B6BFF)
-   accents, subtle gradients and glow. Remap tokens and restyle components and illustrations.
+3. **Dark design system.** 3A (visual foundation: tokens, typography, surfaces) is done, pending
+   review. 3B is the layout redesign (hero, project cards and grid) using the 3A tokens.
+   Known layout issues for 3B: in the vision illustration the headline overlaps the detection
+   boxes; the contact block is offset by its 900px max-width; section numbers sit slightly
+   below their kicker.
 4. **New sections:** "Featured Graduation Project" section for EasyFill above the gallery,
    a filterable project card grid (virtual "All" filter plus generated category filters), expanded
    About (education, hackathon, experience timeline), skills linked to projects, contact upgrades.
