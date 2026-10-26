@@ -1,0 +1,29 @@
+{% from "partials/components.njk" import button, profileButtons %}
+{% set contact = home.contact %}
+
+<section id="contact" class="contact">
+
+    <div class="contact-glow" aria-hidden="true"></div>
+
+    <div class="container contact-content reveal">
+
+        <p class="contact-label">
+            {{ contact.label }}
+        </p>
+
+        <h2>
+            {{ contact.title }}
+        </h2>
+
+        <p>
+            {{ contact.text }}
+        </p>
+
+        <div class="contact-buttons">
+            {{ button("Email Me", "mailto:" + site.email, "light") }}
+            {{ profileButtons(site, "dark-outline") }}
+        </div>
+
+    </div>
+
+</section>

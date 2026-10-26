@@ -1,0 +1,24 @@
+{
+    "name": "Shahar Eliyahu",
+    "initials": "SE",
+    "role": "Software Engineer",
+    "title": "Shahar Eliyahu | Software Engineer",
+    "description": "Shahar Eliyahu - Software Engineer portfolio featuring projects in Artificial Intelligence, Machine Learning, Computer Vision, Big Data, and software engineering.",
+    "language": "en",
+
+    "email": "shahar25806@gmail.com",
+    "cv": "/Shahar_Eliyahu_CV.pdf",
+    "cvFilename": "Shahar_Eliyahu_CV.pdf",
+
+    "social": {
+        "github": "https://github.com/shahar-eliyahu",
+        "linkedin": "https://www.linkedin.com/in/shahar-eliyahu1"
+    },
+
+    "nav": [
+        { "label": "About", "id": "about" },
+        { "label": "Projects", "id": "projects" },
+        { "label": "Skills", "id": "skills" },
+        { "label": "Contact", "id": "contact" }
+    ]
+}

@@ -1,0 +1,46 @@
+{#
+    Reusable UI pieces. Import with:
+    {% from "partials/components.njk" import sectionTitle, button, profileButtons %}
+#}
+
+
+{# Numbered section heading: "01  ABOUT / About Me" #}
+{% macro sectionTitle(number, kicker, title) %}
+<div class="section-title reveal">
+    <span>{{ number }}</span>
+
+    <div>
+        <p>{{ kicker }}</p>
+        <h2>{{ title }}</h2>
+    </div>
+</div>
+{% endmacro %}
+
+
+{#
+    Button link.
+    kind:     "external" opens in a new tab, "download" downloads the file
+    variant:  extra class, e.g. "primary", "light", "dark-outline"
+#}
+{% macro button(label, href, variant = "", kind = "", filename = "") %}
+<a
+    class="button{{ ' ' + variant if variant }}"
+    href="{{ href }}"
+    {%- if kind == "external" %}
+    target="_blank"
+    rel="noopener"
+    {%- elif kind == "download" %}
+    download="{{ filename }}"
+    {%- endif %}
+>
+    {{ label | safe }}
+</a>
+{% endmacro %}
+
+
+{# CV, GitHub and LinkedIn buttons, shared by the hero and contact sections #}
+{% macro profileButtons(site, variant = "") %}
+{{ button("Download CV ↓", site.cv, variant, "download", site.cvFilename) }}
+{{ button("GitHub ↗", site.social.github, variant, "external") }}
+{{ button("LinkedIn ↗", site.social.linkedin, variant, "external") }}
+{% endmacro %}

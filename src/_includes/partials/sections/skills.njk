@@ -1,0 +1,28 @@
+{% from "partials/components.njk" import sectionTitle %}
+{% set section = home.skills %}
+
+<section id="skills" class="section">
+
+    <div class="container">
+
+        {{ sectionTitle(section.number, section.kicker, section.title) }}
+
+        <div class="skills-grid" data-stagger>
+            {%- for group in skills %}
+
+            <div class="skill-category reveal">
+                <h3>{{ group.name }}</h3>
+
+                <div>
+                    {%- for item in group.items %}
+                    <span>{{ item }}</span>
+                    {%- endfor %}
+                </div>
+            </div>
+            {%- endfor %}
+
+        </div>
+
+    </div>
+
+</section>

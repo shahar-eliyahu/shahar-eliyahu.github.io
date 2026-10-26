@@ -1,0 +1,131 @@
+/*
+ * DESIGN TOKENS
+ *
+ * The single source of truth for colors, fonts, shadows and motion.
+ * Components only reference the semantic tokens (section 2+), never the
+ * palette directly, so a new theme only needs to remap section 2.
+ *
+ * Transparent variants are derived in place with
+ *     color-mix(in srgb, var(--token) N%, transparent)
+ * so every color is defined exactly once.
+ */
+
+:root {
+
+    /* 1. PALETTE */
+
+    --palette-white: #ffffff;
+    --palette-black: #000000;
+
+    --palette-slate-50: #f4f7fb;
+    --palette-slate-100: #eef3f9;
+    --palette-slate-200: #d9e2ee;
+    --palette-slate-300: #b9c8db;
+    --palette-slate-400: #9aabc0;
+    --palette-slate-500: #64748b;
+
+    --palette-navy-900: #121d32;
+    --palette-navy-800: #13213b;
+    --palette-navy-700: #26344c;
+    --palette-navy-400: #69768a;
+    --palette-navy-300: #9daabc;
+    --palette-navy-200: #b4c0d0;
+
+    --palette-blue-800: #234c83;
+    --palette-blue-700: #315f9f;
+    --palette-blue-500: #4a7fd0;
+    --palette-blue-300: #9cb9dc;
+    --palette-blue-50: #e8f0fb;
+
+    --palette-orange-500: #d68b16;
+
+
+    /* 2. SEMANTIC COLORS (light theme) */
+
+    --color-bg: var(--palette-slate-50);
+    --color-bg-alt: var(--palette-slate-100);
+    --color-surface: var(--palette-white);
+
+    --color-text: var(--palette-navy-800);
+    --color-text-muted: var(--palette-slate-500);
+
+    --color-primary: var(--palette-blue-700);
+    --color-primary-hover: var(--palette-blue-800);
+    --color-primary-bright: var(--palette-blue-500);
+    --color-primary-soft: var(--palette-blue-50);
+    --color-on-primary: var(--palette-white);
+
+    --color-accent: var(--palette-orange-500);
+    --color-on-accent: var(--palette-navy-900);
+
+    --color-border: var(--palette-slate-200);
+    --color-border-strong: var(--palette-slate-300);
+    --color-border-control: var(--palette-slate-400);
+
+    --color-shadow: var(--palette-navy-800);
+    --color-highlight: var(--palette-white);
+
+    /* Dark ("inverse") areas: contact, footer, logo mark */
+    --color-inverse-bg: var(--palette-navy-900);
+    --color-inverse-text: var(--palette-white);
+    --color-inverse-text-muted: var(--palette-navy-200);
+    --color-inverse-text-subtle: var(--palette-navy-300);
+    --color-inverse-label: var(--palette-blue-300);
+    --color-inverse-border: var(--palette-navy-400);
+    --color-inverse-divider: var(--palette-navy-700);
+    --color-inverse-shadow: var(--palette-black);
+
+
+    /* 3. PROJECT ILLUSTRATIONS
+     * Scene-specific colors used only by the animated project visuals. */
+
+    --viz-light: var(--palette-white);
+
+    --viz-dark-bg: #111d31;
+    --viz-dark-label: #b8c8dc;
+
+    --viz-vision-bg-end: #24446f;
+
+    --viz-data-bg-start: #f9fbfe;
+    --viz-data-bg-end: #dfeaf8;
+
+    --viz-carkeep-bg-end: #e5edf6;
+
+    --viz-pacman-bg-end: #1d3557;
+    --viz-pacman-ghost: #e0283a;
+    --viz-pacman-ghost-edge: var(--palette-navy-900);
+
+    --viz-battle-bg-start: #f3efe2;
+    --viz-battle-bg-end: #e6e0cc;
+    --viz-battle-rock: #8a8d96;
+    --viz-battle-tree: #4f8a58;
+    --viz-battle-blast: #e8781e;
+    --viz-battle-blast-edge: #d9481c;
+    --viz-battle-team-b: #e8741f;
+    --viz-battle-commander: #f2c94c;
+
+
+    /* 4. TYPOGRAPHY */
+
+    --font-body: "Inter", sans-serif;
+    --font-display: "Space Grotesk", sans-serif;
+    --font-mono: "IBM Plex Mono", monospace;
+
+
+    /* 5. SHADOWS */
+
+    --shadow-nav: 0 10px 30px color-mix(in srgb, var(--color-shadow) 6%, transparent);
+    --shadow-card: 0 25px 60px color-mix(in srgb, var(--color-shadow) 7%, transparent);
+    --shadow-card-hover: 0 35px 80px color-mix(in srgb, var(--color-shadow) 14%, transparent);
+    --shadow-card-stacked: 0 20px 50px color-mix(in srgb, var(--color-shadow) 7%, transparent);
+    --shadow-primary: 0 14px 30px color-mix(in srgb, var(--color-primary) 32%, transparent);
+    --shadow-inverse: 0 14px 30px color-mix(in srgb, var(--color-inverse-shadow) 30%, transparent);
+
+
+    /* 6. LAYOUT & MOTION */
+
+    --max-width: 1180px;
+    --nav-height: 80px;
+
+    --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}

@@ -1,0 +1,31 @@
+{% from "partials/components.njk" import sectionTitle %}
+{% set about = home.about %}
+
+<section id="about" class="section">
+
+    <div class="container">
+
+        {{ sectionTitle(about.number, about.kicker, about.title) }}
+
+        <div class="about-grid" data-stagger>
+
+            <div class="about-main reveal">
+                {%- for paragraph in about.paragraphs %}
+                <p>{{ paragraph | safe }}</p>
+                {%- endfor %}
+            </div>
+
+            <div class="about-side reveal">
+                {%- for fact in about.facts %}
+                <div class="about-item">
+                    <span>{{ fact.label }}</span>
+                    <strong>{{ fact.value }}</strong>
+                </div>
+                {%- endfor %}
+            </div>
+
+        </div>
+
+    </div>
+
+</section>

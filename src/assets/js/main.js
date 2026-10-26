@@ -154,7 +154,7 @@ if (canHover && !prefersReducedMotion) {
     // Hero spotlight follows the cursor
     const hero = document.querySelector(".hero");
 
-    hero.addEventListener("pointermove", (event) => {
+    hero?.addEventListener("pointermove", (event) => {
         const rect = hero.getBoundingClientRect();
 
         hero.style.setProperty("--hx", `${event.clientX - rect.left}px`);

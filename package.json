@@ -1,0 +1,18 @@
+{
+  "name": "shahar-eliyahu-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Personal portfolio of Shahar Eliyahu, built with Eleventy.",
+  "type": "module",
+  "scripts": {
+    "start": "eleventy --serve",
+    "build": "npm run clean && eleventy",
+    "clean": "node -e \"require('fs').rmSync('_site', { recursive: true, force: true })\""
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "3.1.7"
+  }
+}

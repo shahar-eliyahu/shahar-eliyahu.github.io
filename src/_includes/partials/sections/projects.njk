@@ -1,0 +1,16 @@
+{% from "partials/components.njk" import sectionTitle %}
+{% set section = home.projects %}
+
+<section id="projects" class="section projects-section">
+
+    <div class="container">
+
+        {{ sectionTitle(section.number, section.kicker, section.title) }}
+
+        {%- for project in collections.projects %}
+        {% include "partials/project-row.njk" %}
+        {%- endfor %}
+
+    </div>
+
+</section>
