@@ -119,35 +119,6 @@ sections.forEach((section) => {
 });
 
 
-// Hero detection box: count confidence up
-const confidence = document.querySelector(".confidence");
-
-if (confidence && !prefersReducedMotion) {
-    const target = parseFloat(confidence.textContent);
-    const duration = 900;
-    const startDelay = 1800;
-
-    confidence.textContent = "0.00";
-
-    setTimeout(() => {
-        const start = performance.now();
-
-        function step(now) {
-            const t = Math.min((now - start) / duration, 1);
-            const eased = 1 - Math.pow(1 - t, 3);
-
-            confidence.textContent = (target * eased).toFixed(2);
-
-            if (t < 1) {
-                requestAnimationFrame(step);
-            }
-        }
-
-        requestAnimationFrame(step);
-    }, startDelay);
-}
-
-
 // Pointer effects (desktop only)
 if (canHover && !prefersReducedMotion) {
 

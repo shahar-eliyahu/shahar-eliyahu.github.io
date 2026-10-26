@@ -7,6 +7,7 @@ import {
     projectsUsing,
     categoryDetails,
 } from "./lib/projects.js";
+import { profileEditor } from "./lib/profile-code.js";
 
 export default function (eleventyConfig) {
     // Static files copied as-is. The CV keeps its original public URL.
@@ -25,6 +26,9 @@ export default function (eleventyConfig) {
     eleventyConfig.addFilter("projectAsset", projectAsset);
     eleventyConfig.addFilter("projectsUsing", projectsUsing);
     eleventyConfig.addFilter("categoryDetails", categoryDetails);
+
+    // Hero editor: profile facts -> highlighted Java / Python / C++ (lib/profile-code.js)
+    eleventyConfig.addFilter("profileEditor", profileEditor);
 
     // "1" -> "01"
     eleventyConfig.addFilter("pad", (value, length = 2) =>

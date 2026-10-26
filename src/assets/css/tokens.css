@@ -51,6 +51,9 @@
     --palette-violet-500: #8b5cf6;
     --palette-violet-600: #7c3aed;
 
+    /* Mint (code strings only) */
+    --palette-mint-300: #86d4b0;
+
 
     /* 2. SEMANTIC COLORS */
 
@@ -62,6 +65,7 @@
 
     /* Text */
     --color-text: var(--palette-gray-50);
+    --color-text-secondary: var(--palette-gray-300);
     --color-text-muted: var(--palette-gray-400);
     --color-text-subtle: var(--palette-gray-500);
 
@@ -100,6 +104,15 @@
     --color-inverse-border: var(--palette-navy-500);
     --color-inverse-divider: var(--palette-navy-800);
     --color-inverse-shadow: var(--palette-black);
+
+    /* Code syntax (hero profile editor) */
+    --color-code-keyword: var(--palette-violet-400);
+    --color-code-type: var(--palette-blue-300);
+    --color-code-name: var(--palette-gray-50);
+    --color-code-field: var(--palette-gray-300);
+    --color-code-string: var(--palette-mint-300);
+    --color-code-punct: var(--palette-gray-500);
+    --color-code-meta: var(--palette-violet-300);
 
     /* Gradients */
     --gradient-brand: linear-gradient(135deg, var(--palette-blue-600), var(--palette-violet-600));
@@ -150,12 +163,14 @@
     --text-sm: 0.875rem;
     --text-base: 1rem;
     --text-lg: 1.08rem;
+    --text-lead: clamp(1.125rem, 1.4vw, 1.3rem);
 
-    --text-h1: clamp(4rem, 9vw, 8.5rem);
+    --text-h1: clamp(3.4rem, 10vw, 9.75rem);
     --text-h2: clamp(2.5rem, 5vw, 4rem);
     --text-h3: clamp(2rem, 4vw, 3rem);
 
     --leading-tight: 1.05;
+    --leading-lead: 1.6;
     --leading-body: 1.65;
 
     --tracking-tight: -0.03em;

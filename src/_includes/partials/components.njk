@@ -2,6 +2,7 @@
     Reusable UI pieces. Import with:
     {% from "partials/components.njk" import sectionTitle, button, profileButtons %}
 #}
+{% from "partials/icons.njk" import icon as svgIcon %}
 
 
 {# Numbered section heading: "01  ABOUT / About Me" #}
@@ -19,10 +20,13 @@
 
 {#
     Button link.
+    variant:  hierarchy / style class: "primary", "secondary", "ghost",
+              "light", "dark-outline" (or "" for the default outline)
     kind:     "external" opens in a new tab, "download" downloads the file
-    variant:  extra class, e.g. "primary", "light", "dark-outline"
+    icon:     optional icon name from partials/icons.njk, shown before the label
+    trailingIcon: optional icon name shown after the label
 #}
-{% macro button(label, href, variant = "", kind = "", filename = "") %}
+{% macro button(label, href, variant = "", kind = "", filename = "", icon = "", trailingIcon = "") %}
 <a
     class="button{{ ' ' + variant if variant }}"
     href="{{ href }}"
@@ -33,14 +37,17 @@
     download="{{ filename }}"
     {%- endif %}
 >
-    {{ label | safe }}
+    {%- if icon %}{{ svgIcon(icon) }}{% endif %}
+    <span>{{ label | safe }}</span>
+    {%- if trailingIcon %}{{ svgIcon(trailingIcon) }}{% endif %}
+    {%- if kind == "external" %}<span class="sr-only"> (opens in a new tab)</span>{% endif %}
 </a>
 {% endmacro %}
 
 
 {# CV, GitHub and LinkedIn buttons, shared by the hero and contact sections #}
-{% macro profileButtons(site, variant = "") %}
-{{ button("Download CV ↓", site.cv, variant, "download", site.cvFilename) }}
-{{ button("GitHub ↗", site.social.github, variant, "external") }}
-{{ button("LinkedIn ↗", site.social.linkedin, variant, "external") }}
+{% macro profileButtons(site, cvVariant = "", linkVariant = "") %}
+{{ button("Download CV", site.cv, cvVariant, "download", site.cvFilename, icon = "download") }}
+{{ button("GitHub", site.social.github, linkVariant, "external", icon = "github") }}
+{{ button("LinkedIn", site.social.linkedin, linkVariant, "external", icon = "linkedin") }}
 {% endmacro %}

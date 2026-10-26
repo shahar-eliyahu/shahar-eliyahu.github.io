@@ -1,12 +1,32 @@
 {
     "hero": {
         "label": "SOFTWARE ENGINEER",
-        "nameLines": ["Shahar", "Eliyahu"],
-        "detectionLabel": "software_engineer",
-        "detectionConfidence": "0.97",
-        "subtitle": "Interested in Artificial Intelligence, Machine Learning, and building practical systems that solve real-world problems."
+        "nameLines": [
+            "Shahar",
+            "Eliyahu"
+        ],
+        "subtitle": "Interested in Artificial Intelligence, Machine Learning, and building practical systems that solve real-world problems.",
+        "profile": {
+            "defaultLanguage": "java",
+            "languages": [
+                "java",
+                "python",
+                "cpp"
+            ],
+            "facts": {
+                "name": "Shahar Eliyahu",
+                "role": "Software Engineer",
+                "degree": "B.Sc. Software Engineering",
+                "college": "Afeka Academic College",
+                "specialization": "Artificial Intelligence",
+                "interests": [
+                    "Machine Learning",
+                    "Computer Vision",
+                    "Intelligent Systems"
+                ]
+            }
+        }
     },
-
     "about": {
         "number": "01",
         "kicker": "ABOUT",
@@ -17,24 +37,30 @@
             "I enjoy solving technical problems that combine software engineering, data, and practical implementation, with an emphasis on systems that can operate in real-world environments."
         ],
         "facts": [
-            { "label": "Focus", "value": "AI & Machine Learning" },
-            { "label": "Interests", "value": "Computer Vision · Intelligent Systems" },
-            { "label": "Approach", "value": "Practical Problem Solving" }
+            {
+                "label": "Focus",
+                "value": "AI & Machine Learning"
+            },
+            {
+                "label": "Interests",
+                "value": "Computer Vision · Intelligent Systems"
+            },
+            {
+                "label": "Approach",
+                "value": "Practical Problem Solving"
+            }
         ]
     },
-
     "projects": {
         "number": "02",
         "kicker": "SELECTED WORK",
         "title": "Featured Projects"
     },
-
     "skills": {
         "number": "03",
         "kicker": "TOOLS",
         "title": "Tech Stack"
     },
-
     "contact": {
         "label": "CONTACT",
         "title": "Let's build something useful.",

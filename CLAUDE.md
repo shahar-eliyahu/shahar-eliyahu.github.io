@@ -16,10 +16,30 @@ Guidance for Claude Code when working on this repository. For step-by-step conte
 9. Never include Claude, Anthropic, AI or assistant attribution in commits.
 10. Never add `Co-Authored-By` trailers.
 11. Keep this file and README.md updated when architectural decisions change.
+12. **Responsive design is required in every phase** (see below).
 
 Also: never invent project details (roles, results, years, screenshots). Leave fields empty
 until the owner provides real information. Don't download external images or generate fake
 screenshots.
+
+### Responsive design (required for every phase)
+
+Every new feature, component, section or visual change is designed and built for desktop,
+tablet and mobile **in the same task**. Mobile work isn't postponed. A final mobile polish
+pass will still happen once the whole site is complete.
+
+- Use a mobile-first approach where practical.
+- Test at **1920, 1440, 1024, 768, 390 and 320px**.
+- Keep text readable, tap targets comfortable (about 44px or more) and spacing right for each size.
+- No horizontal overflow, overlapping elements, broken layouts or needless empty space.
+- Interactive elements must work with touch as well as mouse and keyboard. Don't rely on hover alone.
+- Animations must stay smooth on mobile and respect `prefers-reduced-motion`.
+- Don't just shrink the desktop layout. Restructure it when needed (stacking, reordering,
+  hiding duplicate content, changing grids).
+- When a mobile-specific decision is needed, pick a sensible option consistent with the
+  design system and note it in the report.
+- **Every phase's validation summary must include the responsive checks** (the widths
+  tested and the results).
 
 ## Project
 
@@ -145,17 +165,92 @@ redesigned (Phase 3B), not as a separate churn pass.
   muted `#9aa6c4`. Blue `#3b82f6` (links use the lighter `#60a5fa` for contrast), violet
   `#a78bfa` / `#8b5cf6`. `color-scheme: dark` is set, plus `<meta name="theme-color">`.
 - Accent roles: **blue = actions and links**, **violet = markers** (section and project numbers,
-  hero label, detection boxes). The brand gradient (blue-600 → violet-600) appears only on
+  hero label, editor caret, illustration detection boxes). The brand gradient (blue-600 → violet-600) appears only on
   the primary button, the logo mark, the scroll bar and nav underline.
 - Depth comes from layered navy surfaces, 1px borders, soft black shadows and two faint fixed
   ambient radial gradients on `body`. No particles, no animated backgrounds, glow only on hover.
-- Radii: cards 16px, buttons 10px, tags 6px, hero label pill. Detection boxes stay square on
-  purpose (bounding-box motif).
+- Radii: cards 16px, buttons 10px, tags 6px, hero label pill. Detection boxes in the vision
+  illustration stay square on purpose (bounding-box motif).
 - All 7 illustrations were recolored through `--viz-*` tokens (dark cards). Their shapes and
   animations are unchanged.
 - Contrast: every text element is at least 6.7:1 (WCAG AA); the focus ring is `#93c5fd`, 2px.
 - Fixed a long-standing bug: `.hero-label` was `inline-flex` and sat beside the name on wide
   screens. It's now block-level (`flex` + `fit-content`).
+
+## Hero and buttons (Phase 3B)
+
+- Hero is a two-column grid at 1200px and up (`.hero-layout`, 0.95fr / 1.05fr): name, intro and
+  actions on the left, the profile editor on the right. Below 1200px it stacks (editor below the
+  intro, max 640px wide), including on mobile.
+- **The detection box around the name was removed** (owner decision), along with its label,
+  the 0.97 counter, the `box-draw` / `label-in` keyframes and the JS counter. The name is plain
+  `--text-h1` (up to 9.75rem). Intro: `--text-lead`, `--color-text-secondary`, max 36ch.
+  The vision project illustration keeps its own detection boxes.
+- Button hierarchy (`button()` macro in `components.njk`):
+  `primary` (brand gradient, one per view) → `secondary` (solid raised surface) →
+  `ghost` (text and icon, for profile links). Contact still uses `light` / `dark-outline`.
+  The macro takes `icon` / `trailingIcon` (from `partials/icons.njk`, inline SVG, no
+  library) and adds hidden "(opens in a new tab)" text to external links.
+- GitHub and LinkedIn sit in `.hero-links`, so they wrap together. On mobile, the main actions
+  are full width and the profile links share one row.
+- Section numbers align to the kicker baseline. The contact block uses the full container width.
+
+## Hero profile editor
+
+- **Data:** `home.json → hero.profile` holds `facts` (the only copy of the profile facts: string
+  or list-of-strings values, camelCase keys), `languages` (`java`, `python`, `cpp`) and
+  `defaultLanguage` (**`java`**). Only verified facts go here. Never add invented stats or skills.
+- **Code generation:** `lib/profile-code.js` (the `profileEditor` filter) derives Java
+  (`ShaharEliyahu.java`, class plus `List.of`), Python (`profile.py`, frozen dataclass plus tuple) and
+  C++ (`profile.cpp`, struct plus `std::vector`) at build time, as highlighted HTML
+  (`.code-line` > `.tok-keyword|type|name|field|string|punct|meta`, indentation in `.tok-ws`,
+  `--ws` = indent width). A new fact appears in all three languages automatically. The generated
+  code compiles (checked with javac, Python and MSVC).
+- **Markup** (`hero.njk`): WAI-ARIA tabs (`role="tablist"` / `tab` / `tabpanel`, roving
+  tabindex). All language `<pre>`s share one grid cell, so the height is that of the longest snippet
+  and never jumps. Inactive panels are `visibility: hidden`. Tabs only show with JS; without JS
+  the full Java code is shown with its filename.
+- **Behaviour** (`assets/js/editor.js`, vanilla): click or arrow / Home / End switches language,
+  updates `aria-selected`, the filename and the panel, and restarts typing. Re-selecting the
+  current tab does nothing. There's no auto-cycling.
+- **Typing:** plays in an `aria-hidden` overlay (`.editor-typing`) over the real code. The real
+  code stays in the accessibility tree (opacity 0 while typing), and there's no `aria-live`, so nothing
+  is announced per character. Per-character steps with slight jitter; indentation appears at once;
+  short pause per line. Duration scales with length, clamped to 2–3.4s (about 2.7s per snippet). A
+  `runId` plus `cancelAnimationFrame` cancels any previous run, so rapid switching never mixes languages.
+  Initial typing starts when the editor scrolls into view (IntersectionObserver). The caret is solid
+  while typing and blinks at the end.
+- **Reduced motion:** code appears complete immediately and the caret doesn't blink.
+- **Wrapping:** `pre-wrap` with a hanging indent, so narrow screens wrap lines under the code
+  instead of scrolling. The line-number gutter is 3rem (2.25rem on mobile).
+- Syntax colours are tokens (`--color-code-*`). Strings use a mint (`--palette-mint-300`) that
+  appears nowhere else. All tokens meet AA on the panel (lowest: punctuation 4.9:1).
+
+## Visual hierarchy principles (all phases)
+
+- Important headings must stand out clearly: size, weight and space before color.
+- Descriptive text needs strong contrast (`--color-text-secondary` for leads, `-muted` for
+  body) and a comfortable line length (about 36–70ch).
+- Interactive elements must look interactive. Important actions are buttons, not small text
+  links. Use one primary action per area.
+- Technology tags must stand apart from their background (border plus surface contrast).
+- Create hierarchy with whitespace and typography. Avoid giving everything the same weight.
+- Never rely on glow to make content noticeable. Glow is only a hover accent.
+
+## Requirements for the project gallery redesign (next layout phase)
+
+- EasyFill gets a prominent "Featured Graduation Project" presentation above the gallery
+  (driven by `collections.featuredProjects`, with `type` as metadata).
+- Project titles and descriptions must be more readable than in the current rows.
+- GitHub, Demo and Project Details actions are clearly visible buttons, shown only when the
+  data exists. Details appear only once case-study pages exist.
+- Technology tags must be clearly distinguishable.
+- Media and content must feel balanced. Keep the animated illustrations as the media fallback,
+  and fix the vision illustration's headline overlapping its detection boxes.
+- All cards should look polished and consistent.
+- Category filters are generated from `collections.projectCategories`, with a virtual "All"
+  filter, filtering on `data-categories`, and empty categories hidden.
+- Never invent screenshots, demo links or project information.
 
 ## Validation workflow
 
@@ -173,19 +268,20 @@ redesigned (Phase 3B), not as a separate churn pass.
   layouts, partials, data files.
 - **Phase 2 (done, commit `8c9ec85`):** project content model, categories, featured
   projects, media fallback, validation, docs.
-- **Phase 3A (in progress, awaiting owner review):** dark visual foundation. Tokens, typography,
-  surfaces and recolored illustrations, with no layout or structure changes.
+- **Phase 3A (done, commit `db1ba51`):** dark visual foundation. Tokens, typography, surfaces,
+  recolored illustrations.
+- **Phase 3B (done):** hero redesign (two columns, bigger name,
+  detection box removed), interactive Java/Python/C++ profile editor with typing animation,
+  button hierarchy with icons, section-number and contact alignment fixes.
 - `main` still serves the old hand-written site. This branch has no root `index.html`, so
   **merging before the Actions deploy exists would break the live site.**
 
 ## Roadmap
 
-3. **Dark design system.** 3A (visual foundation: tokens, typography, surfaces) is done, pending
-   review. 3B is the layout redesign (hero, project cards and grid) using the 3A tokens.
-   Known layout issues for 3B: in the vision illustration the headline overlaps the detection
-   boxes; the contact block is offset by its 900px max-width; section numbers sit slightly
-   below their kicker.
-4. **New sections:** "Featured Graduation Project" section for EasyFill above the gallery,
+3. **Dark design system.** 3A (tokens, surfaces) and 3B (hero, editor, hierarchy) are done.
+   The palette will be re-evaluated after the layout redesign.
+4. **New sections.** First, a deferred refinement: the hero name looks slightly too large
+   and heavy. Refine its font size, weight and spacing while keeping the current layout. Then: "Featured Graduation Project" section for EasyFill above the gallery,
    a filterable project card grid (virtual "All" filter plus generated category filters), expanded
    About (education, hackathon, experience timeline), skills linked to projects, contact upgrades.
 5. **Case-study pages** at `/projects/<slug>/`: enable the conditional permalink in
@@ -197,9 +293,11 @@ redesigned (Phase 3B), not as a separate churn pass.
 ## Design requirements
 
 - Professional, modern "dark tech + creative developer" look: polished but not cluttered.
-- Keep the hero object-detection box motif and the 7 animated project illustrations.
+- Keep the 7 animated project illustrations. The hero has no detection box (removed in 3B);
+  its signature element is the interactive profile editor.
 - Fonts: Space Grotesk (display), Inter (body), IBM Plex Mono (labels).
-- Fully responsive (current breakpoints: 850px, 650px), no horizontal scroll.
+- Fully responsive (breakpoints: 1199px for the hero, 850px, 650px), no horizontal scroll
+  down to 320px.
 - Respect `prefers-reduced-motion`. Pointer effects only on hover-capable devices. Content must
   stay visible without JS (`.js` class gates reveal animations).
 - Real screenshots only, with descriptive alt text. Keep images small (webp, under 500 KB).
