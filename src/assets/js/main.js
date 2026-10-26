@@ -44,7 +44,29 @@ function updateScrollState() {
     progressBar.style.transform = `scaleX(${progress})`;
     navbar.classList.toggle("scrolled", scrollTop > 20);
 
+    // At the very bottom a short last section (Contact) may never reach the
+    // observer's band on tall screens, so highlight its link explicitly.
+    if (isAtBottom()) {
+        const allSections = document.querySelectorAll("section[id]");
+        setActiveLink(allSections[allSections.length - 1]?.id);
+    }
+
     scrollTicking = false;
+}
+
+function isAtBottom() {
+    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+    return maxScroll > 0 && window.scrollY >= maxScroll - 2;
+}
+
+function setActiveLink(id) {
+    if (!id) {
+        return;
+    }
+
+    navLinks.forEach((link) => {
+        link.classList.toggle("active", link.getAttribute("href") === `#${id}`);
+    });
 }
 
 window.addEventListener(
@@ -61,10 +83,13 @@ window.addEventListener(
 updateScrollState();
 
 
-// Staggered reveal delays
+// Staggered reveal delays. data-stagger="3" restarts the stagger every
+// 3 items, so each row of a grid reveals left to right without long waits.
 document.querySelectorAll("[data-stagger]").forEach((group) => {
+    const cycle = Number(group.dataset.stagger) || Infinity;
+
     group.querySelectorAll(".reveal").forEach((element, index) => {
-        element.style.setProperty("--delay", `${index * 0.12}s`);
+        element.style.setProperty("--delay", `${(index % cycle) * 0.12}s`);
     });
 });
 
@@ -97,16 +122,10 @@ const sections = document.querySelectorAll("section[id]");
 const sectionObserver = new IntersectionObserver(
     (entries) => {
         entries.forEach((entry) => {
-            if (!entry.isIntersecting) {
-                return;
+            // At the bottom the last section stays active (see updateScrollState)
+            if (entry.isIntersecting && !isAtBottom()) {
+                setActiveLink(entry.target.id);
             }
-
-            navLinks.forEach((link) => {
-                link.classList.toggle(
-                    "active",
-                    link.getAttribute("href") === `#${entry.target.id}`
-                );
-            });
         });
     },
     {
@@ -130,26 +149,6 @@ if (canHover && !prefersReducedMotion) {
 
         hero.style.setProperty("--hx", `${event.clientX - rect.left}px`);
         hero.style.setProperty("--hy", `${event.clientY - rect.top}px`);
-    });
-
-
-    // 3D tilt + glare on project visuals
-    document.querySelectorAll(".project-visual").forEach((card) => {
-        card.addEventListener("pointermove", (event) => {
-            const rect = card.getBoundingClientRect();
-            const x = (event.clientX - rect.left) / rect.width;
-            const y = (event.clientY - rect.top) / rect.height;
-
-            card.style.setProperty("--ry", `${(x - 0.5) * 8}deg`);
-            card.style.setProperty("--rx", `${(0.5 - y) * 8}deg`);
-            card.style.setProperty("--mx", `${x * 100}%`);
-            card.style.setProperty("--my", `${y * 100}%`);
-        });
-
-        card.addEventListener("pointerleave", () => {
-            card.style.setProperty("--rx", "0deg");
-            card.style.setProperty("--ry", "0deg");
-        });
     });
 
 

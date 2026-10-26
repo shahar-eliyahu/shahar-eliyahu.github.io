@@ -54,7 +54,8 @@
     "projects": {
         "number": "02",
         "kicker": "SELECTED WORK",
-        "title": "Featured Projects"
+        "title": "Projects",
+        "filterAll": "All Projects"
     },
     "skills": {
         "number": "03",

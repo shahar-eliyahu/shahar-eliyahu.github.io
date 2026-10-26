@@ -1,15 +1,85 @@
 {% from "partials/components.njk" import sectionTitle %}
+{% from "partials/icons.njk" import icon %}
 {% set section = home.projects %}
+{% set filters = collections.projects | categoryCounts %}
 
 <section id="projects" class="section projects-section">
 
-    <div class="container">
+    <div class="container" data-explorer>
 
         {{ sectionTitle(section.number, section.kicker, section.title) }}
 
-        {%- for project in collections.projects %}
-        {% include "partials/project/row.njk" %}
-        {%- endfor %}
+        {#- Filters are generated from projectCategories.json (empty ones omitted).
+            They need JavaScript, so they're hidden without it. #}
+        {% if filters.length > 1 %}
+        <div class="project-filters reveal" role="group" aria-label="Filter projects by category" data-project-filters>
+            <button type="button" class="filter-chip" data-filter="all" aria-pressed="true">
+                {{ section.filterAll }} <span class="filter-count">{{ collections.projects.length }}</span>
+            </button>
+            {%- for category in filters %}
+            <button type="button" class="filter-chip" data-filter="{{ category.id }}" aria-pressed="false">
+                {{ category.label }} <span class="filter-count">{{ category.count }}</span>
+            </button>
+            {%- endfor %}
+        </div>
+        {% endif %}
+
+        <p class="sr-only" aria-live="polite" data-explorer-status></p>
+
+        {#-
+            Project explorer: a project picker (vertical list on desktop,
+            horizontal strip below 1024px) and one preview panel per project.
+            Without JavaScript the picker items are anchor links and every
+            panel is shown; projects.js turns them into ARIA tabs.
+        #}
+        <div class="explorer reveal">
+
+            <div class="explorer-picker">
+                <ul class="explorer-list" data-explorer-list aria-label="Projects">
+                    {%- for project in collections.projects %}
+                    <li data-project="{{ project.data.slug }}" data-categories="{{ project.data.categories | join(' ') }}">
+                        <a
+                            class="explorer-tab"
+                            id="tab-{{ project.data.slug }}"
+                            href="#project-{{ project.data.slug }}"
+                            data-project="{{ project.data.slug }}"
+                        >
+                            {#- Number within the visible (filtered) list; projects.js renumbers on filter #}
+                            <span class="explorer-tab-index" aria-hidden="true">{{ loop.index | pad }}</span>
+                            <span class="explorer-tab-text">
+                                <span class="explorer-tab-name">{{ project.data.title }}</span>
+                                <span class="explorer-tab-category">{{ (project.data.categories | categoryDetails | first).label }}</span>
+                            </span>
+                        </a>
+                    </li>
+                    {%- endfor %}
+                </ul>
+            </div>
+
+            <div class="explorer-panels">
+                {%- for project in collections.projects %}
+                {% set isFirst = loop.first %}
+                {% include "partials/project/panel.njk" %}
+                {%- endfor %}
+            </div>
+
+        </div>
+
+        {#- Shared full-size image viewer (native modal dialog) #}
+        <dialog class="lightbox" aria-label="Image viewer" data-lightbox>
+            <div class="lightbox-inner">
+                <div class="lightbox-bar">
+                    <p class="lightbox-count" data-lightbox-count></p>
+                    <button type="button" class="lightbox-button" data-lightbox-close aria-label="Close image viewer">✕</button>
+                </div>
+                <figure class="lightbox-figure">
+                    <img class="lightbox-image" src="" alt="" data-lightbox-image>
+                    <figcaption class="lightbox-caption" data-lightbox-caption></figcaption>
+                </figure>
+                <button type="button" class="lightbox-button lightbox-nav is-prev" data-lightbox-prev aria-label="Previous image">{{ icon("arrow-right") }}</button>
+                <button type="button" class="lightbox-button lightbox-nav is-next" data-lightbox-next aria-label="Next image">{{ icon("arrow-right") }}</button>
+            </div>
+        </dialog>
 
     </div>
 

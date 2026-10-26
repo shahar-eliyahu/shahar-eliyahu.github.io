@@ -4,6 +4,7 @@ summary: >-
   End-to-end object detection project for person and vehicle detection using
   YOLO. Includes semi-automatic dataset construction with Florence-2, model
   training, augmentation experiments, and performance evaluation.
+excerpt: "End-to-end YOLO detection of people and vehicles, with a semi-automatic Florence-2 dataset pipeline."
 year: "2025"
 categories: [ai-ml]
 technologies: [YOLO, Florence-2, PyTorch, Computer Vision]

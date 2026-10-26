@@ -5,6 +5,7 @@ summary: >-
   filling. The system analyzes multimodal distress signals in real time, adapts
   the interface to the user's state, and provides supportive prompts and
   voice-based interaction.
+excerpt: "Android app that supports people affected by PTSD during form filling, adapting to distress signals in real time."
 year: "2025–2026"
 type: Final degree project
 categories: [applications]

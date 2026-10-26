@@ -721,18 +721,6 @@
 }
 
 
-/* MOBILE */
-
-@media (max-width: 650px) {
-
-    .ef-fields,
-    .ck-badges,
-    .data-bars {
-        display: none;
-    }
-}
-
-
 /* REDUCED MOTION */
 
 @media (prefers-reduced-motion: reduce) {

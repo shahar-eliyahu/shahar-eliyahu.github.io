@@ -60,9 +60,9 @@ for example `npx serve _site`.
 │   │       ├── nav.njk, footer.njk
 │   │       ├── components.njk  # Reusable macros: sectionTitle, button, profileButtons
 │   │       ├── project/
-│   │       │   ├── row.njk     # One project on the homepage
-│   │       │   ├── media.njk   # Cover image, or animated illustration fallback
-│   │       │   └── macros.njk  # techTags, categoryList, projectLinks
+│   │       │   ├── panel.njk   # One project preview in the Project Explorer
+│   │       │   ├── gallery.njk # Screenshots / video / illustration fallback
+│   │       │   └── macros.njk  # techTags, categoryList, projectActions
 │   │       ├── sections/       # hero, about, projects, skills, contact
 │   │       └── visuals/        # Optional animated illustration per project
 │   │
@@ -73,7 +73,10 @@ for example `npx serve _site`.
 │       │   ├── sections.css    # Homepage sections
 │       │   └── visuals.css     # Project illustrations
 │       ├── img/projects/<slug>/  # Project images (create when needed)
-│       └── js/main.js          # Navigation, scroll effects, reveal, pointer effects
+│       └── js/
+│           ├── main.js         # Navigation, scroll effects, reveal, active link, pointer effects
+│           ├── editor.js       # Hero Java / Python / C++ editor (tabs, typing)
+│           └── projects.js     # Project Explorer (filters, picker, gallery, lightbox, video)
 └── _site/                      # Build output (generated, git-ignored)
 ```
 
@@ -111,8 +114,8 @@ Each project is **one Markdown file** in `src/projects/`. The **file name is the
 `easyfill.md` → slug `easyfill`, images in `src/assets/img/projects/easyfill/`, and
 (once case studies exist) the page `/projects/easyfill/`. Use lowercase letters, digits and hyphens.
 
-Everything on the site is generated from these files: the homepage list, numbering,
-alternating layout, category membership and counts, featured selection and technology lookups.
+Everything on the site is generated from these files: the Project Explorer entries, their order,
+category membership and filter counts, badges and technology lookups.
 Templates never mention a specific project.
 
 ### Adding a new project
@@ -132,16 +135,17 @@ Don't use empty placeholders.
 # --- Basics ---------------------------------------------------------------
 title: EasyFill
 summary: >-
-  One or two sentences shown on the homepage.
+  The full description of the project (kept for the detail page).
+excerpt: "About two lines for the homepage card, condensed from the summary."
 year: "2025–2026"
-type: Final degree project            # free text, e.g. "Course project", "Hackathon"
+type: Final degree project            # optional badge on the card, e.g. "Hackathon"
 role: >-
   What you personally did on the project.
 team: 4                               # team size; omit for solo or unknown
 
 # --- Classification -------------------------------------------------------
 categories: [applications]            # ids from src/_data/projectCategories.json; several allowed
-technologies: [Kotlin, Android, MediaPipe]
+technologies: [Kotlin, Android, MediaPipe]   # all are shown, in this order
 
 # --- Placement ------------------------------------------------------------
 order: 1                              # homepage position, lower comes first
@@ -195,18 +199,20 @@ future case-study page.
 | Field | Required | Notes |
 |---|---|---|
 | `title` | yes | Display name |
-| `summary` | yes | Short text for the homepage and cards |
+| `summary` | yes | Full description (detail pages; cards fall back to it if there's no `excerpt`) |
+| `excerpt` | | About two lines (under ~120 characters) shown on the card. Condense the summary; don't add new facts |
 | `order` | yes | Number, lower comes first. Gaps are fine (10, 20, 30…) |
 | `year` | | Text, e.g. `"2025"` or `"2025–2026"` (quote it) |
-| `type` | | Free text: final degree project, course project, hackathon… |
+| `type` | | Free text: final degree project, course project, hackathon… Shown as a small badge on the card |
 | `role` | | Your role and contributions |
 | `team` | | Team size |
 | `categories` | | List of category ids. A project can have several, or none |
-| `technologies` | | List of technology tags (also used to link skills to projects) |
-| `featured`, `featuredOrder` | | Featured projects also stay in the normal list |
-| `cover` | | `{ src, alt }`. Replaces the illustration on the homepage. `alt` is required |
-| `gallery` | | List of `{ src, alt, caption }` (caption optional). GIFs work like any image |
-| `links.github`, `links.demo`, `links.video` | | Each one shown only if present |
+| `technologies` | | List of technology tags, shown in this order under "Technologies" in the Project Explorer. Also links skills to projects |
+| `featured`, `featuredOrder` | | Marks highlight projects (`collections.featuredProjects`). Not shown differently on the homepage right now |
+| `cover` | | `{ src, alt, fit, position }`. First gallery image. `alt` is required. `fit: contain` shows the whole image (portrait phone screenshots); the default fills the frame, anchored to the top. `position` (e.g. `center`, `50% 30%`) chooses which part stays visible |
+| `gallery` | | More screenshots: list of `{ src, alt, caption, fit, position }` (only `src` and `alt` required). GIFs work like any image |
+| `videoPoster` | | Preview image for the video's play button (file in the project's image folder) |
+| `links.github`, `links.demo`, `links.video` | | Each one shown only if present. `links.video` is a YouTube / Vimeo URL or a local `.mp4` / `.webm` (plays in the gallery); other URLs become a "Watch video" button |
 | `visual` | | Animated illustration and its captions (fallback when there's no `cover`) |
 | `caseStudy` | | `enabled` plus optional `problem`, `solution`, `architecture`, `challenges`, `results`, `lessons` (Markdown) |
 | Markdown body | | Detailed description |
@@ -217,27 +223,67 @@ only contains what is specific to that project.
 ### Editing, ordering, removing
 
 - **Edit:** change the project's file. The homepage updates automatically.
-- **Reorder:** change `order`. Numbers ("PROJECT 01") and left/right alternation follow it.
+- **Reorder:** change `order`. The Project Explorer list follows it (EasyFill is `order: 1`, so it comes first).
 - **Remove:** delete the file and its image folder.
 - **Change categories or technologies:** edit the lists in the front matter (see [Categories](#categories)).
 
-### Images and screenshots
+### Screenshots and videos
 
-- Put files in `src/assets/img/projects/<slug>/` and reference them **by file name only**
-  (`src: cover.webp`). The site turns that into `/assets/img/projects/<slug>/cover.webp`.
-- Every image needs `alt` text that describes what it shows. The build fails without it,
-  and also fails if a referenced file is missing.
-- Prefer `.webp` (or optimized `.png`/`.jpg`), around 1600px wide or less, and well under 500 KB each.
-  Don't commit raw videos. Link to them with `links.video` (YouTube and similar).
-- Without a `cover`, the project shows its animated illustration (`visual`). Without either,
-  it shows its title on a plain card.
+The homepage **Project Explorer** shows each project's media in a gallery: a main view, thumbnails,
+previous/next arrows, swipe on phones, a full-size image viewer, and an in-page video player.
+Until a project has real media, its animated illustration is shown (no empty or fake thumbnails).
+
+**Add screenshots:**
+
+1. Put the files in `src/assets/img/projects/<slug>/`, e.g. `src/assets/img/projects/easyfill/`.
+   Prefer `.webp` (or optimized `.png` / `.jpg`), at most ~1600px wide, well under 500 KB each.
+2. In the project's `.md`, add a `cover` (the first image shown) and optionally more under `gallery`:
+
+```yaml
+cover:
+  src: home.webp
+  alt: EasyFill home screen with the form list          # required: describe what it shows
+gallery:
+  - src: form.webp
+    alt: Form filling with the calm-mode interface
+    caption: Calm mode adapts the layout to stress signals # optional, shown on the image
+    fit: contain                                          # optional: show a portrait phone screenshot whole
+  - src: settings.webp
+    alt: Accessibility settings screen
+    position: center                                      # optional: which part stays visible when cropped
+```
+
+- `fit: contain` is best for **portrait phone screenshots** and diagrams (shown whole, centred).
+  The default fills the frame and keeps the **top** of the image (where app screens have their header).
+- The gallery order is `cover` first, then `gallery` in the order listed.
+- The build fails if a file is missing or `alt` text is absent.
+
+**Add a video** (one per project) with `links.video`:
+
+```yaml
+links:
+  video: https://www.youtube.com/watch?v=VIDEO_ID   # YouTube or Vimeo: plays inside the page
+  # video: demo.mp4                                 # or a small local .mp4 / .webm in the image folder
+videoPoster: video-poster.webp                       # optional preview image for the play button
+```
+
+- YouTube (`watch`, `youtu.be`, `shorts`) and Vimeo links become an in-page player
+  (privacy-friendly embed, loaded only when the visitor presses Play, never autoplaying on its own).
+  The video appears as the last gallery item with a ▶ thumbnail.
+- Local `.mp4` / `.webm` files play natively. Keep them short and small, or use YouTube.
+- Any other link (e.g. a Google Drive page) can't be embedded and becomes a "Watch video" button.
 
 ### Featured projects
 
-To feature a project, add `featured: true` to its front matter, and optionally `featuredOrder: 2`
-to set its position among featured projects. The first featured project (`featuredOrder: 1`)
-is the primary one. That's EasyFill, which will get its own "Featured Graduation Project"
-section in a later design phase. Featured projects still appear in the normal project list.
+All projects, including EasyFill, appear the same way in the **Project Explorer**: a list of
+projects (a swipeable strip on phones and tablets) and a preview of the selected one with its
+gallery, description, technologies and buttons. The category filters and their counts are
+generated automatically, and the address bar keeps the current filter and project
+(`?category=ai-ml&project=pacman-ai`), so a view can be shared.
+
+`featured: true` (with optional `featuredOrder`) marks highlight projects in the data
+(`collections.featuredProjects`). EasyFill is the primary one. The homepage doesn't show
+featured projects differently at the moment; its "Final degree project" badge comes from `type`.
 
 Being a graduation project is project information (`type: Final degree project`), not a category.
 
@@ -245,6 +291,16 @@ Being a graduation project is project information (`type: Final degree project`)
 
 Add any of these under `links:`. Each one is shown only if present:
 `github` (repository), `demo` (live demo), `video` (YouTube or similar).
+
+**Project buttons in the explorer.** Both of these are intended:
+
+- **Explore Project** opens the project's own detail page (full description, screenshots, videos,
+  technical explanation). It's the main button, and appears automatically for a project once its
+  detail page exists (planned for Phase 4B). Until then it's simply not shown, so there's never a
+  broken link.
+- **GitHub** is always available directly in the explorer, so visitors can open the repository
+  without visiting the detail page. It's the main button for now, and a separate secondary
+  button once Explore Project appears.
 
 ### Categories
 

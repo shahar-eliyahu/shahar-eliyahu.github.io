@@ -21,21 +21,22 @@
     --palette-black: #000000;
 
     /* Navy scale (backgrounds, surfaces, borders) */
-    --palette-navy-1000: #070b16;
-    --palette-navy-950: #0b1020;
-    --palette-navy-900: #0e1428;
-    --palette-navy-850: #111930;
-    --palette-navy-800: #141d35;
-    --palette-navy-750: #1a2442;
-    --palette-navy-700: #222c4a;
-    --palette-navy-600: #2e3a5f;
-    --palette-navy-500: #3d4b75;
+    --palette-navy-1000: #131c30;
+    --palette-navy-950: #172238;
+    --palette-navy-900: #1b2842;
+        --palette-navy-800: #23314c;
+    --palette-navy-750: #2b3b59;
+    --palette-navy-700: #34445f;
+    --palette-navy-600: #44567a;
+    --palette-navy-500: #56698f;
 
     /* Cool grays (text) */
-    --palette-gray-50: #e8eeff;
-    --palette-gray-300: #b4bfda;
-    --palette-gray-400: #9aa6c4;
-    --palette-gray-500: #7d89a8;
+    --palette-gray-50: #f1f5f9;
+    --palette-gray-100: #f8fafc;
+    --palette-gray-200: #dbe2ec;
+    --palette-gray-300: #c6d0de;
+    --palette-gray-400: #a9b5ca;
+    --palette-gray-500: #9aa7c0;
 
     /* Blue */
     --palette-blue-300: #93c5fd;
@@ -43,7 +44,7 @@
     --palette-blue-500: #3b82f6;
     --palette-blue-600: #2563eb;
     --palette-blue-700: #1d4ed8;
-    --palette-blue-950: #1d2c55;
+    --palette-blue-950: #2c3f6b;
 
     /* Violet */
     --palette-violet-300: #c4b5fd;
@@ -66,6 +67,8 @@
     /* Text */
     --color-text: var(--palette-gray-50);
     --color-text-secondary: var(--palette-gray-300);
+    /* Neutral (not blue-tinted) light gray for longer reading text on cards */
+    --color-text-body: var(--palette-gray-200);
     --color-text-muted: var(--palette-gray-400);
     --color-text-subtle: var(--palette-gray-500);
 
@@ -114,6 +117,11 @@
     --color-code-punct: var(--palette-gray-500);
     --color-code-meta: var(--palette-violet-300);
 
+    /* Technology badges */
+    --color-tag-text: var(--palette-blue-300);
+    --color-tag-bg: color-mix(in srgb, var(--color-primary) 10%, transparent);
+    --color-tag-border: color-mix(in srgb, var(--color-primary) 30%, transparent);
+
     /* Gradients */
     --gradient-brand: linear-gradient(135deg, var(--palette-blue-600), var(--palette-violet-600));
     --gradient-accent-line: linear-gradient(90deg, var(--color-primary), var(--color-accent-strong));
@@ -129,23 +137,23 @@
     --viz-card: var(--palette-navy-800);
     --viz-chip: var(--palette-navy-750);
 
-    --viz-dark-bg: #0d1630;
+    --viz-dark-bg: #1c2a48;
     --viz-dark-label: var(--palette-gray-400);
 
-    --viz-vision-bg-end: #1a2f5c;
+    --viz-vision-bg-end: #2b4576;
 
-    --viz-data-bg-start: #111a32;
-    --viz-data-bg-end: #182647;
+    --viz-data-bg-start: #22304d;
+    --viz-data-bg-end: #2a3c61;
 
-    --viz-carkeep-bg-end: #18233f;
+    --viz-carkeep-bg-end: #2a3a5a;
 
-    --viz-pacman-bg-end: #18284d;
+    --viz-pacman-bg-end: #273c66;
     --viz-pacman-ghost: #f0475b;
     --viz-pacman-ghost-edge: var(--palette-navy-950);
 
-    --viz-battle-bg-start: #1a2236;
-    --viz-battle-bg-end: #232b3f;
-    --viz-battle-rock: #4b5574;
+    --viz-battle-bg-start: #26324b;
+    --viz-battle-bg-end: #2e3a54;
+    --viz-battle-rock: #63708f;
     --viz-battle-tree: #3f7d5a;
     --viz-battle-blast: #f08a3c;
     --viz-battle-blast-edge: #f26b3a;
@@ -165,7 +173,7 @@
     --text-lg: 1.08rem;
     --text-lead: clamp(1.125rem, 1.4vw, 1.3rem);
 
-    --text-h1: clamp(3.4rem, 10vw, 9.75rem);
+    --text-h1: clamp(3rem, 8.2vw, 8rem);
     --text-h2: clamp(2.5rem, 5vw, 4rem);
     --text-h3: clamp(2rem, 4vw, 3rem);
 

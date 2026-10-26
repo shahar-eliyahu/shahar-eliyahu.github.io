@@ -1,0 +1,126 @@
+{#
+    Media gallery for one project. Expects `project`.
+    Items come from the `projectMedia` filter (lib/projects.js): real images
+    (cover, gallery), an embeddable/native video, or, with no real media,
+    the project's illustration. Only real images open in the lightbox.
+
+    Without JavaScript: the first item is shown, images link to the full-size
+    file and the video links to its source. assets/js/projects.js adds
+    switching, thumbnails, swipe, the lightbox and the in-page player.
+#}
+{%- from "partials/icons.njk" import icon %}
+{%- set data = project.data %}
+{%- set items = project | projectMedia %}
+{%- set visualId = data.visual.id if data.visual else "" %}
+{%- set count = items.length %}
+
+{#- Illustration only (no real media yet): a shorter, compact stage #}
+<div class="gallery{{ ' is-illustration-only' if count == 1 and items[0].kind == 'illustration' }}" data-gallery>
+
+    <div class="gallery-stage" data-gallery-stage>
+        {%- for item in items %}
+
+        <div
+            class="gallery-item"
+            data-gallery-item
+            data-kind="{{ item.kind }}"
+            {%- if item.kind == "image" %} data-src="{{ item.src }}" data-alt="{{ item.alt }}" data-caption="{{ item.caption }}"{% endif %}
+            {%- if not loop.first %} hidden{% endif %}
+        >
+
+            {%- if item.kind == "image" %}
+
+            <a class="gallery-zoom" href="{{ item.src }}" data-lightbox-open>
+                <img
+                    class="gallery-image{{ ' is-contain' if item.fit == 'contain' }}"
+                    src="{{ item.src }}"
+                    alt="{{ item.alt }}"
+                    {%- if item.position %} style="object-position: {{ item.position }}"{% endif %}
+                    loading="lazy"
+                    decoding="async"
+                >
+                <span class="sr-only"> (open full size)</span>
+            </a>
+            {%- if item.caption %}
+            <p class="gallery-caption">{{ item.caption }}</p>
+            {%- endif %}
+
+            {%- elif item.kind == "video" %}
+
+            <div
+                class="gallery-video"
+                data-video
+                data-provider="{{ item.provider }}"
+                data-title="{{ item.title }}"
+                {%- if item.embed %} data-embed="{{ item.embed }}"{% endif %}
+                {%- if item.src %} data-src="{{ item.src }}"{% endif %}
+            >
+                {%- if item.poster %}
+                <img class="gallery-poster" src="{{ item.poster }}" alt="" loading="lazy" decoding="async">
+                {%- elif visualId %}
+                <div class="project-visual {{ visualId }}-visual is-backdrop" aria-hidden="true">
+                    {% include "partials/visuals/" + visualId + ".njk" ignore missing %}
+                </div>
+                {%- endif %}
+
+                <a class="gallery-play" href="{{ item.url }}" target="_blank" rel="noopener" data-video-play>
+                    {{ icon("play") }}
+                    <span>Play video</span>
+                    <span class="sr-only">: {{ item.title }}</span>
+                </a>
+
+                <a class="gallery-video-source" href="{{ item.url }}" target="_blank" rel="noopener">
+                    Open video in a new tab {{ icon("arrow-up-right") }}
+                </a>
+            </div>
+
+            {%- else %}
+
+            {#- Illustration: a decorative stand-in, never presented as a screenshot #}
+            <div class="project-visual{{ ' ' + visualId + '-visual' if visualId else ' is-fallback' }}" aria-hidden="true">
+                {% if visualId %}{% include "partials/visuals/" + visualId + ".njk" ignore missing %}{% endif %}
+
+                <div class="visual-label">
+                    {{ data.visual.label if data.visual.label else (data.categories | categoryDetails | first).label | upper }}
+                </div>
+
+                <div class="visual-center">
+                    <strong>{{ data.title }}</strong>
+                </div>
+            </div>
+
+            {%- endif %}
+        </div>
+        {%- endfor %}
+
+        {%- if count > 1 %}
+        <button type="button" class="gallery-nav is-prev" data-gallery-prev aria-label="Previous media">{{ icon("arrow-right") }}</button>
+        <button type="button" class="gallery-nav is-next" data-gallery-next aria-label="Next media">{{ icon("arrow-right") }}</button>
+        <p class="gallery-count" aria-hidden="true"><span data-gallery-index>1</span> / {{ count }}</p>
+        {%- endif %}
+    </div>
+
+    {%- if count > 1 %}
+    <ul class="gallery-thumbs" aria-label="{{ data.title }} media">
+        {%- for item in items %}
+        <li>
+            <button
+                type="button"
+                class="gallery-thumb is-{{ item.kind }}"
+                data-gallery-thumb="{{ loop.index0 }}"
+                aria-label="{{ 'Video' if item.kind == 'video' else ('Image' if item.kind == 'image' else 'Illustration') }} {{ loop.index }} of {{ count }}{{ ': ' + item.alt if item.alt }}{{ ': ' + item.title if item.kind == 'video' }}"
+                {%- if loop.first %} aria-current="true"{% endif %}
+            >
+                {%- if item.kind == "image" %}
+                <img src="{{ item.src }}" alt="" loading="lazy" decoding="async">
+                {%- elif item.kind == "video" and item.poster %}
+                <img src="{{ item.poster }}" alt="" loading="lazy" decoding="async">
+                {%- endif %}
+                {%- if item.kind == "video" %}<span class="gallery-thumb-icon">{{ icon("play") }}</span>{% endif %}
+            </button>
+        </li>
+        {%- endfor %}
+    </ul>
+    {%- endif %}
+
+</div>

@@ -6,6 +6,9 @@ import {
     projectAsset,
     projectsUsing,
     categoryDetails,
+    categoryCounts,
+    projectMedia,
+    projectVideo,
 } from "./lib/projects.js";
 import { profileEditor } from "./lib/profile-code.js";
 
@@ -26,6 +29,9 @@ export default function (eleventyConfig) {
     eleventyConfig.addFilter("projectAsset", projectAsset);
     eleventyConfig.addFilter("projectsUsing", projectsUsing);
     eleventyConfig.addFilter("categoryDetails", categoryDetails);
+    eleventyConfig.addFilter("categoryCounts", categoryCounts);
+    eleventyConfig.addFilter("projectMedia", projectMedia);
+    eleventyConfig.addFilter("projectVideo", projectVideo);
 
     // Hero editor: profile facts -> highlighted Java / Python / C++ (lib/profile-code.js)
     eleventyConfig.addFilter("profileEditor", profileEditor);

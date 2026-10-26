@@ -6,6 +6,7 @@ summary: >-
   attack and take cover, and medics and providers support the front line. Built
   with A* over a dynamic danger map, BFS cover search, line-of-sight checks and
   state machines.
+excerpt: "Real-time C++/OpenGL battle simulation where two AI teams of specialised roles fight autonomously."
 categories: [ai-ml]
 technologies: [C++, OpenGL, Multi-Agent AI, A* / BFS]
 
