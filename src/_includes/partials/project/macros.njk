@@ -1,0 +1,67 @@
+{#
+    Small project UI pieces. Import with:
+    {% from "partials/project/macros.njk" import techTags, categoryList, projectLinks %}
+#}
+
+
+{# Technology tags: ["Kotlin", "Android"] #}
+{% macro techTags(technologies) %}
+<div class="project-tech">
+    {%- for item in technologies %}
+    <span>{{ item }}</span>
+    {%- endfor %}
+</div>
+{% endmacro %}
+
+
+{#
+    Category labels for a project. Pass the resolved category objects:
+    categoryList(project.data.categories | categoryDetails)
+#}
+{% macro categoryList(categories) %}
+{%- if categories.length %}
+<ul class="project-categories">
+    {%- for category in categories %}
+    <li data-category="{{ category.id }}">{{ category.label }}</li>
+    {%- endfor %}
+</ul>
+{%- endif %}
+{% endmacro %}
+
+
+{# External project links. Only links present in front matter are shown. #}
+{% macro projectLinks(links) %}
+{%- if links.github %}
+
+<a
+    class="project-link"
+    href="{{ links.github }}"
+    target="_blank"
+    rel="noopener"
+>
+    View Project <span>↗</span>
+</a>
+{%- endif %}
+{%- if links.demo %}
+
+<a
+    class="project-link"
+    href="{{ links.demo }}"
+    target="_blank"
+    rel="noopener"
+>
+    Live Demo <span>↗</span>
+</a>
+{%- endif %}
+{%- if links.video %}
+
+<a
+    class="project-link"
+    href="{{ links.video }}"
+    target="_blank"
+    rel="noopener"
+>
+    Watch Video <span>↗</span>
+</a>
+{%- endif %}
+{% endmacro %}

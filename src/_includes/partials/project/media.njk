@@ -1,0 +1,38 @@
+{#
+    Project image area. Expects `project` (a collection item).
+
+    - With a `cover` image: shows the image.
+    - Otherwise: shows the animated illustration from partials/visuals/<visual.id>.njk
+      (if one exists) with its caption and headline.
+#}
+{%- set data = project.data %}
+{%- set visualId = data.visual.id if data.visual else "" %}
+
+<div class="project-visual{{ ' ' + visualId + '-visual' if visualId }}{{ ' has-image' if data.cover.src }}">
+
+    {%- if data.cover.src %}
+
+    <img
+        class="project-image"
+        src="{{ data.cover.src | projectAsset(data.slug) }}"
+        alt="{{ data.cover.alt }}"
+        loading="lazy"
+        decoding="async"
+    >
+    {%- else %}
+
+    {% if visualId %}{% include "partials/visuals/" + visualId + ".njk" ignore missing %}{% endif %}
+
+    <div class="visual-label">
+        {{ data.visual.label if data.visual.label else (data.categories | categoryDetails | first).label | upper }}
+    </div>
+
+    <div class="visual-center">
+        {%- if data.visual.kicker %}
+        <span>{{ data.visual.kicker }}</span>
+        {%- endif %}
+        <strong>{{ data.visual.headline or data.title }}</strong>
+    </div>
+    {%- endif %}
+
+</div>

@@ -450,6 +450,18 @@
     opacity: 1;
 }
 
+/* Cover image, shown instead of the illustration when a project has one */
+.project-image {
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+}
+
 .visual-label {
     position: absolute;
 
@@ -602,6 +614,10 @@
     border-bottom: 1px solid transparent;
 
     transition: border-color 0.2s ease;
+}
+
+.project-link + .project-link {
+    margin-left: 24px;
 }
 
 .project-link span {

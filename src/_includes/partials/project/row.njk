@@ -1,0 +1,33 @@
+{#
+    One project on the homepage. Expects `project` (a collection item) and
+    `loop` from the surrounding for-loop. Every second row is mirrored.
+#}
+{%- from "partials/project/macros.njk" import techTags, projectLinks %}
+{%- set data = project.data %}
+
+<article
+    class="project-row{{ ' reverse' if loop.index is even }} reveal"
+    data-project="{{ data.slug }}"
+    data-categories="{{ data.categories | join(' ') }}"
+>
+
+    {% include "partials/project/media.njk" %}
+
+    <div class="project-content">
+
+        <p class="project-number">
+            PROJECT {{ loop.index | pad }}
+        </p>
+
+        <h3>{{ data.title }}</h3>
+
+        <p class="project-description">
+            {{ data.summary }}
+        </p>
+
+        {{ techTags(data.technologies) }}
+        {{ projectLinks(data.links) }}
+
+    </div>
+
+</article>

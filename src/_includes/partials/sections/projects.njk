@@ -8,7 +8,7 @@
         {{ sectionTitle(section.number, section.kicker, section.title) }}
 
         {%- for project in collections.projects %}
-        {% include "partials/project-row.njk" %}
+        {% include "partials/project/row.njk" %}
         {%- endfor %}
 
     </div>

@@ -1,13 +1,18 @@
 ---
 title: NLP Final Project
-order: 4
 summary: >-
   Sentiment analysis project on the IMDb dataset comparing Word2Vec-based
   representations, LSTM networks, and DistilBERT, including preprocessing,
   training, evaluation, and model comparison.
-tech: [Word2Vec, LSTM, DistilBERT, NLP]
+year: "2025"
+categories: [ai-ml]
+technologies: [Word2Vec, LSTM, DistilBERT, NLP]
+
+order: 4
+
 links:
   github: https://github.com/shahar-eliyahu/NLP-Final-Project
+
 visual:
   id: nlp
   label: NATURAL LANGUAGE PROCESSING

@@ -1,14 +1,30 @@
+import {
+    allProjects,
+    featuredProjects,
+    projectCategories,
+    projectTechnologies,
+    projectAsset,
+    projectsUsing,
+    categoryDetails,
+} from "./lib/projects.js";
+
 export default function (eleventyConfig) {
     // Static files copied as-is. The CV keeps its original public URL.
     eleventyConfig.addPassthroughCopy("src/assets");
     eleventyConfig.addPassthroughCopy("src/Shahar_Eliyahu_CV.pdf");
 
-    // Projects, ordered by their `order` front matter field
-    eleventyConfig.addCollection("projects", (collectionApi) =>
-        collectionApi
-            .getFilteredByGlob("src/projects/*.md")
-            .sort((a, b) => (a.data.order ?? 999) - (b.data.order ?? 999))
-    );
+    // Rebuild when project helpers change during `npm start`
+    eleventyConfig.addWatchTarget("./lib/");
+
+    // Project collections (see lib/projects.js)
+    eleventyConfig.addCollection("projects", allProjects);
+    eleventyConfig.addCollection("featuredProjects", featuredProjects);
+    eleventyConfig.addCollection("projectCategories", projectCategories);
+    eleventyConfig.addCollection("projectTechnologies", projectTechnologies);
+
+    eleventyConfig.addFilter("projectAsset", projectAsset);
+    eleventyConfig.addFilter("projectsUsing", projectsUsing);
+    eleventyConfig.addFilter("categoryDetails", categoryDetails);
 
     // "1" -> "01"
     eleventyConfig.addFilter("pad", (value, length = 2) =>
