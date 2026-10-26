@@ -608,6 +608,9 @@
     overflow: hidden;
 
     background: var(--viz-card);
+
+    /* Lets illustrations adapt to short strips (@container in visuals.css) */
+    container-type: size;
 }
 
 /* No illustration either: a quiet grid pattern with the title */
@@ -2293,6 +2296,17 @@ html:not(.js) .explorer-panel + .explorer-panel {
 
     .project-main {
         order: 1;
+    }
+
+    /* Summary only: no sections, so no sticky column beside empty space */
+    .project-layout.is-summary-only {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .project-layout.is-summary-only .project-aside {
+        position: static;
+
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     }
 }
 

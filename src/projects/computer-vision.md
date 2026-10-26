@@ -10,6 +10,7 @@ categories: [ai-ml]
 technologies: [YOLO, Florence-2, PyTorch, Computer Vision]
 
 order: 2
+detailPage: true
 
 links:
   github: https://github.com/shahar-eliyahu/Computer-Vision-Final-Project

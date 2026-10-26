@@ -10,6 +10,7 @@ categories: [ai-ml]
 technologies: [Word2Vec, LSTM, DistilBERT, NLP]
 
 order: 4
+detailPage: true
 
 links:
   github: https://github.com/shahar-eliyahu/NLP-Final-Project

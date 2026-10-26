@@ -401,12 +401,12 @@ Add any of these under `links:`. Each one is shown only if present:
 **Project buttons in the explorer.** Both of these are intended:
 
 - **Explore Project** opens the project's own detail page (full description, screenshots, videos,
-  technical explanation). It's the main button, and appears automatically for a project once its
-  detail page exists (planned for Phase 4B). Until then it's simply not shown, so there's never a
-  broken link.
+  technical explanation). It's the main button, and appears automatically for every project with
+  `detailPage: true` (currently all seven). Without a detail page it's simply not shown, so
+  there's never a broken link.
 - **GitHub** is always available directly in the explorer, so visitors can open the repository
-  without visiting the detail page. It's the main button for now, and a separate secondary
-  button once Explore Project appears.
+  without visiting the detail page. It's a separate secondary button next to Explore Project, or
+  the main button for a project without a detail page.
 
 ### Categories
 
@@ -442,8 +442,9 @@ unknown category, or if the category file has a duplicate `id`, an invalid `id` 
 ### Project detail pages
 
 Every project can have its own page at `/projects/<slug>/`, generated from its Markdown file by
-one shared template. You never create HTML pages by hand. **EasyFill is the first one**
-(`/projects/easyfill/`).
+one shared template. You never create HTML pages by hand. **All seven current projects have
+one.** A project with only a summary (no Overview or `caseStudy` yet) gets a compact page with its
+introduction, illustration, technologies and links; it grows automatically as you add sections.
 
 **To give a project its page:**
 

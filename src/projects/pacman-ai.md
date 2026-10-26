@@ -10,6 +10,7 @@ categories: [ai-ml]
 technologies: [C++, OpenGL, A* / BFS, Game AI]
 
 order: 6
+detailPage: true
 
 links:
   github: https://github.com/shahar-eliyahu/PacMan-CPP

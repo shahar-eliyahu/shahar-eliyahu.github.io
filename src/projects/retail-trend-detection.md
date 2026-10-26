@@ -10,6 +10,7 @@ categories: [ai-ml]
 technologies: [Apache Kafka, Apache Spark, PySpark, Random Forest]
 
 order: 3
+detailPage: true
 
 links:
   github: https://github.com/shahar-eliyahu/Real-Time-Retail-Trend-Detection

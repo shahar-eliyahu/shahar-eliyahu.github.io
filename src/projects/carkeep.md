@@ -9,6 +9,7 @@ categories: [applications]
 technologies: [Flutter, Dart, Firebase, Mobile]
 
 order: 5
+detailPage: true
 
 links:
   github: https://github.com/shahar-eliyahu/CarKeep

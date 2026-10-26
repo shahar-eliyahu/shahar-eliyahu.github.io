@@ -11,6 +11,7 @@ categories: [ai-ml]
 technologies: [C++, OpenGL, Multi-Agent AI, A* / BFS]
 
 order: 7
+detailPage: true
 
 links:
   github: https://github.com/shahar-eliyahu/Tactical-AI-Battle

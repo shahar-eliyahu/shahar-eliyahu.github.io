@@ -73,7 +73,8 @@ lib/projects.js           project collections, lookups, build-time content valid
 src/index.njk             homepage = section partials in order
 src/_data/                site.json, home.json (homepage text), skills.json, projectCategories.json
 src/projects/*.md         one file per project (front matter = data, body = description)
-src/projects/projects.11tydata.js   defaults for all projects; slug = file name; permalink: false
+src/projects/projects.11tydata.js   defaults for all projects; slug = file name; layout; permalink
+                                    /projects/<slug>/ only with `detailPage: true` (else false)
 src/_includes/layouts/base.njk      page shell
 src/_includes/layouts/project.njk   project detail page (one template for all projects)
 src/_includes/partials/   nav, footer, components.njk (macros), sections/, project/, visuals/
@@ -339,8 +340,9 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   directly available in the explorer as a separate button (secondary once Explore exists), so
   visitors never have to open the detail page to reach the repository. Until detail pages exist,
   Explore is *not rendered* (no broken links or placeholder pages) and "View on GitHub" is the
-  primary button. This was verified with a temporary page: Explore appeared as primary
-  (`/projects/<slug>/`, HTTP 200) with GitHub as a secondary button opening in a new tab. Demo if
+  primary button. **All seven projects now have a page**, so every panel shows Explore Project
+  (primary) + GitHub (secondary, new tab); a project added without `detailPage` falls back to
+  "View on GitHub" automatically. Demo if
   `links.demo`; "Watch video" only for videos that can't play inline.
 - **Media model** (`projectMedia` / `projectVideo` in `lib/projects.js`): cover, then gallery
   images (deduplicated), or a single illustration item if there are none, then the video if
@@ -377,8 +379,10 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   no per-project HTML files.
 - **Opt-in per project:** `detailPage: true`. `projects.11tydata.js` computes
   `permalink: /projects/<slug>/` only then (otherwise `false`). The URL makes `project.url` truthy,
-  which turns on "Explore Project" (primary) with GitHub secondary in the explorer. **Only
-  EasyFill is enabled** (the reviewed example). Enable the others once they have real content.
+  which turns on "Explore Project" (primary) with GitHub secondary in the explorer. **All seven
+  projects are enabled** (EasyFill first as the reviewed example, then the other six, owner
+  request). The six have only their existing data (summary, category, year, technologies, GitHub,
+  illustration); their write-ups will be added later.
 - **Data cascade defaults:** `layout`, `templateEngineOverride: "md"` (bodies are plain Markdown,
   so `{{ }}` stays literal), `caseStudy: {}`, and computed `description` = `summary`.
 - **Sections** (each only with real content): Overview (Markdown body), Key features
@@ -395,6 +399,17 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   aspect ratio shrank the width). An illustration alone is a strip: 5:2, 4:1, then 5:1.
 - **Layout:** mobile first. Phones and tablet: details (Technologies, At a glance, On this page)
   stacked above the sections. Desktop (1024px+): sections plus a sticky 300px details column.
+- **Summary-only pages** (no Overview or `caseStudy` sections yet): `.project-layout.is-summary-only`,
+  no `.project-main` is rendered and the details span the full width (no sticky column beside empty
+  space). The `summary` is shown once, as the introduction; it's never repeated as an Overview.
+  Adding any section switches the page to the normal two-column layout automatically.
+- **Illustrations in short strips:** `.project-visual` is a size container (`container-type: size`).
+  `visuals.css` adapts three illustrations with `@container (max-height: 170px)` (phone strips,
+  about 115–145px tall): NLP tokens are shifted by their own size (always inside) and kept below
+  the label; CarKeep's badges become one row above the road (two badges under 340px wide); the
+  vision boxes shrink and swap sides (person right, vehicle low left) so their tracking motion
+  never collides with the label or each other. Taller cards keep the original design. This also
+  fixed the same clipping in the explorer on phones.
 - **Shared JS:** `gallery.js` exposes `window.ProjectGallery.create(scope, { announce })`. The
   explorer creates one per panel; galleries outside `[data-explorer]` set themselves up and
   announce through `[data-gallery-status]`. `partials/project/lightbox.njk` is included once per
@@ -430,8 +445,11 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   lighter slate-blue palette site-wide; centred desktop navigation; **interactive Project
   Explorer** (filters, picker, preview, screenshot/video gallery, lightbox, in-page video), card
   excerpts, media model.
-- **Phase 4B (in progress, awaiting review):** reusable project detail page template; only
-  EasyFill's page (`/projects/easyfill/`) is enabled as the reviewed example.
+- **Phase 4B (done, commit `32cc0af9c6166f985836981c0be0a8bdad03559a`):** reusable project
+  detail page template (EasyFill as the reviewed example), shared gallery/lightbox/video script,
+  "Adding a New Project" docs.
+- **All detail pages (in progress, awaiting review):** `detailPage: true` for the other six
+  projects (existing data only), summary-only page layout, illustration fixes for short strips.
 - `main` still serves the old hand-written site. This branch has no root `index.html`, so
   **merging before the Actions deploy exists would break the live site.**
 
@@ -439,11 +457,11 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
 
 3. **Dark design system.** 3A (tokens, surfaces) and 3B (hero, editor, hierarchy) are done.
    The palette will be re-evaluated after the layout redesign.
-4. **New sections.** 4A (Project Explorer) is done. 4B (project detail pages) is in progress:
-   template plus the EasyFill example first, the other projects later via `detailPage: true`.
-   Then: expanded About (education, hackathon, experience timeline), skills linked to projects,
+4. **New sections.** 4A (Project Explorer) and 4B (project detail pages) are done; all seven
+   projects have a page. Then: expanded About (education, hackathon, experience timeline), skills linked to projects,
    contact upgrades.
-5. **Remaining detail pages:** enable per project once it has real content (no new templates).
+5. **Project content:** fill the seven pages with real write-ups and screenshots from the owner
+   (Overview, `caseStudy`, `role` / `team`, media). No template changes needed.
 6. **Polish:** accessibility (keyboard, focus, contrast), performance, Open Graph tags, favicon, 404, sitemap.
 7. **Launch (with approval only):** GitHub Actions deploy workflow, switch the Pages source to
    Actions, then merge.

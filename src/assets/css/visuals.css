@@ -225,6 +225,29 @@
     animation: track-two 6s ease-in-out infinite;
 }
 
+/* Short strips (phones): smaller boxes on swapped sides (person right,
+   vehicle low left), so neither the label nor the tracking motion makes
+   them collide */
+@container (max-height: 170px) {
+    .box-one {
+        width: 64px;
+        height: 62%;
+
+        left: auto;
+        right: 16%;
+        top: 46px;
+    }
+
+    .box-two {
+        width: 100px;
+        height: 40px;
+
+        left: 18%;
+        right: auto;
+        bottom: 14%;
+    }
+}
+
 @keyframes scan {
     to {
         top: 100%;
@@ -413,7 +436,18 @@
 
     opacity: 0;
 
+    /* Shift by the same share of the token's own size, so a token at 86%
+       still ends inside the frame */
+    translate: calc(var(--x) * -1) calc(var(--y) * -1);
+
     animation: token-float 6s ease-in-out var(--d) infinite;
+}
+
+/* Short strips (phones): keep the tokens below the label */
+@container (max-height: 170px) {
+    .token {
+        top: calc(28px + var(--y) * 0.7);
+    }
 }
 
 .token.pos {
@@ -483,6 +517,26 @@
     font-family: var(--font-mono);
 
     font-size: 0.68rem;
+}
+
+/* Short strips: one row just above the road */
+@container (max-height: 170px) {
+    .ck-badges {
+        top: auto;
+        left: 20px;
+        bottom: calc(16% + 12px);
+
+        flex-direction: row;
+
+        justify-content: flex-end;
+    }
+}
+
+/* Too narrow for three in a row: keep the two that tell the story */
+@container (max-height: 170px) and (max-width: 340px) {
+    .ck-badges span:first-child {
+        display: none;
+    }
 }
 
 .ck-badges .due {
