@@ -11,6 +11,7 @@ const progressBar = document.querySelector(".scroll-progress");
 const menuButton = document.querySelector(".menu-button");
 const navLinksContainer = document.querySelector(".nav-links");
 const navLinks = document.querySelectorAll(".nav-links a");
+const onHomepage = [...navLinks].some((link) => link.getAttribute("href").startsWith("#"));
 
 
 // Mobile navigation
@@ -46,7 +47,7 @@ function updateScrollState() {
 
     // At the very bottom a short last section (Contact) may never reach the
     // observer's band on tall screens, so highlight its link explicitly.
-    if (isAtBottom()) {
+    if (onHomepage && isAtBottom()) {
         const allSections = document.querySelectorAll("section[id]");
         setActiveLink(allSections[allSections.length - 1]?.id);
     }
@@ -116,8 +117,9 @@ revealElements.forEach((element) => {
 });
 
 
-// Highlight active navigation section
-const sections = document.querySelectorAll("section[id]");
+// Highlight active navigation section (homepage only: on other pages the nav
+// links point back home and "Projects" is marked as current in the markup)
+const sections = onHomepage ? document.querySelectorAll("section[id]") : [];
 
 const sectionObserver = new IntersectionObserver(
     (entries) => {

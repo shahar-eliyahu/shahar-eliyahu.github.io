@@ -104,95 +104,200 @@ project whose `technologies` list contains the same name, ignoring case. For exa
 `collections.projects | projectsUsing("C++")` returns Pacman AI and Tactical AI Battle. To link
 a skill to a project, add the skill's exact name to that project's `technologies`.
 
-Projects have their own section below: [Managing projects](#managing-projects).
+Projects have their own guide below: [Adding a New Project](#adding-a-new-project).
+
+---
+
+## Adding a New Project
+
+Every project is **one Markdown file** in `src/projects/`. You never write HTML for a project.
+The site builds everything from that file: the entry in the Project Explorer, its category and
+filter counts, its gallery, its buttons and (optionally) its own detail page.
+
+### Step 1: Create the file
+
+Create `src/projects/<slug>.md`. The **file name is the project's slug**. Use lowercase letters,
+digits and hyphens only (e.g. `face-recognition-app.md`). The slug is used for:
+
+- the image folder: `src/assets/img/projects/<slug>/`
+- the detail page address: `/projects/<slug>/` (only if you enable it)
+- explorer links: `/?project=<slug>`
+
+The easiest start is to copy the [complete example](#complete-example) below and delete what you
+don't need.
+
+### Step 2: Fill in the basics
+
+Only three fields are required: **`title`**, **`summary`** and **`order`**. Everything else is
+optional. Leave out what you don't have (no empty placeholders).
+
+| What | Field | Notes |
+|---|---|---|
+| Title | `title` | The project name |
+| Summary | `summary` | 2–4 sentences. Introduction on the detail page; fallback text in the explorer |
+| Short description | `excerpt` | About two lines (under ~120 characters) for the explorer. The build warns if it's longer |
+| Year | `year` | Text in quotes, e.g. `"2026"` or `"2025–2026"` |
+| Badge | `type` | e.g. `Final degree project`, `Course project`, `Hackathon`. Shown as a small badge |
+| Categories | `categories` | A list of category ids: `[ai-ml]`, `[applications]` or both |
+| Technologies | `technologies` | A list, shown in this order (all of them) |
+| GitHub | `links.github` | The repository URL. Always shown as a direct button |
+| Position | `order` | A number; lower comes first (see [Order and numbering](#order-and-numbering)) |
+
+**Categories and filters.** The available ids are defined in `src/_data/projectCategories.json`
+(currently `ai-ml` and `applications`). The explorer's filter buttons and their counts are
+generated automatically. A new project appears under every category it lists, and the build
+fails if you use an id that doesn't exist. To add a new category, see [Categories](#categories).
+
+### Step 3: Add screenshots and a video (optional)
+
+1. Create the folder `src/assets/img/projects/<slug>/` and put the files there
+   (`.webp`, `.png`, `.jpg` or `.gif`; at most ~1600px wide, well under 500 KB each).
+2. Reference them by **file name only**:
+   - `cover`: the first image shown (`src` and `alt` are required).
+   - `gallery`: more screenshots (each needs `src` and `alt`; `caption`, `fit` and `position` are optional).
+   - `fit: contain` shows a **portrait phone screenshot** whole instead of cropping it.
+3. For a video, set `links.video` to a **YouTube or Vimeo URL** (plays inside the page after the
+   visitor presses Play) or to a small local **`.mp4` / `.webm`** file in the same folder.
+   `videoPoster` is an optional preview image. Any other video URL becomes a "Watch video" button.
+
+Without any images, the explorer shows the project's animated illustration (`visual`), or a
+plain panel with the title if it has none. Creating a new animated illustration is optional and
+needs a small partial in `src/_includes/partials/visuals/<id>.njk` plus styles in
+`src/assets/css/visuals.css`. A project works fine without one.
+
+### Step 4: Write the detailed content (optional)
+
+Long-form content is shown on the project's **detail page**:
+
+- **Overview:** the Markdown body *below* the closing `---`. Use `###` for subheadings, because
+  the page already provides the "Overview" heading.
+- **`caseStudy`** (each part optional; empty parts are simply not shown):
+  - `features`: a list of short points (Key features)
+  - `architecture`: Markdown text (Architecture & implementation)
+  - `challenges`: a list of `challenge` / `solution` pairs (Challenges & solutions)
+  - `results`: Markdown text (Results & evaluation)
+  - `lessons`: Markdown text (Lessons learned)
+- **`role`** and **`team`** fill the "At a glance" box.
+
+Write only real, verified information. The page has no fixed minimum: a project with only a few
+features and a results sentence is fine.
+
+### Step 5: Turn on the detail page (optional)
+
+Add **`detailPage: true`**. The next build then automatically:
+
+- creates the page **`/projects/<slug>/`** from the shared template (no new HTML or template);
+- shows an **Explore Project** button for this project in the explorer (as the main button);
+- keeps the **GitHub** button as a separate, direct link;
+- adds "Back to Projects", an "On this page" list (with 3 or more sections) and Previous / Next
+  links between projects that have pages.
+
+**Adding a project without a detail page yet:** leave out `detailPage` (it defaults to `false`).
+The project still appears in the explorer with its gallery, technologies and **View on GitHub**
+button, and no Explore Project button is shown (so there are no broken links). Add
+`detailPage: true` later, once the content is ready.
+
+### Step 6: Preview, build and check
+
+```bash
+npm start         # live preview at http://localhost:8080
+npm run build     # production build into _site/ (also validates every project file)
+```
+
+- Open `http://localhost:8080/?project=<slug>#projects` to see the project selected in the
+  explorer, and `http://localhost:8080/projects/<slug>/` for its detail page (if enabled).
+- **`npm run build` is the automated check.** It fails with a message naming the file and field
+  if something is wrong: missing `title` / `summary`, a non-numeric `order`, an invalid file name,
+  an unknown category, a missing image or `alt` text, an invalid `fit`, a `challenges` entry
+  without a `solution`, and so on. The repository has no separate test suite.
+- Then check by hand, at a desktop width and a phone width (your browser's device toolbar, e.g.
+  1440px and 390px):
+  - the project appears in the right filters with the right count;
+  - the GitHub (and demo) links open the right pages;
+  - images aren't badly cropped (use `fit: contain` or `position` if they are);
+  - the video plays, if there is one;
+  - the detail page shows the sections you wrote and no empty ones.
+
+### Order and numbering
+
+- Projects appear in the explorer sorted by `order` (lowest first). Gaps are fine (10, 20, 30 lets
+  you insert later). If two projects share an `order`, the build warns and sorts them by title.
+- The numbers next to project names (01, 02, …) are **not stored anywhere**. They are the
+  position in the currently visible list and renumber automatically when a filter is applied.
+- Previous / Next on detail pages follows the same order, counting only projects that have a page.
+
+### Complete example
+
+A copyable file using every supported field. Save it as `src/projects/<slug>.md`, replace the
+values, and **delete every line you don't have real content for**. The image and video files
+must exist in `src/assets/img/projects/<slug>/`, or the build stops and tells you which one is
+missing.
+
+```markdown
+---
+title: My New Project
+summary: >-
+  Two to four sentences describing what the project does and why. This is the
+  introduction at the top of the detail page.
+excerpt: "About two lines for the Project Explorer, under ~120 characters."
+year: "2026"
+type: Course project
+role: >-
+  What you personally built or were responsible for.
+team: 3
+categories: [ai-ml]
+technologies: [Python, PyTorch, Docker]
+order: 80
+
+cover:
+  src: cover.webp
+  alt: Main screen of My New Project showing the results dashboard
+gallery:
+  - src: settings.webp
+    alt: Settings screen with the model options
+    caption: Optional caption shown on the image
+  - src: phone.webp
+    alt: The mobile view on a phone
+    fit: contain
+
+links:
+  github: https://github.com/shahar-eliyahu/my-new-project
+  demo: https://example.com/my-new-project
+  video: https://www.youtube.com/watch?v=VIDEO_ID
+videoPoster: video-poster.webp
+
+detailPage: true
+caseStudy:
+  features:
+    - First key feature, in one short sentence
+    - Second key feature
+  architecture: >-
+    How the system is built: main components, data flow and important
+    technical decisions. **Markdown** works here.
+  challenges:
+    - challenge: A real problem you ran into
+      solution: How you solved it
+  results: >-
+    What the project achieved and how it was evaluated.
+  lessons: >-
+    What you learned.
+---
+
+The Overview: a few paragraphs of plain Markdown about the motivation
+and what the project does.
+
+### A subheading inside the overview
+
+More text, lists, [links](https://example.com) and `inline code` all work.
+```
+
+The full list of fields with every option is in the [field reference](#field-reference) below.
 
 ---
 
 ## Managing projects
 
-Each project is **one Markdown file** in `src/projects/`. The **file name is the slug**:
-`easyfill.md` → slug `easyfill`, images in `src/assets/img/projects/easyfill/`, and
-(once case studies exist) the page `/projects/easyfill/`. Use lowercase letters, digits and hyphens.
-
-Everything on the site is generated from these files: the Project Explorer entries, their order,
-category membership and filter counts, badges and technology lookups.
-Templates never mention a specific project.
-
-### Adding a new project
-
-1. Create `src/projects/<slug>.md` (copy the example below and delete the fields you don't need).
-2. If it has images, put them in `src/assets/img/projects/<slug>/`.
-3. Run `npm start` and check the homepage. The build fails with a clear message if
-   something is wrong, such as an unknown category, a missing image or missing alt text.
-
-### Complete example
-
-Only `title`, `summary` and `order` are required. Leave out anything you don't have yet.
-Don't use empty placeholders.
-
-```yaml
----
-# --- Basics ---------------------------------------------------------------
-title: EasyFill
-summary: >-
-  The full description of the project (kept for the detail page).
-excerpt: "About two lines for the homepage card, condensed from the summary."
-year: "2025–2026"
-type: Final degree project            # optional badge on the card, e.g. "Hackathon"
-role: >-
-  What you personally did on the project.
-team: 4                               # team size; omit for solo or unknown
-
-# --- Classification -------------------------------------------------------
-categories: [applications]            # ids from src/_data/projectCategories.json; several allowed
-technologies: [Kotlin, Android, MediaPipe]   # all are shown, in this order
-
-# --- Placement ------------------------------------------------------------
-order: 1                              # homepage position, lower comes first
-featured: true                        # optional, default false
-featuredOrder: 1                      # position among featured projects
-
-# --- Media (files in src/assets/img/projects/<slug>/) ---------------------
-cover:
-  src: cover.webp
-  alt: EasyFill form screen with the calm-mode interface
-gallery:
-  - src: screen-1.webp
-    alt: Distress level indicator during form filling
-    caption: Optional caption
-  - src: demo.gif
-    alt: Voice-assisted form filling in action
-
-# --- Links (all optional) ---------------------------------------------------
-links:
-  github: https://github.com/shahar-eliyahu/EasyFill
-  demo: https://example.com
-  video: https://www.youtube.com/watch?v=...
-
-# --- Animated illustration (used when there is no cover image) -------------
-visual:
-  id: easyfill                        # partials/visuals/easyfill.njk + .easyfill-visual CSS
-  label: EASYFILL
-  kicker: PTSD
-  headline: Adaptive Support
-
-# --- Case study (pages are not built yet, so keep enabled: false) ----------
-caseStudy:
-  enabled: false
-  problem: >-
-    Markdown text…
-  solution: …
-  architecture: …
-  challenges: …
-  results: …
-  lessons: …
----
-
-The Markdown body is the project's detailed description. It's shown on its
-future case-study page.
-```
-
-(The values above are illustrative. Real project files only contain verified information.)
+These sections are the detailed reference for the steps above.
 
 ### Field reference
 
@@ -214,8 +319,9 @@ future case-study page.
 | `videoPoster` | | Preview image for the video's play button (file in the project's image folder) |
 | `links.github`, `links.demo`, `links.video` | | Each one shown only if present. `links.video` is a YouTube / Vimeo URL or a local `.mp4` / `.webm` (plays in the gallery); other URLs become a "Watch video" button |
 | `visual` | | Animated illustration and its captions (fallback when there's no `cover`) |
-| `caseStudy` | | `enabled` plus optional `problem`, `solution`, `architecture`, `challenges`, `results`, `lessons` (Markdown) |
-| Markdown body | | Detailed description |
+| `detailPage` | | `true` publishes the project's own page at `/projects/<slug>/` and shows "Explore Project" in the explorer. Default `false` |
+| `caseStudy` | | Detail-page sections, all optional: `features` (list), `architecture` (Markdown), `challenges` (list of `{ challenge, solution }`), `results` (Markdown), `lessons` (Markdown) |
+| Markdown body | | The detail page's Overview (plain Markdown) |
 
 Defaults for every field live in `src/projects/projects.11tydata.js`, so a project file
 only contains what is specific to that project.
@@ -333,14 +439,35 @@ No HTML, CSS or JavaScript changes are needed for any of these. A category with 
 is allowed (its count is 0). The build fails with a clear message if a project uses an
 unknown category, or if the category file has a duplicate `id`, an invalid `id` or a missing `label`.
 
-### Preparing a case study
+### Project detail pages
 
-1. Add the detailed description as the Markdown body.
-2. Fill in whichever `caseStudy` sections you have (`problem`, `solution`, …).
-3. Add `cover` and `gallery` images.
-4. Leave `caseStudy.enabled: false` for now. Case-study pages (`/projects/<slug>/`) will be
-   built in a later phase. Until then the build only shows a warning if it's enabled, and
-   publishes no project pages.
+Every project can have its own page at `/projects/<slug>/`, generated from its Markdown file by
+one shared template. You never create HTML pages by hand. **EasyFill is the first one**
+(`/projects/easyfill/`).
+
+**To give a project its page:**
+
+1. Add `detailPage: true` to its front matter.
+2. Write whatever real content you have:
+   - **Overview:** the Markdown body below the front matter (headings, lists and links work).
+   - **Key features:** `caseStudy.features`, a list.
+   - **Architecture & implementation:** `caseStudy.architecture`, Markdown text.
+   - **Challenges & solutions:** `caseStudy.challenges`, a list of `challenge` / `solution` pairs.
+   - **Results & evaluation:** `caseStudy.results`. **Lessons learned:** `caseStudy.lessons`.
+   - **At a glance:** `role` and `team`.
+3. Add screenshots or a video as described above. They appear in the page's gallery.
+
+Then the site automatically:
+
+- builds `/projects/<slug>/` with your title, category, year, badges, introduction (`summary`),
+  technologies, gallery and links;
+- shows only the sections you filled in, plus an "On this page" list once there are 3 or more;
+- turns on the **Explore Project** button in the explorer (GitHub stays as a separate button);
+- links Previous / Next between projects that have pages, and "Back to Projects" to the explorer
+  with that project selected.
+
+The build fails with a clear message if a section has the wrong shape (for example a challenge
+without a solution).
 
 Developer notes (template helpers, architecture) are in [CLAUDE.md](CLAUDE.md).
 

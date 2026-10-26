@@ -4,8 +4,15 @@
  * The full field reference is in the README.
  */
 export default {
-    // Case-study pages are not built yet, so no project produces a page.
-    permalink: false,
+    // Detail pages are opt-in per project: `detailPage: true` publishes
+    // /projects/<slug>/ with layouts/project.njk and turns on the
+    // "Explore Project" button in the explorer. No other changes are needed.
+    detailPage: false,
+    layout: "layouts/project.njk",
+
+    // Project bodies are plain Markdown (no template tags), so `{{ }}` in a
+    // write-up can never break the build.
+    templateEngineOverride: "md",
 
     categories: [],
     technologies: [],
@@ -15,12 +22,16 @@ export default {
     gallery: [],
     links: {},
 
-    caseStudy: {
-        enabled: false,
-    },
+    caseStudy: {},
 
     eleventyComputed: {
         // The file name is the slug: easyfill.md -> "easyfill"
         slug: (data) => data.page.fileSlug,
+
+        permalink: (data) =>
+            data.detailPage === true ? `/projects/${data.page.fileSlug}/` : false,
+
+        // <meta name="description"> on the detail page
+        description: (data) => data.summary,
     },
 };

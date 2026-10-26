@@ -49,17 +49,19 @@
       there is no detail page yet, otherwise a secondary "GitHub" button.
     - Live demo (links.demo), and "Watch video" only when the video can't
       play inside the gallery (`externalVideo`).
+    `showExplore = false` on the detail page itself (no link to the same page).
     Hidden text names the project so repeated links stay distinct.
 #}
-{% macro projectActions(project, leadVariant = "secondary", externalVideo = false) %}
+{% macro projectActions(project, leadVariant = "secondary", externalVideo = false, showExplore = true) %}
 {%- set links = project.data.links %}
 {%- set context = '<span class="sr-only">: ' + (project.data.title | escape) + '</span>' %}
-{%- if project.url %}{% set lead = "explore" %}
+{%- set explore = project.url and showExplore %}
+{%- if explore %}{% set lead = "explore" %}
 {%- elif links.github %}{% set lead = "github" %}
 {%- elif links.demo %}{% set lead = "demo" %}
 {%- else %}{% set lead = "video" %}{% endif %}
 <div class="project-actions">
-    {%- if project.url %}
+    {%- if explore %}
     {{ button("Explore Project" + context, project.url, leadVariant + " small", trailingIcon = "arrow-right") }}
     {%- endif %}
     {%- if links.github %}

@@ -1770,6 +1770,533 @@ html:not(.js) .explorer-panel + .explorer-panel {
 }
 
 
+/* PROJECT DETAIL PAGE
+ * Markup: layouts/project.njk (one template for every project with
+ * `detailPage: true`). Gallery and lightbox are the shared components.
+ * Mobile first: base = phone, then 651px+ and 1024px+. */
+
+.project-page {
+    padding: var(--space-6) 0 var(--space-8);
+}
+
+.project-back {
+    display: inline-flex;
+
+    gap: var(--space-2);
+
+    min-height: 44px;
+
+    margin-bottom: var(--space-4);
+
+    align-items: center;
+
+    color: var(--color-link);
+
+    font-size: var(--text-sm);
+    font-weight: 600;
+
+    text-decoration: none;
+}
+
+.project-back .icon {
+    width: 18px;
+    height: 18px;
+
+    transition: transform var(--duration-fast) ease;
+}
+
+.project-back:hover .icon {
+    transform: translateX(-3px);
+}
+
+.project-hero {
+    display: flex;
+
+    gap: var(--space-3);
+
+    margin-bottom: var(--space-6);
+
+    flex-direction: column;
+}
+
+.project-page-title {
+    margin: 0;
+
+    color: var(--palette-gray-100);
+
+    font-family: var(--font-display);
+    font-size: clamp(2.25rem, 1.6rem + 2.6vw, 3.5rem);
+    font-weight: 600;
+
+    line-height: 1.05;
+
+    letter-spacing: var(--tracking-tight);
+}
+
+.project-intro {
+    max-width: 62ch;
+
+    margin: 0;
+
+    color: var(--color-text-body);
+
+    font-size: var(--text-lead);
+
+    line-height: var(--leading-lead);
+}
+
+.project-hero .project-actions {
+    margin-top: var(--space-2);
+}
+
+.project-hero .project-actions .button:first-child {
+    flex: 1 1 100%;
+}
+
+/* Media: real screenshots get a generous but bounded stage;
+   an illustration alone stays a compact strip */
+.project-page-media {
+    margin-bottom: var(--space-6);
+
+    overflow: hidden;
+
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+
+    background: var(--color-surface);
+
+    box-shadow: var(--shadow-card);
+}
+
+.project-page .gallery-stage {
+    aspect-ratio: 16 / 10;
+}
+
+.project-page .gallery.is-illustration-only .gallery-stage {
+    aspect-ratio: 5 / 2;
+}
+
+/* Content: phones stack the details card above the sections */
+.project-layout {
+    display: grid;
+
+    gap: var(--space-6);
+}
+
+.project-aside {
+    display: grid;
+
+    gap: var(--space-4);
+
+    align-content: start;
+}
+
+.aside-card {
+    padding: var(--space-5);
+
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+
+    background: var(--color-surface);
+}
+
+.aside-title {
+    margin: 0 0 var(--space-3);
+
+    color: var(--color-text-secondary);
+
+    font-family: var(--font-body);
+    font-size: 0.875rem;
+    font-weight: 600;
+
+    letter-spacing: 0.01em;
+}
+
+.aside-facts {
+    display: grid;
+
+    gap: var(--space-3);
+
+    margin: 0;
+}
+
+.aside-facts dt {
+    color: var(--color-text-muted);
+
+    font-size: 0.8rem;
+}
+
+.aside-facts dd {
+    margin: 0;
+
+    color: var(--color-text);
+}
+
+.project-toc ol {
+    display: grid;
+
+    gap: 2px;
+
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+
+    counter-reset: toc;
+}
+
+.project-toc a {
+    display: flex;
+
+    gap: var(--space-2);
+
+    min-height: 44px;
+
+    padding: 6px var(--space-2);
+
+    align-items: center;
+
+    border-radius: var(--radius-sm);
+
+    color: var(--color-text-secondary);
+
+    font-size: 0.9rem;
+
+    text-decoration: none;
+
+    counter-increment: toc;
+}
+
+.project-toc a::before {
+    content: counter(toc, decimal-leading-zero);
+
+    color: var(--color-accent);
+
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+}
+
+.project-toc a:hover {
+    background: var(--color-surface-raised);
+
+    color: var(--color-text);
+}
+
+.project-main {
+    display: grid;
+
+    min-width: 0;
+
+    gap: var(--space-5);
+}
+
+.project-section {
+    padding: var(--space-5);
+
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+
+    background: var(--color-surface);
+
+    scroll-margin-top: calc(var(--nav-height) + var(--space-4));
+}
+
+.project-section-title {
+    margin: 0 0 var(--space-4);
+
+    color: var(--palette-gray-100);
+
+    font-family: var(--font-display);
+    font-size: clamp(1.35rem, 1.2rem + 0.6vw, 1.65rem);
+    font-weight: 600;
+
+    letter-spacing: -0.01em;
+}
+
+/* Long-form Markdown */
+.prose {
+    max-width: 70ch;
+
+    color: var(--color-text-body);
+
+    font-size: 1.0625rem;
+
+    line-height: 1.75;
+}
+
+.prose > :first-child {
+    margin-top: 0;
+}
+
+.prose > :last-child {
+    margin-bottom: 0;
+}
+
+.prose p,
+.prose ul,
+.prose ol {
+    margin: 0 0 var(--space-4);
+}
+
+.prose h3 {
+    margin: var(--space-5) 0 var(--space-2);
+
+    color: var(--color-text);
+
+    font-size: 1.125rem;
+}
+
+.prose a {
+    color: var(--color-link);
+}
+
+.prose strong {
+    color: var(--color-text);
+}
+
+.prose code {
+    padding: 1px 6px;
+
+    border-radius: var(--radius-sm);
+
+    background: var(--color-surface-raised);
+
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+}
+
+.prose li + li {
+    margin-top: var(--space-1);
+}
+
+.feature-list {
+    display: grid;
+
+    gap: var(--space-3);
+
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+}
+
+.feature-list li {
+    position: relative;
+
+    padding-left: var(--space-6);
+
+    color: var(--color-text-body);
+
+    font-size: 1.0625rem;
+
+    line-height: 1.6;
+}
+
+/* Small check-style marker */
+.feature-list li::before {
+    content: "";
+
+    position: absolute;
+
+    left: 2px;
+    top: 0.45em;
+
+    width: 14px;
+    height: 8px;
+
+    border-left: 2px solid var(--color-primary-bright);
+    border-bottom: 2px solid var(--color-primary-bright);
+
+    transform: rotate(-45deg);
+}
+
+.challenge-list {
+    display: grid;
+
+    gap: var(--space-4);
+}
+
+.challenge {
+    padding: var(--space-4);
+
+    border: 1px solid var(--color-border);
+    border-left: 3px solid var(--color-accent);
+    border-radius: var(--radius-md);
+
+    background: color-mix(in srgb, var(--color-surface-raised) 50%, transparent);
+}
+
+.challenge-label {
+    margin: 0 0 var(--space-1);
+
+    color: var(--palette-violet-300);
+
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+
+    letter-spacing: 0.1em;
+
+    text-transform: uppercase;
+}
+
+.challenge-label.is-solution {
+    margin-top: var(--space-3);
+
+    color: var(--color-tag-text);
+}
+
+.challenge .prose {
+    font-size: 1rem;
+}
+
+/* Previous / next */
+.project-pager {
+    display: grid;
+
+    gap: var(--space-3);
+
+    margin-top: var(--space-7);
+}
+
+.pager-link {
+    display: grid;
+
+    gap: var(--space-1);
+
+    padding: var(--space-4) var(--space-5);
+
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+
+    background: var(--color-surface);
+
+    color: var(--color-text);
+
+    text-decoration: none;
+
+    transition: border-color var(--duration-fast) ease;
+}
+
+.pager-link:hover {
+    border-color: var(--color-primary);
+}
+
+.pager-label {
+    display: inline-flex;
+
+    gap: var(--space-2);
+
+    align-items: center;
+
+    color: var(--color-text-muted);
+
+    font-size: 0.8rem;
+}
+
+.pager-label .icon {
+    width: 14px;
+    height: 14px;
+}
+
+.pager-title {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.pager-link.is-next {
+    text-align: right;
+
+    justify-items: end;
+}
+
+.project-footer-back {
+    margin: var(--space-6) 0 0;
+}
+
+
+/* Tablet (651px+) */
+
+@media (min-width: 651px) {
+
+    .project-page {
+        padding-top: var(--space-7);
+    }
+
+    .project-hero .project-actions .button:first-child {
+        flex: 0 1 auto;
+    }
+
+    .project-page .gallery-stage {
+        aspect-ratio: 16 / 9;
+    }
+
+    .project-page .gallery.is-illustration-only .gallery-stage {
+        aspect-ratio: 4 / 1;
+    }
+
+    .project-section {
+        padding: var(--space-6);
+    }
+
+    /* Technologies and contents side by side above the sections */
+    .project-aside {
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    }
+
+    .project-pager {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .pager-link.is-next:only-child {
+        grid-column: 2;
+    }
+}
+
+
+/* Desktop (1024px+): sections with a sticky details column */
+
+@media (min-width: 1024px) {
+
+    /* Full card width at a bounded height (a capped aspect ratio would
+       shrink the width and leave an empty band) */
+    .project-page .gallery-stage {
+        height: clamp(360px, 38vw, 540px);
+
+        aspect-ratio: auto;
+    }
+
+    .project-page .gallery.is-illustration-only .gallery-stage {
+        height: auto;
+
+        aspect-ratio: 5 / 1;
+    }
+
+    .project-layout {
+        grid-template-columns: minmax(0, 1fr) 300px;
+
+        gap: var(--space-6);
+
+        align-items: start;
+    }
+
+    .project-aside {
+        position: sticky;
+
+        top: calc(var(--nav-height) + var(--space-4));
+
+        order: 2;
+
+        grid-template-columns: 1fr;
+    }
+
+    .project-main {
+        order: 1;
+    }
+}
+
+
 /* SKILLS */
 
 .skills-grid {

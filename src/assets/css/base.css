@@ -142,6 +142,9 @@ button:focus-visible {
 
 .logo {
     justify-self: start;
+
+    /* Keep the name on one line when the centred links leave little room */
+    white-space: nowrap;
 }
 
 .logo {

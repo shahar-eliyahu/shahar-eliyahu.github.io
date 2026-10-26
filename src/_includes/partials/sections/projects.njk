@@ -1,5 +1,4 @@
 {% from "partials/components.njk" import sectionTitle %}
-{% from "partials/icons.njk" import icon %}
 {% set section = home.projects %}
 {% set filters = collections.projects | categoryCounts %}
 
@@ -65,21 +64,7 @@
 
         </div>
 
-        {#- Shared full-size image viewer (native modal dialog) #}
-        <dialog class="lightbox" aria-label="Image viewer" data-lightbox>
-            <div class="lightbox-inner">
-                <div class="lightbox-bar">
-                    <p class="lightbox-count" data-lightbox-count></p>
-                    <button type="button" class="lightbox-button" data-lightbox-close aria-label="Close image viewer">✕</button>
-                </div>
-                <figure class="lightbox-figure">
-                    <img class="lightbox-image" src="" alt="" data-lightbox-image>
-                    <figcaption class="lightbox-caption" data-lightbox-caption></figcaption>
-                </figure>
-                <button type="button" class="lightbox-button lightbox-nav is-prev" data-lightbox-prev aria-label="Previous image">{{ icon("arrow-right") }}</button>
-                <button type="button" class="lightbox-button lightbox-nav is-next" data-lightbox-next aria-label="Next image">{{ icon("arrow-right") }}</button>
-            </div>
-        </dialog>
+        {% include "partials/project/lightbox.njk" %}
 
     </div>
 

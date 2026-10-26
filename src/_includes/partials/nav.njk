@@ -20,7 +20,8 @@
 
         <div class="nav-links" id="nav-links">
             {%- for item in site.nav %}
-            <a href="{{ homePrefix }}#{{ item.id }}">{{ item.label }}</a>
+            {%- set isCurrent = item.id == "projects" and page.url and page.url.startsWith("/projects/") %}
+            <a href="{{ homePrefix }}#{{ item.id }}"{% if isCurrent %} class="active" aria-current="page"{% endif %}>{{ item.label }}</a>
             {%- endfor %}
         </div>
 

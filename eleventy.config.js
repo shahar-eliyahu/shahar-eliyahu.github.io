@@ -9,6 +9,8 @@ import {
     categoryCounts,
     projectMedia,
     projectVideo,
+    projectNeighbors,
+    findProject,
 } from "./lib/projects.js";
 import { profileEditor } from "./lib/profile-code.js";
 
@@ -32,6 +34,17 @@ export default function (eleventyConfig) {
     eleventyConfig.addFilter("categoryCounts", categoryCounts);
     eleventyConfig.addFilter("projectMedia", projectMedia);
     eleventyConfig.addFilter("projectVideo", projectVideo);
+    eleventyConfig.addFilter("projectNeighbors", projectNeighbors);
+    eleventyConfig.addFilter("findProject", findProject);
+
+    // Markdown in front matter fields (project case-study sections), rendered
+    // with Eleventy's own markdown-it instance (no extra dependency)
+    let markdownLibrary;
+    eleventyConfig.amendLibrary("md", (library) => {
+        markdownLibrary = library;
+    });
+    eleventyConfig.addFilter("markdown", (text) => (text ? markdownLibrary.render(String(text)) : ""));
+    eleventyConfig.addFilter("markdownInline", (text) => (text ? markdownLibrary.renderInline(String(text)) : ""));
 
     // Hero editor: profile facts -> highlighted Java / Python / C++ (lib/profile-code.js)
     eleventyConfig.addFilter("profileEditor", profileEditor);

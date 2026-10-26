@@ -1,0 +1,199 @@
+---
+layout: layouts/base.njk
+---
+{#-
+    Project detail page: one shared template for every project with
+    `detailPage: true` (see projects.11tydata.js). Every section is optional
+    and only rendered when the project has real content for it:
+
+    - Markdown body             → Overview
+    - caseStudy.features        → Key features (list)
+    - caseStudy.architecture    → Architecture & implementation (Markdown)
+    - caseStudy.challenges      → Challenges & solutions ({ challenge, solution })
+    - caseStudy.results         → Results & evaluation (Markdown)
+    - caseStudy.lessons         → Lessons learned (Markdown)
+    - role / team               → "At a glance"
+#}
+{%- from "partials/project/macros.njk" import techTags, projectActions %}
+{%- from "partials/icons.njk" import icon %}
+
+{%- set project = collections.projects | findProject(page.url) %}
+{%- set cs = caseStudy or {} %}
+{%- set video = project | projectVideo %}
+{%- set pager = collections.projects | projectNeighbors(page.url) %}
+{%- set overview = content | striptags | trim %}
+
+{#- Sections present on this page, in order (drives the "On this page" list) #}
+{%- set sections = [] %}
+{%- if overview %}{% set _ = sections.push({ id: "overview", label: "Overview" }) %}{% endif %}
+{%- if cs.features and cs.features.length %}{% set _ = sections.push({ id: "features", label: "Key features" }) %}{% endif %}
+{%- if cs.architecture %}{% set _ = sections.push({ id: "architecture", label: "Architecture & implementation" }) %}{% endif %}
+{%- if cs.challenges and cs.challenges.length %}{% set _ = sections.push({ id: "challenges", label: "Challenges & solutions" }) %}{% endif %}
+{%- if cs.results %}{% set _ = sections.push({ id: "results", label: "Results & evaluation" }) %}{% endif %}
+{%- if cs.lessons %}{% set _ = sections.push({ id: "lessons", label: "Lessons learned" }) %}{% endif %}
+
+<article class="project-page" data-project="{{ slug }}" aria-labelledby="project-page-title">
+
+    <div class="container">
+
+        {#- Back to the explorer with this project selected #}
+        <a class="project-back" href="/?project={{ slug }}#projects">
+            {{ icon("arrow-left") }}
+            <span>Back to Projects</span>
+        </a>
+
+        <header class="project-hero">
+            <p class="project-meta">
+                {%- for category in categories | categoryDetails %}
+                <span class="project-category">{{ category.label }}</span>
+                {%- endfor %}
+                {%- if year %}
+                <span class="project-year">{{ year }}</span>
+                {%- endif %}
+                {%- if type %}
+                <span class="project-badge">{{ type }}</span>
+                {%- endif %}
+            </p>
+
+            <h1 class="project-page-title" id="project-page-title">{{ title }}</h1>
+
+            <p class="project-intro">{{ summary }}</p>
+
+            {{ projectActions(project, "primary", video and video.provider == "external", false) }}
+        </header>
+
+        <div class="project-page-media">
+            {% include "partials/project/gallery.njk" %}
+        </div>
+
+        <div class="project-layout">
+
+            <aside class="project-aside" aria-label="Project details">
+
+                {%- if technologies.length %}
+                <div class="aside-card">
+                    <h2 class="aside-title">Technologies</h2>
+                    {{ techTags(technologies) }}
+                </div>
+                {%- endif %}
+
+                {%- if role or team %}
+                <div class="aside-card">
+                    <h2 class="aside-title">At a glance</h2>
+                    <dl class="aside-facts">
+                        {%- if role %}
+                        <div><dt>Role</dt><dd>{{ role }}</dd></div>
+                        {%- endif %}
+                        {%- if team %}
+                        <div><dt>Team</dt><dd>{{ team }}{{ " people" if team is number }}</dd></div>
+                        {%- endif %}
+                    </dl>
+                </div>
+                {%- endif %}
+
+                {%- if sections.length >= 3 %}
+                <nav class="aside-card project-toc" aria-label="On this page">
+                    <h2 class="aside-title">On this page</h2>
+                    <ol>
+                        {%- for section in sections %}
+                        <li><a href="#{{ section.id }}">{{ section.label }}</a></li>
+                        {%- endfor %}
+                    </ol>
+                </nav>
+                {%- endif %}
+
+            </aside>
+
+            <div class="project-main">
+
+                {%- if overview %}
+                <section class="project-section" id="overview" aria-labelledby="overview-title">
+                    <h2 class="project-section-title" id="overview-title">Overview</h2>
+                    <div class="prose">{{ content | safe }}</div>
+                </section>
+                {%- endif %}
+
+                {%- if cs.features and cs.features.length %}
+                <section class="project-section" id="features" aria-labelledby="features-title">
+                    <h2 class="project-section-title" id="features-title">Key features</h2>
+                    <ul class="feature-list">
+                        {%- for feature in cs.features %}
+                        <li>{{ feature | markdownInline | safe }}</li>
+                        {%- endfor %}
+                    </ul>
+                </section>
+                {%- endif %}
+
+                {%- if cs.architecture %}
+                <section class="project-section" id="architecture" aria-labelledby="architecture-title">
+                    <h2 class="project-section-title" id="architecture-title">Architecture &amp; implementation</h2>
+                    <div class="prose">{{ cs.architecture | markdown | safe }}</div>
+                </section>
+                {%- endif %}
+
+                {%- if cs.challenges and cs.challenges.length %}
+                <section class="project-section" id="challenges" aria-labelledby="challenges-title">
+                    <h2 class="project-section-title" id="challenges-title">Challenges &amp; solutions</h2>
+                    <div class="challenge-list">
+                        {%- for item in cs.challenges %}
+                        <div class="challenge">
+                            <p class="challenge-label">Challenge</p>
+                            <div class="prose">{{ item.challenge | markdown | safe }}</div>
+                            <p class="challenge-label is-solution">Solution</p>
+                            <div class="prose">{{ item.solution | markdown | safe }}</div>
+                        </div>
+                        {%- endfor %}
+                    </div>
+                </section>
+                {%- endif %}
+
+                {%- if cs.results %}
+                <section class="project-section" id="results" aria-labelledby="results-title">
+                    <h2 class="project-section-title" id="results-title">Results &amp; evaluation</h2>
+                    <div class="prose">{{ cs.results | markdown | safe }}</div>
+                </section>
+                {%- endif %}
+
+                {%- if cs.lessons %}
+                <section class="project-section" id="lessons" aria-labelledby="lessons-title">
+                    <h2 class="project-section-title" id="lessons-title">Lessons learned</h2>
+                    <div class="prose">{{ cs.lessons | markdown | safe }}</div>
+                </section>
+                {%- endif %}
+
+            </div>
+
+        </div>
+
+        {#- Previous / next only among projects that have a detail page #}
+        {%- if pager.prev or pager.next %}
+        <nav class="project-pager" aria-label="More projects">
+            {%- if pager.prev %}
+            <a class="pager-link is-prev" href="{{ pager.prev.url }}">
+                <span class="pager-label">{{ icon("arrow-left") }} Previous project</span>
+                <span class="pager-title">{{ pager.prev.data.title }}</span>
+            </a>
+            {%- endif %}
+            {%- if pager.next %}
+            <a class="pager-link is-next" href="{{ pager.next.url }}">
+                <span class="pager-label">Next project {{ icon("arrow-right") }}</span>
+                <span class="pager-title">{{ pager.next.data.title }}</span>
+            </a>
+            {%- endif %}
+        </nav>
+        {%- endif %}
+
+        <p class="project-footer-back">
+            <a class="button secondary small" href="/?project={{ slug }}#projects">
+                {{ icon("arrow-left") }}
+                <span>Back to all projects</span>
+            </a>
+        </p>
+
+    </div>
+
+</article>
+
+<p class="sr-only" aria-live="polite" data-gallery-status></p>
+
+{% include "partials/project/lightbox.njk" %}

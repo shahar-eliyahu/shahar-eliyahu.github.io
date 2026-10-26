@@ -12,7 +12,11 @@ Guidance for Claude Code when working on this repository. For step-by-step conte
 5. Preserve existing functionality and content unless a change is explicitly requested.
 6. Keep the site static and compatible with GitHub Pages.
 7. Avoid unnecessary dependencies, backend services, databases and authentication.
-8. Commit with the owner's existing Git author and committer identity. Never change git config.
+8. Commit as **`shahar-eliyahu <shahar25806@gmail.com>`** (author and committer). This is set in
+   the repository-local `.git/config`; never change the global Git config (it still holds the
+   old college address, which must not be used). Never amend or rewrite earlier commits
+   (`a66e52e`…`2d7d2e9` carry the old address and stay as they are). Check
+   `git config --show-origin user.email` before committing.
 9. Never include Claude, Anthropic, AI or assistant attribution in commits.
 10. Never add `Co-Authored-By` trailers.
 11. Keep this file and README.md updated when architectural decisions change.
@@ -71,11 +75,13 @@ src/_data/                site.json, home.json (homepage text), skills.json, pro
 src/projects/*.md         one file per project (front matter = data, body = description)
 src/projects/projects.11tydata.js   defaults for all projects; slug = file name; permalink: false
 src/_includes/layouts/base.njk      page shell
+src/_includes/layouts/project.njk   project detail page (one template for all projects)
 src/_includes/partials/   nav, footer, components.njk (macros), sections/, project/, visuals/
 src/assets/css/           tokens.css → base.css → sections.css → visuals.css (load order matters)
 src/assets/js/main.js     nav, scroll progress, reveal, active link, pointer effects
 src/assets/js/editor.js   hero profile editor (tabs, typing)
-src/assets/js/projects.js Project Explorer (filters, picker tabs, gallery, lightbox, video)
+src/assets/js/gallery.js  shared media: gallery, lightbox, video (explorer and detail pages)
+src/assets/js/projects.js Project Explorer (filters, picker tabs); uses ProjectGallery
 src/assets/img/projects/<slug>/     project images (create when real images exist)
 src/Shahar_Eliyahu_CV.pdf           must stay published at /Shahar_Eliyahu_CV.pdf
 ```
@@ -87,8 +93,9 @@ src/Shahar_Eliyahu_CV.pdf           must stay published at /Shahar_Eliyahu_CV.pd
 - **Slug = file name** (`easyfill.md` → `easyfill`). It's unique by construction, and drives the image
   folder and the future URL `/projects/<slug>/`.
 - **Validation fails the build** (`lib/projects.js`): required fields, slug format, unknown
-  category ids, malformed category config, missing image files and missing alt text. Warnings cover duplicate
-  `order` values, a missing illustration partial, and `caseStudy.enabled` before case-study pages exist.
+  category ids, malformed category config, missing image files and missing alt text, wrongly
+  shaped `caseStudy` sections and the retired `caseStudy.enabled`. Warnings cover duplicate
+  `order` values and a missing illustration partial.
 - **Name collision gotcha:** global data files merge into every page's data (arrays concatenate).
   Never give a `_data` file the same name as a project front matter field (that's why it's
   `projectCategories.json`, not `categories.json`).
@@ -102,8 +109,37 @@ Front matter fields: `title`, `summary`, `order` (required), plus `year`, `type`
 `excerpt`, `categories[]`, `technologies[]`, `featured`, `featuredOrder`, `cover{src,alt,fit,position}`,
 `gallery[{src,alt,caption,fit,position}]`, `videoPoster`,
 `links{github,demo,video}`, `visual{id,label,kicker,headline}`,
-`caseStudy{enabled,problem,solution,architecture,challenges,results,lessons}`. The Markdown body
-is the detailed description. Full reference with an example: README → Managing projects.
+`detailPage`, `caseStudy{features[],architecture,challenges[{challenge,solution}],results,lessons}`.
+The Markdown body is the detail page's Overview. Step-by-step guide and a complete example:
+README → "Adding a New Project"; full field reference: README → "Managing projects".
+
+### Adding or changing projects (rules for AI-assisted work)
+
+Follow README → "Adding a New Project". Don't re-derive the process; these rules govern it:
+
+1. **One Markdown file per project** in `src/projects/<slug>.md`, read by the existing collection
+   (`allProjects`) and rendered by the shared `layouts/project.njk`. Never write per-project HTML,
+   copy a template, or add a project-specific layout or partial for its page.
+2. **Follow the schema above exactly.** Use only existing fields and category ids from
+   `src/_data/projectCategories.json`. A new field or category is a schema change (see rule 9).
+3. **Reuse the shared media components:** `partials/project/gallery.njk`, `lightbox.njk` and
+   `assets/js/gallery.js` (`ProjectGallery`). Images go in `src/assets/img/projects/<slug>/`;
+   videos use `links.video` (YouTube / Vimeo / local `.mp4`/`.webm`). No new gallery or player code.
+4. **Preserve the Project Explorer:** filters and counts, relative numbering, and the direct
+   **GitHub** button on every project. "Explore Project" comes only from `detailPage: true`;
+   never hard-code it or link to a page that isn't built.
+5. **`detailPage: true` only when the owner asks for it or has approved the page's content.**
+   Otherwise leave it out; the project is still complete in the explorer.
+6. **Never invent** details, features, architecture, metrics, results, team size, roles,
+   screenshots, videos or links. Use only what the owner provides or what already exists in the
+   repository (CV, existing text). Leave a field out rather than filling it with a placeholder.
+7. **Keep responsive design and accessibility intact:** `alt` text for every image (required by
+   the build), `fit: contain` for portrait screenshots, no layout changes for a single project.
+8. **Test:** `npm run build` (validates every project file and must pass with no new warnings),
+   then check the explorer entry (filters, numbering, buttons) and the detail page if enabled, at
+   a desktop width (1440px) and a phone width (390px), plus 320px when layout is affected.
+9. **Schema changes update the docs in the same change:** validation in `lib/projects.js`, the
+   README guide, field reference and complete example, and the field list above.
 
 - Media (`partials/project/gallery.njk`, items from `projectMedia`): real images (`cover`,
   `gallery`) and an embeddable video; with no real images, the animated illustration
@@ -147,6 +183,9 @@ is the detailed description. Full reference with an example: README → Managing
 | `n \| pad` | `1` → `"01"` |
 | `project \| projectMedia` | ordered gallery items: `image` / `video` / `illustration` |
 | `project \| projectVideo` | `links.video` classified: youtube / vimeo / file / external (+ embed URL) |
+| `projects \| findProject(page.url)` | the collection entry for a detail page |
+| `projects \| projectNeighbors(page.url)` | `{ prev, next }` among projects that have a page |
+| `text \| markdown` / `markdownInline` | Markdown from front matter (Eleventy's own markdown-it) |
 
 Skills ↔ projects: link skills to projects with `projectsUsing`. Never maintain a manual mapping.
 
@@ -332,6 +371,40 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
 - **Gotcha:** sibling selectors see hidden panels (`.explorer-panel + .explorer-panel` matched
   every panel after the first). Stacked-layout spacing is scoped to `html:not(.js)`.
 
+## Project detail pages (Phase 4B)
+
+- **One template for every project:** `layouts/project.njk` (chained into `base.njk`). There are
+  no per-project HTML files.
+- **Opt-in per project:** `detailPage: true`. `projects.11tydata.js` computes
+  `permalink: /projects/<slug>/` only then (otherwise `false`). The URL makes `project.url` truthy,
+  which turns on "Explore Project" (primary) with GitHub secondary in the explorer. **Only
+  EasyFill is enabled** (the reviewed example). Enable the others once they have real content.
+- **Data cascade defaults:** `layout`, `templateEngineOverride: "md"` (bodies are plain Markdown,
+  so `{{ }}` stays literal), `caseStudy: {}`, and computed `description` = `summary`.
+- **Sections** (each only with real content): Overview (Markdown body), Key features
+  (`caseStudy.features` list), Architecture & implementation, Challenges & solutions (list of
+  `{challenge, solution}`), Results & evaluation, Lessons learned (all Markdown, via the `markdown`
+  filter). "At a glance" appears only with `role` / `team`. "On this page" appears with 3+
+  sections. Previous / next only links projects that have a page. Validation fails on a wrong shape
+  and rejects the old `caseStudy.enabled`.
+- **Header:** back link `/?project=<slug>#projects` (the explorer re-selects the project), meta
+  (category · year · `type` badge), h1, `summary` as the introduction, actions with
+  `showExplore = false` (no link to the page itself; GitHub is primary).
+- **Media:** the same `gallery.njk` with page-level sizes: real media 16:10 on phones, 16:9 on
+  tablet, then a fixed `clamp(360px, 38vw, 540px)` height at full width on desktop (a capped
+  aspect ratio shrank the width). An illustration alone is a strip: 5:2, 4:1, then 5:1.
+- **Layout:** mobile first. Phones and tablet: details (Technologies, At a glance, On this page)
+  stacked above the sections. Desktop (1024px+): sections plus a sticky 300px details column.
+- **Shared JS:** `gallery.js` exposes `window.ProjectGallery.create(scope, { announce })`. The
+  explorer creates one per panel; galleries outside `[data-explorer]` set themselves up and
+  announce through `[data-gallery-status]`. `partials/project/lightbox.njk` is included once per
+  page.
+- **Nav on detail pages:** links point to `/#…` and "Projects" gets `aria-current="page"`.
+  `main.js` runs the section highlight only on the homepage (`onHomepage`), so it can't clear that.
+- **EasyFill content** comes only from the summary and the CV (5 features; evaluation with
+  real-user tests and synthetic data). Overview, architecture, challenges, lessons, role, team and
+  screenshots are still missing and intentionally left out.
+
 ## Validation workflow
 
 - `npm run build` must succeed with no errors or warnings.
@@ -353,9 +426,12 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
 - **Phase 3B (done, commit `b1db7f8`):** hero redesign (two columns, bigger name,
   detection box removed), interactive Java/Python/C++ profile editor with typing animation,
   button hierarchy with icons, section-number and contact alignment fixes.
-- **Phase 4A (implemented, awaiting approval):** hero name refinement; lighter slate-blue
-  palette site-wide; centred desktop navigation; **interactive Project Explorer** (filters, picker,
-  preview, screenshot/video gallery, lightbox, in-page video), card excerpts, media model.
+- **Phase 4A (done, commit `2d7d2e9dbaf1ecbe5b0619c1f57fbf188577bfab`):** hero name refinement;
+  lighter slate-blue palette site-wide; centred desktop navigation; **interactive Project
+  Explorer** (filters, picker, preview, screenshot/video gallery, lightbox, in-page video), card
+  excerpts, media model.
+- **Phase 4B (in progress, awaiting review):** reusable project detail page template; only
+  EasyFill's page (`/projects/easyfill/`) is enabled as the reviewed example.
 - `main` still serves the old hand-written site. This branch has no root `index.html`, so
   **merging before the Actions deploy exists would break the live site.**
 
@@ -363,11 +439,11 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
 
 3. **Dark design system.** 3A (tokens, surfaces) and 3B (hero, editor, hierarchy) are done.
    The palette will be re-evaluated after the layout redesign.
-4. **New sections.** 4A (unified filterable project grid, hero name refinement) is pending
-   review. 4B: project detail / case-study pages. Then: expanded About (education, hackathon,
-   experience timeline), skills linked to projects, contact upgrades.
-5. **Case-study pages** at `/projects/<slug>/`: enable the conditional permalink in
-   `projects.11tydata.js` plus a `project` layout. Publish only projects with real content.
+4. **New sections.** 4A (Project Explorer) is done. 4B (project detail pages) is in progress:
+   template plus the EasyFill example first, the other projects later via `detailPage: true`.
+   Then: expanded About (education, hackathon, experience timeline), skills linked to projects,
+   contact upgrades.
+5. **Remaining detail pages:** enable per project once it has real content (no new templates).
 6. **Polish:** accessibility (keyboard, focus, contrast), performance, Open Graph tags, favicon, 404, sitemap.
 7. **Launch (with approval only):** GitHub Actions deploy workflow, switch the Pages source to
    Actions, then merge.
