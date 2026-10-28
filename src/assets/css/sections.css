@@ -166,9 +166,9 @@
 
     font-weight: 600;
 
-    line-height: 0.95;
+    line-height: var(--leading-display);
 
-    letter-spacing: -0.035em;
+    letter-spacing: var(--tracking-display);
 }
 
 
@@ -508,7 +508,9 @@
 .about-text {
     position: relative;
 
-    max-width: 68ch;
+    max-width: var(--measure-body);
+
+    font-size: var(--text-body);
 
     padding-left: var(--space-5);
 }
@@ -539,7 +541,7 @@
 
     color: var(--color-text-body);
 
-    font-size: var(--text-lg);
+    font-size: var(--text-body);
 
     line-height: var(--leading-body);
 }
@@ -579,9 +581,10 @@
         margin-bottom: 0;
     }
 
-    /* Start the text level with the heading, not the small kicker above it */
-    .about-text {
-        margin-top: var(--space-5);
+    /* Side by side, the content is short, so the usual 104px under it (plus
+       the next section's 104px) read as a gap; 72px is the phone rhythm */
+    .about-section {
+        padding-bottom: 72px;
     }
 }
 
@@ -762,7 +765,7 @@
     color: var(--color-text-secondary);
 
     font-family: var(--font-mono);
-    font-size: 0.72rem;
+    font-size: var(--text-mono);
 
     text-align: center;
 }
@@ -1337,10 +1340,10 @@ html:not(.js) .explorer-panel + .explorer-panel {
     align-items: center;
 
     font-family: var(--font-mono);
-    font-size: 0.76rem;
+    font-size: var(--text-mono);
     font-weight: 500;
 
-    letter-spacing: 0.08em;
+    letter-spacing: var(--tracking-label);
 
     text-transform: uppercase;
 }
@@ -1362,7 +1365,7 @@ html:not(.js) .explorer-panel + .explorer-panel {
 
     color: var(--palette-violet-300);
 
-    font-size: 0.68rem;
+    font-size: 0.6875rem;
 }
 
 .explorer-title {
@@ -1371,12 +1374,12 @@ html:not(.js) .explorer-panel + .explorer-panel {
     color: var(--palette-gray-100);
 
     font-family: var(--font-display);
-    font-size: clamp(1.6rem, 1.3rem + 1vw, 2.1rem);
+    font-size: var(--text-h3);
     font-weight: 600;
 
-    line-height: 1.15;
+    line-height: var(--leading-h3);
 
-    letter-spacing: -0.02em;
+    letter-spacing: var(--tracking-h3);
 }
 
 .explorer-excerpt {
@@ -1386,9 +1389,9 @@ html:not(.js) .explorer-panel + .explorer-panel {
 
     color: var(--color-text-body);
 
-    font-size: 1rem;
+    font-size: var(--text-body);
 
-    line-height: 1.7;
+    line-height: var(--leading-body);
 }
 
 /* Technologies: directly under the description, with a readable heading */
@@ -1402,10 +1405,9 @@ html:not(.js) .explorer-panel + .explorer-panel {
     color: var(--color-text-secondary);
 
     font-family: var(--font-body);
-    font-size: 0.875rem;
+    font-size: var(--text-sm);
     font-weight: 600;
 
-    letter-spacing: 0.01em;
 }
 
 .explorer-info .project-actions {
@@ -1638,10 +1640,6 @@ html:not(.js) .explorer-panel + .explorer-panel {
         flex: 0 1 auto;
     }
 
-    .explorer-excerpt {
-        font-size: 1.0625rem;
-    }
-
     .lightbox-inner {
         padding: var(--space-4) var(--space-7) var(--space-6);
     }
@@ -1821,23 +1819,13 @@ html:not(.js) .explorer-panel + .explorer-panel {
 }
 
 .project-page-title {
-    margin: 0;
-
     color: var(--palette-gray-100);
-
-    font-family: var(--font-display);
-    font-size: clamp(2.25rem, 1.6rem + 2.6vw, 3.5rem);
-    font-weight: 600;
-
-    line-height: 1.05;
-
-    letter-spacing: var(--tracking-tight);
 }
 
 .project-intro {
-    max-width: 62ch;
+    max-width: var(--measure-lead);
 
-    margin: 0;
+    margin: var(--space-1) 0 0;
 
     color: var(--color-text-body);
 
@@ -1902,15 +1890,15 @@ html:not(.js) .explorer-panel + .explorer-panel {
 }
 
 .aside-title {
-    margin: 0 0 var(--space-3);
+    margin: 0 0 var(--space-2);
 
     color: var(--color-text-secondary);
 
     font-family: var(--font-body);
-    font-size: 0.875rem;
+    font-size: var(--text-sm);
+    line-height: var(--leading-ui);
     font-weight: 600;
 
-    letter-spacing: 0.01em;
 }
 
 .aside-facts {
@@ -2008,21 +1996,23 @@ html:not(.js) .explorer-panel + .explorer-panel {
     color: var(--palette-gray-100);
 
     font-family: var(--font-display);
-    font-size: clamp(1.35rem, 1.2rem + 0.6vw, 1.65rem);
+    font-size: var(--text-h3);
     font-weight: 600;
 
-    letter-spacing: -0.01em;
+    line-height: var(--leading-h3);
+
+    letter-spacing: var(--tracking-h3);
 }
 
 /* Long-form Markdown */
 .prose {
-    max-width: 70ch;
+    max-width: var(--measure-body);
 
     color: var(--color-text-body);
 
-    font-size: 1.0625rem;
+    font-size: var(--text-body);
 
-    line-height: 1.75;
+    line-height: var(--leading-body);
 }
 
 .prose > :first-child {
@@ -2088,9 +2078,9 @@ html:not(.js) .explorer-panel + .explorer-panel {
 
     color: var(--color-text-body);
 
-    font-size: 1.0625rem;
+    font-size: var(--text-body);
 
-    line-height: 1.6;
+    line-height: var(--leading-body);
 }
 
 /* Small check-style marker */
@@ -2133,10 +2123,10 @@ html:not(.js) .explorer-panel + .explorer-panel {
     color: var(--palette-violet-300);
 
     font-family: var(--font-mono);
-    font-size: 0.72rem;
+    font-size: var(--text-mono);
     font-weight: 500;
 
-    letter-spacing: 0.1em;
+    letter-spacing: var(--tracking-label);
 
     text-transform: uppercase;
 }
@@ -2145,10 +2135,6 @@ html:not(.js) .explorer-panel + .explorer-panel {
     margin-top: var(--space-3);
 
     color: var(--color-tag-text);
-}
-
-.challenge .prose {
-    font-size: 1rem;
 }
 
 /* Previous / next */
@@ -2192,7 +2178,7 @@ html:not(.js) .explorer-panel + .explorer-panel {
 
     color: var(--color-text-muted);
 
-    font-size: 0.8rem;
+    font-size: var(--text-small);
 }
 
 .pager-label .icon {
@@ -2202,7 +2188,9 @@ html:not(.js) .explorer-panel + .explorer-panel {
 
 .pager-title {
     font-family: var(--font-display);
-    font-size: 1.1rem;
+    font-size: var(--text-h4);
+
+    line-height: var(--leading-h4);
     font-weight: 600;
 }
 
@@ -2310,12 +2298,14 @@ html:not(.js) .explorer-panel + .explorer-panel {
 
 
 /* SKILLS
- * Compact rows: the category name, then its technologies as the same tags
- * the Project Explorer uses. Phones: name above tags. 651px+: side by side;
- * 1024px+ on the same grid as About. */
+ * Horizontal category rows separated by thin lines (no cards): the name with
+ * the blue -> violet marker from the About line, then the technologies.
+ * Featured tags (with logos) are always shown; the rest of a category is
+ * revealed in place by "Show more" (main.js). Mobile first: the name sits above
+ * its tags; 651px+ beside them; 1200px+ full-size featured tags. */
 
 .skills-list {
-    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
 }
 
 .skill-row {
@@ -2323,57 +2313,228 @@ html:not(.js) .explorer-panel + .explorer-panel {
 
     gap: var(--space-3);
 
-    padding: var(--space-5) 0;
+    /* the tags' own bottom margin completes the bottom spacing */
+    padding: var(--space-4) 0 calc(var(--space-4) - 8px);
 
-    border-bottom: 1px solid var(--color-border);
+    border-top: 1px solid var(--color-border);
 }
 
-.skill-name {
+.skill-heading {
+    display: flex;
+
+    gap: var(--space-2);
+
     margin: 0;
+
+    align-items: center;
 
     color: var(--color-text);
 
     font-family: var(--font-display);
 
-    font-size: 1.125rem;
+    font-size: var(--text-h4);
     font-weight: 600;
 
-    line-height: 1.3;
+    line-height: var(--leading-h4);
+}
+
+/* Small accent marker, matching the About accent line */
+.skill-heading::before {
+    content: "";
+
+    flex: none;
+
+    width: 3px;
+    height: 1em;
+
+    border-radius: 2px;
+
+    background: linear-gradient(180deg, var(--color-primary), var(--color-accent-strong));
+}
+
+/* Tags and the toggle share one line flow, so the button always follows the
+   last visible tag */
+.skill-body {
+    min-width: 0;
 }
 
 .skill-tags {
-    gap: var(--space-2);
+    display: inline;
+
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
 }
 
-.skill-tags .tech-badge {
-    transition:
-        border-color var(--duration-fast) ease,
-        color var(--duration-fast) ease;
-}
+/* Featured: logo and name, the most visible tier (a little more compact on
+   phones, full size from 651px) */
+.skill-tag {
+    display: inline-flex;
 
-.skill-tags .tech-badge:hover {
-    border-color: var(--color-primary);
+    gap: 6px;
+
+    margin: 0 6px 8px 0;
+
+    padding: 4px 11px;
+
+    align-items: center;
+
+    vertical-align: middle;
+
+    border: 1px solid var(--color-tag-border);
+    border-radius: var(--radius-pill);
+
+    background: var(--color-tag-bg);
 
     color: var(--color-text);
+
+    font-size: 0.8125rem;
+    font-weight: 500;
+
+    line-height: 1.4;
+
+    white-space: nowrap;
+}
+
+.skill-tag.has-logo {
+    padding-left: 7px;
+}
+
+.skill-tag img {
+    flex: none;
+
+    width: 18px;
+    height: 18px;
+}
+
+/* Additional skills: quieter and more compact */
+.skill-tag.is-extra {
+    padding: 3px 10px;
+
+    border-color: var(--color-border);
+
+    background: transparent;
+
+    color: var(--color-text-secondary);
+
+    font-size: 0.8125rem;
+}
+
+.skill-tag.is-extra.has-logo {
+    padding-left: 7px;
+}
+
+.skill-tag.is-extra img {
+    width: 18px;
+    height: 18px;
+}
+
+/* With JavaScript the extras wait behind "Show more"; without it all show */
+.js .skill-row:not(.is-expanded) .skill-tag.is-extra {
+    display: none;
+}
+
+html:not(.js) .skill-toggle {
+    display: none;
+}
+
+/* "Show more" / "Show less": a quiet text button in the tag flow, with a
+   44px tall hit area */
+.skill-toggle {
+    position: relative;
+
+    display: inline-flex;
+
+    margin: 0 0 8px;
+
+    padding: 4px 10px;
+
+    align-items: center;
+
+    vertical-align: middle;
+
+    border: 1px solid transparent;
+    border-radius: var(--radius-pill);
+
+    background: transparent;
+
+    color: var(--color-link);
+
+    font: inherit;
+    font-size: var(--text-small);
+    font-weight: 600;
+
+    line-height: var(--leading-ui);
+
+    white-space: nowrap;
+
+    cursor: pointer;
+
+    transition:
+        background-color var(--duration-fast) ease,
+        border-color var(--duration-fast) ease;
+}
+
+.skill-toggle::after {
+    content: "";
+
+    position: absolute;
+
+    inset: -8px 0;
+}
+
+.skill-toggle:hover {
+    border-color: var(--color-tag-border);
+
+    background: var(--color-tag-bg);
 }
 
 @media (min-width: 651px) {
 
+    /* 224px fits the longest category name ("Programming Languages") */
     .skill-row {
-        grid-template-columns: 200px minmax(0, 1fr);
+        grid-template-columns: 224px minmax(0, 1fr);
 
         gap: var(--space-6);
 
-        align-items: center;
+        align-items: start;
+    }
+
+    /* Level the name with the first line of tags */
+    .skill-heading {
+        min-height: 30px;
     }
 }
 
-@media (min-width: 1024px) {
+/* Wide screens: full-size featured tags (most categories still fit one line) */
+@media (min-width: 1200px) {
 
     .skill-row {
-        grid-template-columns: var(--split-columns);
+        grid-template-columns: 240px minmax(0, 1fr);
 
-        gap: var(--space-8);
+        gap: var(--space-7);
+    }
+
+    .skill-heading {
+        min-height: 32px;
+    }
+
+    .skill-tag.is-featured {
+        gap: 7px;
+
+        padding: 5px 12px;
+
+        font-size: 0.875rem;
+    }
+
+    .skill-tag.is-featured.has-logo {
+        padding-left: 8px;
+    }
+
+    .skill-tag.is-featured img {
+        width: 20px;
+        height: 20px;
     }
 }
 
@@ -2452,44 +2613,37 @@ html:not(.js) .explorer-panel + .explorer-panel {
     gap: var(--space-6);
 }
 
-.contact-label {
-    margin: 0 0 var(--space-3);
-
-    color: var(--color-inverse-label);
-
-    font-family: var(--font-mono);
-
-    font-size: 0.75rem;
-
-    letter-spacing: var(--tracking-label);
-}
-
 .contact h2 {
     max-width: 18ch;
-
-    margin: 0;
-
-    font-family: var(--font-display);
-
-    font-size: clamp(2rem, 1.4rem + 2.4vw, 3.25rem);
-
-    font-weight: 600;
-
-    line-height: 1.08;
-
-    letter-spacing: -0.03em;
 
     text-wrap: balance;
 }
 
-.contact-text > p:not(.contact-label) {
+.contact-text > p {
     max-width: 52ch;
 
     margin: var(--space-4) 0 0;
 
     color: var(--color-inverse-text-muted);
 
-    font-size: var(--text-lg);
+    font-size: var(--text-body);
+
+    line-height: var(--leading-body);
+}
+
+/* The headline's last word in the blue -> violet accent */
+.contact-accent {
+    color: var(--color-accent);
+}
+
+@supports (background-clip: text) or (-webkit-background-clip: text) {
+    .contact-accent {
+        background: linear-gradient(90deg, var(--color-link), var(--color-accent));
+        -webkit-background-clip: text;
+        background-clip: text;
+
+        color: transparent;
+    }
 }
 
 /* Phones: Email and CV full width, GitHub and LinkedIn side by side */
@@ -2507,9 +2661,28 @@ html:not(.js) .explorer-panel + .explorer-panel {
     padding: 0 var(--space-4);
 }
 
-.contact-buttons .contact-email,
+.contact-email-wrap,
 .contact-buttons .button[download] {
     grid-column: 1 / -1;
+}
+
+/* Room above the button for the mascot's head (46px visible) */
+.contact-email-wrap {
+    position: relative;
+
+    margin-top: 50px;
+}
+
+/* Main action: a touch taller than the secondary buttons; above the
+   mascot's body, below its hands */
+.contact-email {
+    position: relative;
+    z-index: 1;
+
+    width: 100%;
+    min-height: 54px;
+
+    font-size: 0.98rem;
 }
 
 .button.light {
@@ -2536,6 +2709,215 @@ html:not(.js) .explorer-panel + .explorer-panel {
     border-color: var(--color-inverse-text);
 
     color: var(--color-inverse-text);
+}
+
+/* CONTACT MASCOT (partials/contact-mascot.njk, behaviour in main.js)
+ * A small lavender square peeking over the Email Me button. The body sits
+ * behind the button (its lower part hidden by the button's top edge), the
+ * hands in front, on that edge. The wrapper has no z-index, so body (0),
+ * button (1) and hands (2) share one stacking order. Purely decorative:
+ * no pointer events, hidden from assistive technology.
+ *
+ * Poses and faces follow data-mood (idle · email · approve · cheer) through
+ * CSS transitions; one-shot moves (entrance, nods, the entrance tap) are Web
+ * Animations from main.js, so the two never compete for the same property
+ * at the same time. */
+
+.mascot {
+    display: block;
+
+    height: 0;
+
+    pointer-events: none;
+}
+
+.mascot svg {
+    position: absolute;
+
+    right: 28px;
+
+    overflow: visible;
+
+    pointer-events: none;
+}
+
+/* 18px of the 64px body stays hidden behind the button */
+.mascot-body {
+    bottom: calc(100% - 18px);
+    z-index: 0;
+
+    transform-origin: 50% 100%;
+
+    transition: transform 0.24s var(--ease-out);
+}
+
+.mascot-hands {
+    top: -6px;
+    z-index: 2;
+}
+
+.mascot-head,
+.mascot-hand {
+    transform-box: fill-box;
+    transform-origin: 50% 100%;
+}
+
+.mascot-skin {
+    fill: var(--mascot-body);
+}
+
+/* Darker strip where the body disappears behind the button */
+.mascot-shadow {
+    fill: var(--mascot-shade);
+}
+
+.mascot-brows path,
+.mascot-mouth {
+    fill: none;
+
+    stroke: var(--mascot-face);
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.mascot-brows {
+    transition: transform 0.2s var(--ease-out);
+}
+
+/* Eyes look within ~2.5px (--look-x / --look-y from main.js) */
+.mascot-eyes {
+    transform: translate(calc(var(--look-x, 0) * 1px), calc(var(--look-y, 0) * 1px));
+
+    transition: transform 0.14s ease-out;
+}
+
+.mascot-eye {
+    fill: var(--mascot-face);
+
+    transform-box: fill-box;
+    transform-origin: center;
+
+    animation: mascot-blink 5.5s infinite;
+
+    transition: ry 0.15s ease;
+}
+
+.mascot-eye + .mascot-eye {
+    animation-delay: 0.04s;
+}
+
+.mascot-mouth {
+    opacity: 0;
+
+    transition: opacity 0.15s ease;
+}
+
+/* the happy mouth is a small open smile */
+.mascot-mouth.is-happy {
+    fill: var(--mascot-face);
+}
+
+.mascot-hand {
+    transition: transform 0.22s var(--ease-out);
+}
+
+.mascot-hand rect {
+    fill: var(--mascot-body);
+
+    stroke: var(--mascot-shade);
+    stroke-width: 1;
+}
+
+.mascot-hand path {
+    fill: none;
+
+    stroke: var(--mascot-shade);
+    stroke-width: 1.2;
+    stroke-linecap: round;
+}
+
+/* Faces */
+.mascot[data-mood="idle"] .is-soft,
+.mascot[data-mood="approve"] .is-pleased,
+.mascot:is([data-mood="email"], [data-mood="cheer"]) .is-happy {
+    opacity: 1;
+}
+
+.mascot:is([data-mood="email"], [data-mood="cheer"]) .mascot-brows {
+    transform: translateY(-2.5px);
+}
+
+.mascot[data-mood="approve"] .mascot-brows {
+    transform: translateY(-1.5px);
+}
+
+/* smiling eyes */
+.mascot:is([data-mood="email"], [data-mood="cheer"]) .mascot-eye {
+    ry: 2.6px;
+}
+
+/* Poses: up for Email Me; for a secondary button a smaller lift, leaning
+   toward it, with the nearer hand lifted in a little gesture */
+.mascot[data-mood="email"] .mascot-body {
+    transform: translateY(-6px) rotate(-3deg);
+}
+
+.mascot[data-mood="approve"] .mascot-body {
+    transform: translateY(-3px) rotate(-4deg);
+}
+
+.mascot[data-mood="approve"][data-point="right"] .mascot-body {
+    transform: translateY(-3px) rotate(3deg);
+}
+
+.mascot[data-mood="approve"][data-point="left"] .mascot-hand.is-left {
+    transform: translate(-3px, -5px) rotate(-24deg);
+}
+
+.mascot[data-mood="approve"][data-point="right"] .mascot-hand.is-right {
+    transform: translate(3px, -5px) rotate(24deg);
+}
+
+/* Entrance: with JavaScript (and motion allowed) it waits mostly hidden behind
+   the button until the section is in view; without JavaScript it simply
+   rests in place. During the entrance the Web Animation drives the body. */
+@media (prefers-reduced-motion: no-preference) {
+
+    .js .mascot[data-entrance="pending"] .mascot-body {
+        transform: translateY(36px);
+    }
+
+    .js .mascot[data-entrance="pending"] .mascot-hands {
+        opacity: 0;
+    }
+}
+
+.mascot[data-entrance="playing"] .mascot-body {
+    transition: none;
+}
+
+@keyframes mascot-blink {
+    0%,
+    93%,
+    100% {
+        transform: scaleY(1);
+    }
+
+    95% {
+        transform: scaleY(0.1);
+    }
+}
+
+/* Reduced motion: no poses or gestures (blinking and transitions are off
+   site-wide); the face still changes, statically. !important so it beats
+   every mood / point pose, like the site-wide reduced-motion rule. */
+@media (prefers-reduced-motion: reduce) {
+
+    .mascot .mascot-body,
+    .mascot .mascot-hand {
+        transform: none !important;
+    }
 }
 
 /* 651px+: Email on top, the three secondary actions in one row */
@@ -2590,7 +2972,7 @@ footer {
     align-items: center;
     justify-content: space-between;
 
-    font-size: 0.82rem;
+    font-size: var(--text-small);
 }
 
 /* Homepage: the footer continues the contact band, so a container-width

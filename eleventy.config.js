@@ -13,6 +13,7 @@ import {
     findProject,
 } from "./lib/projects.js";
 import { profileEditor } from "./lib/profile-code.js";
+import { skillLogo, validateSkills } from "./lib/skills.js";
 
 export default function (eleventyConfig) {
     // Static files copied as-is. The CV keeps its original public URL.
@@ -48,6 +49,10 @@ export default function (eleventyConfig) {
 
     // Hero editor: profile facts -> highlighted Java / Python / C++ (lib/profile-code.js)
     eleventyConfig.addFilter("profileEditor", profileEditor);
+
+    // Skills: logo URL per skill, and validation of the skills data (lib/skills.js)
+    eleventyConfig.addFilter("skillLogo", skillLogo);
+    eleventyConfig.on("eleventy.before", validateSkills);
 
     // "1" -> "01"
     eleventyConfig.addFilter("pad", (value, length = 2) =>

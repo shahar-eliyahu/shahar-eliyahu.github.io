@@ -103,7 +103,6 @@
     --color-inverse-text: var(--palette-gray-50);
     --color-inverse-text-muted: var(--palette-gray-300);
     --color-inverse-text-subtle: var(--palette-gray-400);
-    --color-inverse-label: var(--palette-blue-300);
     --color-inverse-border: var(--palette-navy-500);
     --color-inverse-divider: var(--palette-navy-800);
     --color-inverse-shadow: var(--palette-black);
@@ -160,29 +159,57 @@
     --viz-battle-team-b: #f08a3c;
     --viz-battle-commander: #f2c94c;
 
+    /* Contact mascot (peeks over the Email Me button) */
+    --mascot-body: var(--palette-violet-400);
+    --mascot-shade: var(--palette-violet-500);
+    --mascot-face: var(--palette-navy-1000);
+
 
     /* 4. TYPOGRAPHY */
 
-    --font-body: "Inter", sans-serif;
-    --font-display: "Space Grotesk", sans-serif;
+    /* Inter for everything but code (self-hosted, see base.css) */
+    --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --font-display: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
     --font-mono: "IBM Plex Mono", monospace;
 
-    --text-xs: 0.72rem;
-    --text-sm: 0.875rem;
-    --text-base: 1rem;
-    --text-lg: 1.08rem;
-    --text-lead: clamp(1.125rem, 1.4vw, 1.3rem);
+    /* Type scale (owner-approved audit). Components keep a few deliberate
+       exceptions: hero editor, Skills tags, explorer picker tabs, Email Me,
+       logo, hero pill. */
+    --text-mono: 0.75rem;       /* 12px: monospace labels and metadata */
+    --text-xs: 0.72rem;         /* hero editor filename (editor exception) */
+    --text-small: 0.8125rem;    /* 13px: footer, pager label, secondary notes */
+    --text-sm: 0.875rem;        /* 14px: small UI (badges, chips, small buttons, labels) */
+    --text-ui: 0.9375rem;       /* 15px: buttons and navigation */
+    --text-body: 1.0625rem;     /* 17px: every paragraph and list */
+    --text-lead: clamp(1.125rem, 1.4vw, 1.25rem);   /* 18px → 20px: introductions */
 
-    --text-h1: clamp(3rem, 8.2vw, 8rem);
-    --text-h2: clamp(2.5rem, 5vw, 4rem);
-    --text-h3: clamp(2rem, 4vw, 3rem);
+    /* Hero name: 112px from ~1570px wide, ~107px at 1440, ~79px at 1024, ~62px
+       at 768 (phones use their own size in sections.css, so tablets never drop
+       below phones). Section headings (and project page titles): 52px on
+       desktop (from ~1420px), ~44px at 1024, ~39px at 768, 34px on phones.
+       H3 (explorer panel and project section titles): 28 / ~26 / 24px. */
+    --text-h1: clamp(3rem, 0.66rem + 6.7vw, 7rem);
+    --text-h2: clamp(2.125rem, 1.5rem + 2vw, 3.25rem);
+    --text-h3: clamp(1.5rem, 1.371rem + 0.53vw, 1.75rem);
+    --text-h4: 1.0625rem;       /* 17px: small headings (Skills categories, pager) */
 
-    --leading-tight: 1.05;
-    --leading-lead: 1.6;
+    --leading-display: 0.95;
+    --leading-heading: 1.1;
+    --leading-h3: 1.2;
+    --leading-h4: 1.3;
+    --leading-ui: 1.4;
+    --leading-lead: 1.55;
     --leading-body: 1.65;
 
-    --tracking-tight: -0.03em;
-    --tracking-label: 0.12em;
+    /* Inter wants slightly negative tracking at large sizes, none below ~20px */
+    --tracking-display: -0.03em;
+    --tracking-heading: -0.022em;
+    --tracking-h3: -0.015em;
+    --tracking-label: 0.08em;   /* monospace uppercase labels */
+
+    /* Line lengths: ~72 characters for body text, shorter for introductions */
+    --measure-body: 62ch;
+    --measure-lead: 56ch;
 
 
     /* 5. SPACING */
@@ -222,7 +249,7 @@
 
     --max-width: 1180px;
 
-    /* Heading or label column + content column (About, Skills on desktop) */
+    /* Heading column + content column (About on desktop) */
     --split-columns: minmax(220px, 0.42fr) minmax(0, 1fr);
     --nav-height: 80px;
 

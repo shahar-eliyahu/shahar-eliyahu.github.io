@@ -140,6 +140,23 @@ sections.forEach((section) => {
 });
 
 
+// Skills: "Show more" reveals the rest of a category's technologies in place.
+// Each category toggles on its own; CSS hides the extras only while collapsed.
+document.querySelectorAll("[data-skill-toggle]").forEach((button) => {
+    const row = button.closest(".skill-row");
+    const label = button.querySelector("[data-toggle-label]");
+    const collapsedLabel = label.textContent;
+
+    button.addEventListener("click", () => {
+        const expanded = button.getAttribute("aria-expanded") !== "true";
+
+        button.setAttribute("aria-expanded", String(expanded));
+        row.classList.toggle("is-expanded", expanded);
+        label.textContent = expanded ? "Show less" : collapsedLabel;
+    });
+});
+
+
 // Pointer effects (desktop only)
 if (canHover && !prefersReducedMotion) {
 
@@ -152,4 +169,218 @@ if (canHover && !prefersReducedMotion) {
         hero.style.setProperty("--hx", `${event.clientX - rect.left}px`);
         hero.style.setProperty("--hy", `${event.clientY - rect.top}px`);
     });
+}
+
+
+// Contact mascot (partials/contact-mascot.njk). State lives in data
+// attributes that CSS turns into poses and faces:
+//   data-mood: idle · email (Email Me hovered / focused) · approve (Download
+//              CV, GitHub or LinkedIn) · cheer (entrance)
+//   data-entrance: pending → playing → done (once per page load)
+// One-shot moves (entrance, nods, the entrance tap) are Web Animations that are
+// cancelled whenever the state changes, so quick pointer moves can't stack up.
+// Reduced motion: moods still change the face, but nothing moves.
+const mascot = document.querySelector("[data-mascot]");
+
+if (mascot) {
+    const contact = mascot.closest(".contact");
+    const email = mascot.closest(".contact-email-wrap").querySelector(".contact-email");
+    const buttons = [...contact.querySelectorAll(".contact-buttons .button")];
+    const body = mascot.querySelector(".mascot-body");
+    const head = mascot.querySelector(".mascot-head");
+    const hands = mascot.querySelector(".mascot-hands");
+    const rightHand = mascot.querySelector(".mascot-hand.is-right");
+    const eyes = mascot.querySelector(".mascot-eyes");
+    const moves = !prefersReducedMotion && "animate" in Element.prototype;
+
+    let hovered = null;
+    let focused = null;
+    let active = null;
+    let encourageTimer = 0;
+    let lookFrame = 0;
+    let nod = null;
+    let entrance = [];
+
+    // Eyes: up to ~2.5px toward a point (full reach from ~120px away)
+    const look = (x, y) => {
+        mascot.style.setProperty("--look-x", x.toFixed(2));
+        mascot.style.setProperty("--look-y", y.toFixed(2));
+    };
+
+    const lookAt = (x, y) => {
+        if (!moves) return;
+
+        const rect = eyes.getBoundingClientRect();
+        const dx = x - (rect.left + rect.width / 2);
+        const dy = y - (rect.top + rect.height / 2);
+        const distance = Math.hypot(dx, dy) || 1;
+        const reach = 2.5 * Math.min(1, distance / 120);
+
+        look((dx / distance) * reach, (dy / distance) * reach * 0.8);
+    };
+
+    const centre = (element) => {
+        const rect = element.getBoundingClientRect();
+        return [rect.left + rect.width / 2, rect.top + rect.height / 2];
+    };
+
+    // Nods: a little dip of the head, twice for "yes, yes!", once to approve
+    const NODS = {
+        twice: [
+            { transform: "none" },
+            { transform: "translateY(3.5px) rotate(2deg)", offset: 0.2 },
+            { transform: "translateY(-1px) rotate(0deg)", offset: 0.42 },
+            { transform: "translateY(3px) rotate(-1.5deg)", offset: 0.64 },
+            { transform: "translateY(-0.5px)", offset: 0.84 },
+            { transform: "none" },
+        ],
+        once: [
+            { transform: "none" },
+            { transform: "translateY(2.5px) rotate(1.5deg)", offset: 0.4 },
+            { transform: "translateY(-0.5px)", offset: 0.75 },
+            { transform: "none" },
+        ],
+    };
+
+    const playNod = (frames, duration) => {
+        nod?.cancel();
+        if (moves) nod = head.animate(frames, { duration, easing: "ease-in-out" });
+    };
+
+    const endEntrance = () => {
+        entrance.forEach((animation) => animation.cancel());
+        entrance = [];
+        mascot.dataset.entrance = "done";
+    };
+
+    // Apply the reaction for whichever button is hovered (or keyboard-focused)
+    const update = () => {
+        const target = hovered || focused;
+        if (target === active) return;
+
+        // An interaction always wins over the entrance
+        if (target && mascot.dataset.entrance === "playing") endEntrance();
+
+        active = target;
+        clearTimeout(encourageTimer);
+        nod?.cancel();
+
+        if (!target) {
+            mascot.dataset.mood = "idle";
+            delete mascot.dataset.point;
+            look(0, 0);
+            return;
+        }
+
+        lookAt(...centre(target));
+
+        if (target === email) {
+            mascot.dataset.mood = "email";
+            delete mascot.dataset.point;
+
+            // Still here after 2 seconds: an enthusiastic "yes, yes!"
+            encourageTimer = setTimeout(() => playNod(NODS.twice, 760), 2000);
+        } else {
+            mascot.dataset.mood = "approve";
+            mascot.dataset.point = centre(target)[0] < centre(eyes)[0] ? "left" : "right";
+            playNod(NODS.once, 420);
+        }
+    };
+
+    buttons.forEach((button) => {
+        // Hover from a mouse or pen only; a tap goes straight to the link
+        button.addEventListener("pointerenter", (event) => {
+            if (event.pointerType === "touch") return;
+            hovered = button;
+            update();
+        });
+
+        button.addEventListener("pointerleave", () => {
+            if (hovered !== button) return;
+            hovered = null;
+            update();
+        });
+
+        // Keyboard focus only (a tap can focus a link too)
+        button.addEventListener("focus", () => {
+            if (!button.matches(":focus-visible")) return;
+            focused = button;
+            update();
+        });
+
+        button.addEventListener("blur", () => {
+            if (focused !== button) return;
+            focused = null;
+            update();
+        });
+    });
+
+    // Eyes follow the pointer around the contact band (mouse / trackpad only),
+    // unless a button already has the mascot's attention
+    if (canHover && moves) {
+        contact.addEventListener("pointermove", (event) => {
+            if (active) return;
+
+            cancelAnimationFrame(lookFrame);
+            lookFrame = requestAnimationFrame(() => lookAt(event.clientX, event.clientY));
+        });
+
+        contact.addEventListener("pointerleave", () => {
+            cancelAnimationFrame(lookFrame);
+            if (!active) look(0, 0);
+        });
+    }
+
+    // Entrance, once, when the Email Me button comes into view: pop up from
+    // behind it with a grin, tap the button, settle into the usual peek
+    const playEntrance = () => {
+        mascot.dataset.entrance = "playing";
+        mascot.dataset.mood = "cheer";
+
+        const timing = { duration: 1250, delay: 250, fill: "backwards" };
+
+        entrance = [
+            body.animate([
+                { transform: "translateY(36px)" },
+                { transform: "translateY(-9px) rotate(2deg)", offset: 0.28, easing: "ease-out" },
+                { transform: "translateY(-6px) rotate(-4deg)", offset: 0.5 },
+                { transform: "translateY(-6px) rotate(-4deg)", offset: 0.72, easing: "ease-in-out" },
+                { transform: "none" },
+            ], { ...timing, easing: "cubic-bezier(0.34, 1.4, 0.64, 1)" }),
+            hands.animate([
+                { opacity: 0, transform: "translateY(5px)" },
+                { opacity: 1, transform: "none", offset: 0.3 },
+                { opacity: 1, transform: "none" },
+            ], timing),
+            // the right hand points down at the button: two quick taps
+            rightHand.animate([
+                { transform: "none" },
+                { transform: "none", offset: 0.4 },
+                { transform: "translate(2px, -6px) rotate(20deg)", offset: 0.5 },
+                { transform: "translateY(0.5px)", offset: 0.6 },
+                { transform: "translate(2px, -4px) rotate(14deg)", offset: 0.68 },
+                { transform: "none", offset: 0.8 },
+                { transform: "none" },
+            ], timing),
+        ];
+
+        entrance[0].finished.then(() => {
+            endEntrance();
+            if (!active) mascot.dataset.mood = "idle";
+        }, () => {});
+    };
+
+    if (!moves || !("IntersectionObserver" in window)) {
+        mascot.dataset.entrance = "done";
+    } else {
+        const observer = new IntersectionObserver((entries) => {
+            if (!entries.some((entry) => entry.isIntersecting)) return;
+
+            observer.disconnect();
+            if (active) endEntrance();
+            else playEntrance();
+        }, { threshold: 0.6 });
+
+        observer.observe(email);
+    }
 }

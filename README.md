@@ -47,7 +47,8 @@ for example `npx serve _site`.
 │   ├── _data/                  # Site-wide content (JSON)
 │   │   ├── site.json           # Name, email, CV, social links, navigation
 │   │   ├── home.json           # Homepage text: hero, about, section titles, contact
-│   │   ├── skills.json         # Skill groups
+│   │   ├── skills.json         # Skill categories: featured + more
+│   │   ├── skillLogos.json     # Skill name → logo file
 │   │   └── projectCategories.json  # Project categories (id, label, order)
 │   │
 │   ├── projects/               # One Markdown file per project
@@ -94,12 +95,39 @@ so existing links keep working.
 ### Hero, About, Contact text
 
 Edit `src/_data/home.json`. About is text only: its `paragraphs` may contain simple HTML such as
-`<strong>`, and the first paragraph is shown as a slightly larger introduction.
+`<strong>`, and the first paragraph is shown as a slightly larger introduction. The last word of
+the contact `title` is highlighted automatically.
 
 ### Skills
 
-Edit `src/_data/skills.json`. Each group has a `name` and a list of `items`. Every group is shown
-as one row (the name, then its items as tags), in the order of the file.
+Edit `src/_data/skills.json`. Each category is one row on the page:
+
+```json
+{
+    "name": "Data & Processing",
+    "featured": ["Pandas", "NumPy", "Apache Spark", "Apache Kafka"],
+    "more": ["Spark Structured Streaming", "EDA", "Data Cleaning"]
+}
+```
+
+- `featured`: 5 recognisable technologies (ideally ones with a logo), always visible, in this
+  order. Keep concepts such as OOP or Data Cleaning in `more`.
+- `more`: everything else, revealed by the category's "Show more" button ("Show less" when
+  open). Use `[]` when there's nothing more; no button is shown then.
+- To add a skill, add its name to one of the two lists. To feature a different one, move names
+  between the lists, or between categories. Categories appear in the file's order.
+- The five categories are deliberately broad (Programming Languages, AI & Machine Learning, Data &
+  Processing, Platforms & Systems, Development Tools): put a new skill where its main use fits
+  rather than adding a category. A new category is just another `{ name, featured, more }`.
+- Each skill may appear only once in the whole file; the build stops with a message otherwise.
+
+**Logos.** `src/_data/skillLogos.json` maps a skill's exact name to a logo file in
+`src/assets/img/skills/` (`"Python": "python"` → `python.svg`). Skills without an entry are shown
+as text, which is right for concepts (OOP, Fine-tuning, …). To add a logo, take the official SVG
+from [devicon](https://devicon.dev) (MIT) or [Simple Icons](https://simpleicons.org) (CC0), save
+it as `src/assets/img/skills/<id>.svg`, add the mapping, and note it in `CREDITS.txt`. Check it on
+the dark background: black or navy parts need the brand's light (dark-mode) variant. The build
+stops if a mapped file is missing or a mapping names an unknown skill.
 
 Skills are linked to projects automatically. There's no manual mapping: a skill matches every
 project whose `technologies` list contains the same name, ignoring case. For example,

@@ -1,0 +1,49 @@
+{#-
+    Contact mascot: a small square creature peeking over the Email Me button.
+    Decorative only (aria-hidden, no pointer events). Two layers:
+    - body: sits behind the button, so the button's top edge hides its lower part
+    - hands: sit in front, resting on that edge
+    State (set by main.js, styled in sections.css):
+    - data-mood: idle · email (Email Me hovered / focused) · approve (CV, GitHub,
+      LinkedIn) · cheer (during the entrance)
+    - data-entrance: pending (mostly hidden, only with JS and motion allowed) →
+      playing → done
+    - data-point: which hand gestures toward a secondary button (left / right)
+    Eyes look via --look-x / --look-y.
+#}
+<span class="mascot" aria-hidden="true" data-mascot data-mood="idle" data-entrance="pending">
+    <svg class="mascot-body" viewBox="0 0 56 64" width="56" height="64" focusable="false">
+        <g class="mascot-head">
+            {#- slightly lopsided rounded square #}
+            <path class="mascot-skin" d="M10 8.5 Q28 3 46 7.5 Q54 9.5 54 19 L54 64 L2 64 L2 18 Q2 9.5 10 8.5 Z"/>
+            <path class="mascot-shadow" d="M2 43.5 L54 43.5 L54 64 L2 64 Z"/>
+
+            {#- relaxed arcs, the right one a little higher: curious, not cross #}
+            <g class="mascot-brows">
+                <path d="M12.5 18.5 Q17 16 21.5 17.5"/>
+                <path d="M33.5 16.5 Q38.5 13.5 43 15.5"/>
+            </g>
+
+            <g class="mascot-eyes">
+                <ellipse class="mascot-eye" cx="17.5" cy="26" rx="3" ry="3.3"/>
+                <ellipse class="mascot-eye" cx="38" cy="25.5" rx="3" ry="3.3"/>
+            </g>
+
+            {#- one mouth per mood: soft (idle), pleased (approve), happy (email, cheer) #}
+            <path class="mascot-mouth is-soft" d="M23 34.5 Q28.5 38 34 34"/>
+            <path class="mascot-mouth is-pleased" d="M21.5 33.5 Q28.5 40 35.5 33"/>
+            <path class="mascot-mouth is-happy" d="M20.5 32.5 Q28.5 43 36.5 32 Q28.5 35.5 20.5 32.5 Z"/>
+        </g>
+    </svg>
+
+    <svg class="mascot-hands" viewBox="0 0 56 12" width="56" height="12" focusable="false">
+        <g class="mascot-hand is-left">
+            <rect x="0.5" y="1.5" width="13" height="9" rx="4.5"/>
+            <path d="M5.5 6 L5.5 9.5 M9.5 6 L9.5 9.5"/>
+        </g>
+        <g class="mascot-hand is-right">
+            <rect x="42.5" y="1.5" width="13" height="9" rx="4.5"/>
+            <path d="M46.5 6 L46.5 9.5 M50.5 6 L50.5 9.5"/>
+        </g>
+    </svg>
+</span>

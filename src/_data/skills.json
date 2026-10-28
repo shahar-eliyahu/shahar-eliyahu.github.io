@@ -1,18 +1,31 @@
 [
     {
+        "name": "Programming Languages",
+        "featured": ["Python", "Java", "C++", "C", "Kotlin"],
+        "more": ["SQL", "OOP", "Data Structures & Algorithms", "REST APIs"]
+    },
+    {
         "name": "AI & Machine Learning",
-        "items": ["PyTorch", "TensorFlow", "OpenCV", "Scikit-learn"]
+        "featured": ["PyTorch", "TensorFlow / Keras", "scikit-learn", "OpenCV", "Hugging Face"],
+        "more": [
+            "YOLO", "MediaPipe", "Transformers", "Florence-2", "DistilBERT", "spaCy", "NLTK",
+            "Word2Vec", "LSTM", "CNN", "Transfer Learning", "Fine-tuning", "Object Detection", "Image Segmentation",
+            "Data Augmentation", "Data Annotation", "Model Evaluation", "Error Analysis", "Edge AI", "CUDA / GPU Training"
+        ]
     },
     {
-        "name": "Languages",
-        "items": ["Python", "C++", "Kotlin", "Java", "Dart"]
+        "name": "Data & Processing",
+        "featured": ["Pandas", "NumPy", "Apache Spark", "Apache Kafka", "Spark Structured Streaming"],
+        "more": ["EDA", "Data Cleaning"]
     },
     {
-        "name": "Data & Streaming",
-        "items": ["Apache Spark", "PySpark", "Apache Kafka", "Pandas"]
+        "name": "Platforms & Systems",
+        "featured": ["Android", "Firebase", "Linux", "Microsoft Azure", "Google Cloud Run"],
+        "more": ["Jetpack Compose", "Azure AI Document Intelligence", "Embedded Systems", "Multithreading", "OpenMP", "MPI"]
     },
     {
-        "name": "Development",
-        "items": ["Android", "Flutter", "Firebase", "Git", "GitHub"]
+        "name": "Development Tools",
+        "featured": ["Git", "GitHub", "Android Studio", "Claude Code", "Cursor"],
+        "more": ["Visual Studio", "GitHub Copilot", "Claude", "ChatGPT"]
     }
 ]

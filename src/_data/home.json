@@ -28,8 +28,6 @@
         }
     },
     "about": {
-        "number": "01",
-        "kicker": "ABOUT",
         "title": "About Me",
         "paragraphs": [
             "I studied <strong>Software Engineering</strong> at Afeka Academic College, where I developed a strong interest in <strong>Artificial Intelligence</strong> and <strong>Machine Learning</strong>.",
@@ -38,18 +36,13 @@
         ]
     },
     "projects": {
-        "number": "02",
-        "kicker": "SELECTED WORK",
         "title": "Projects",
         "filterAll": "All Projects"
     },
     "skills": {
-        "number": "03",
-        "kicker": "TOOLS",
         "title": "Skills"
     },
     "contact": {
-        "label": "CONTACT",
         "title": "Let's build something useful.",
         "text": "Feel free to contact me or explore more of my work."
     }

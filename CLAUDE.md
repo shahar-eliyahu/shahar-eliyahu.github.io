@@ -71,13 +71,17 @@ npm run build      # clean production build into _site/
 eleventy.config.js        collections, filters, passthrough, dirs (input: src, output: _site)
 lib/projects.js           project collections, lookups, build-time content validation
 src/index.njk             homepage = section partials in order
-src/_data/                site.json, home.json (homepage text), skills.json, projectCategories.json
+src/_data/                site.json, home.json (homepage text), skills.json, skillLogos.json,
+                          projectCategories.json
+lib/skills.js             skills validation and the skillLogo filter
+src/assets/img/skills/    technology logos (SVG) + CREDITS.txt
+src/assets/fonts/         Inter variable WOFF2 (self-hosted) + OFL licence
 src/projects/*.md         one file per project (front matter = data, body = description)
 src/projects/projects.11tydata.js   defaults for all projects; slug = file name; layout; permalink
                                     /projects/<slug>/ only with `detailPage: true` (else false)
 src/_includes/layouts/base.njk      page shell
 src/_includes/layouts/project.njk   project detail page (one template for all projects)
-src/_includes/partials/   nav, footer, components.njk (macros), sections/, project/, visuals/
+src/_includes/partials/   nav, footer, components.njk (macros), contact-mascot.njk, sections/, project/, visuals/
 src/assets/css/           tokens.css → base.css → sections.css → visuals.css (load order matters)
 src/assets/js/main.js     nav, scroll progress, reveal, active link, pointer effects
 src/assets/js/editor.js   hero profile editor (tabs, typing)
@@ -217,8 +221,8 @@ redesigned (Phase 3B), not as a separate churn pass.
   Blue `#3b82f6` (links `#60a5fa`), violet `#a78bfa` / `#8b5cf6`. All set in the palette layer of
   `tokens.css` (the scale names were kept, so semantic tokens follow). `color-scheme: dark`, plus
   `<meta name="theme-color" content="#172238">`.
-- Accent roles: **blue = actions and links**, **violet = markers** (section and project numbers,
-  hero label, editor caret, illustration detection boxes). The brand gradient (blue-600 → violet-600) appears only on
+- Accent roles: **blue = actions and links**, **violet = markers** (project numbers in the
+  explorer, hero label, editor caret, illustration detection boxes). The brand gradient (blue-600 → violet-600) appears only on
   the primary button, the logo mark, the scroll bar and nav underline.
 - Depth comes from layered navy surfaces, 1px borders, soft black shadows and two faint fixed
   ambient radial gradients on `body`. No particles, no animated backgrounds, glow only on hover.
@@ -226,7 +230,7 @@ redesigned (Phase 3B), not as a separate churn pass.
   illustration stay square on purpose (bounding-box motif).
 - All 7 illustrations were recolored through `--viz-*` tokens (dark cards). Their shapes and
   animations are unchanged.
-- Contrast after the palette change: every text element meets WCAG AA (lowest 5.4:1, section
+- Contrast after the palette change: every text element meets WCAG AA (lowest 5.4:1, explorer
   numbers); editor tokens at least 4.98:1; the focus ring is `#93c5fd`, 2px.
 - Section separation comes from tone (bg / bg-alt / contact) plus a 1px line, not heavy borders.
   Vertical rhythm: sections 104px (72px on phones), title gap 56px (40px), contact 80px top / 48px bottom (48px on phones).
@@ -240,8 +244,10 @@ redesigned (Phase 3B), not as a separate churn pass.
   intro, max 640px wide), including on mobile.
 - **The detection box around the name was removed** (owner decision), along with its label,
   the 0.97 counter, the `box-draw` / `label-in` keyframes and the JS counter. The name is plain
-  `--text-h1`: `clamp(3rem, 8.2vw, 8rem)`, weight 600, letter-spacing −0.035em (refined in 4A,
-  about 18% smaller than in 3B). Intro: `--text-lead`, `--color-text-secondary`, max 36ch.
+  `--text-h1`: `clamp(3rem, 0.66rem + 6.7vw, 7rem)` (112px at ≥ ~1570px,
+  107 at 1440, 79 at 1024, 62 at 768; was `clamp(3rem, 8.2vw, 8rem)`, 118–128px), weight 600,
+  letter-spacing −0.03em (`--tracking-display`). Phones (≤ 650px) keep `clamp(2.9rem, 15vw, 5rem)` (58.5 at 390, 48 at
+  320); the curve keeps tablets above phones. Intro: `--text-lead`, `--color-text-secondary`, max 36ch.
   The vision project illustration keeps its own detection boxes.
 - Button hierarchy (`button()` macro in `components.njk`):
   `primary` (brand gradient, one per view) → `secondary` (solid raised surface) →
@@ -250,7 +256,10 @@ redesigned (Phase 3B), not as a separate churn pass.
   library) and adds hidden "(opens in a new tab)" text to external links.
 - GitHub and LinkedIn sit in `.hero-links`, so they wrap together. On mobile, the main actions
   are full width and the profile links share one row.
-- Section numbers align to the kicker baseline.
+- **Section headings are just the title** (owner decision): `sectionTitle(title)` renders
+  `.section-title > h2` only. The numbers (01–03), the small kickers (ABOUT, SELECTED WORK,
+  TOOLS) and the Contact label were removed from the templates, CSS and `home.json`. Space under
+  headings: 56px (40px on phones); the About text starts level with its heading on desktop.
 
 ## Navigation
 
@@ -300,26 +309,131 @@ redesigned (Phase 3B), not as a separate churn pass.
 Design-only redesign (owner request): compact, text-led, no new interactions or widgets. Copy is
 unchanged except the Skills heading ("Tech Stack" → "Skills", matching the nav).
 
-- **Shared grid:** `--split-columns` (`tokens.css`: `minmax(220px, 0.42fr) minmax(0, 1fr)`) is used
-  at 1024px+ by About (heading | text) and the Skills rows (name | tags), so the About accent line
-  and the skill tags start on the same vertical.
+- **Split grid:** `--split-columns` (`tokens.css`: `minmax(220px, 0.42fr) minmax(0, 1fr)`) places
+  the About heading beside its text at 1024px+.
 - **About:** text only. The Focus / Interests / Approach list was removed (template, CSS and
   `home.json → about.facts`). `.about-text`: max 68ch, a 2px blue→violet accent line on the left,
   the first paragraph as a slightly larger lead (`--text-lead`). Below 1024px the heading sits
-  above the text.
-- **Skills:** `.skills-list` of `.skill-row`s (an `h3` name plus a `ul.tech-list` labelled by it),
-  separated by 1px lines. Tags reuse the explorer's `.tech-badge` (consistent with projects); hover
-  only brightens the border and text. Phones: name above tags; 651px+: 200px name column. The old
-  cards and their cursor spotlight (`main.js`) were removed.
-- **Contact:** a compact band on the inverse surface (grid texture + glow kept). Heading
-  `clamp(2rem, …, 3.25rem)`. Phones and tablet: text, then actions; 1024px+: text left, a 500px
+  above the text. In the two-column layout (1024px+) the section (`.about-section`) has 72px
+  bottom padding instead of 104: the content is short there, and 104 + the next section's 104
+  read as an empty gap (owner request). Tablet and phones keep the normal padding.
+- **Skills (category rows, featured + "Show more", logos):** 61 technologies, the owner's CV list
+  (exact names; never add skills that aren't on the CV), in **five broad categories** (owner's
+  order): Programming Languages (9) · AI & Machine Learning (25, includes computer vision and
+  NLP) · Data & Processing (7) · Platforms & Systems (11) · Development Tools (9). New skills go
+  into one of these by primary role; don't add categories or subcategories.
+  - **Data:** `skills.json` → `{ name, featured: [...], more: [...] }`. Each skill appears once;
+    `featured` (exactly 5 per category, owner request: recognisable tools with logos, chosen
+    for relevance, never concept skills like OOP / CNN / Data Cleaning; 25 in total) always
+    shows, `more` sits behind "Show more" (`[]` = no control); `more` lists tools first,
+    concepts last. Featured order is also tuned so rows wrap cleanly at 320px (e.g. Android,
+    Firebase, Linux, …). C and Spark Structured Streaming are featured because they are the only
+    remaining logo-bearing skills in their categories. `skillLogos.json` maps skill
+    name → logo id (`src/assets/img/skills/<id>.svg`); unmapped skills are text-only.
+    `lib/skills.js` (`validateSkills` on `eleventy.before`) fails the build on a duplicate skill
+    or category name, an unknown key (a typo like `featurd` would silently hide skills), an
+    empty `featured`, a logo mapping for an unknown skill or a missing SVG; `skillLogo` is the
+    filter. Template and CSS never name a category or a count.
+  - **Judgement calls in the grouping:** OOP, Data Structures & Algorithms and REST APIs sit in
+    Programming Languages (core programming concepts); CUDA / GPU Training and Data Annotation in
+    AI & ML (used for model training / datasets); Jetpack Compose and Azure AI Document
+    Intelligence in Platforms & Systems (Android UI toolkit; Azure service); Claude and ChatGPT
+    in Development Tools (coding assistants).
+  - **Logos:** vendored, no runtime dependency. devicon 2.18.0 (MIT, multi-colour originals) and
+    Simple Icons 16.36.0 (CC0, brand colour) where devicon has none or is unsuitable
+    (Linux 194KB, Jetpack Compose mostly navy, YOLO, MediaPipe, NVIDIA for CUDA, GitHub, Cursor).
+    Black/navy parts that vanish on the dark tags were set to `#E2E8F0` (as on the brands'
+    dark-background versions): scikit-learn text, pandas bars, Kafka, GitHub, Cursor, YOLO.
+    Credits and the devicon licence: `src/assets/img/skills/CREDITS.txt` (`.txt`, because a
+    `.md` there would be built as a page). Text-only by design: concepts (OOP, Fine-tuning, …),
+    SQL (no single logo), ChatGPT (no licensed OpenAI mark in either set), spaCy (its mark is a
+    wordmark, illegible at 18px), DistilBERT, NLTK, Florence-2, OpenMP, MPI.
+    `<img alt="" width height loading="lazy">`: decorative (the name is the text), no layout shift.
+  - **Layout:** `.skills-list` of `.skill-row`s with 1px separators, no cards. Phones: the `h3`
+    (3px blue→violet marker, as the About line) above the tags. 651px+: grid `224px | 1fr` (fits
+    "Programming Languages", 215px, on one line);
+    1200px+: `240px | 1fr` and full-size featured tags (20px logos, 0.875rem); below 1200px all
+    tags are compact (18px logos, 0.8125rem), which keeps most rows on one line at 768–1199px.
+    Extras (`.is-extra`) are quieter: transparent, `--color-border`, secondary text. Plain
+    wrapping (no `text-wrap: balance`: with inline tags it added lines on phones).
+  - **Expansion:** one `ul` per category (labelled by its heading) holds featured + extras, so
+    "Show more" (a `<button aria-expanded aria-controls=<ul id>>`, name "Show more <category>
+    skills" via sr-only text; no count, owner request) always follows the last visible tag; it toggles `.is-expanded` on
+    the row (main.js), the label becomes "Show less", focus stays on the button. CSS hides
+    extras only under `.js`; without JS all 61 show and the buttons are hidden. 44px hit area via
+    `::after`. No animation (only a colour transition, removed by reduced motion).
+  - Collapsed height: 680px at 1440px, 757px at 1024px, 854px at 768px, 1017px at 390px,
+    1089px at 320px (13–28% shorter than the earlier eight-category version).
+- **Contact:** a compact band on the inverse surface (grid texture + glow kept). Heading uses
+  `--text-h2`, like every section heading. Phones and tablet: text, then actions; 1024px+: text left, a 500px
   action column right. Actions are a grid: **Email Me** (`light`, primary) full width on top;
   Download CV, GitHub, LinkedIn (`dark-outline`) share one row from 651px (on phones CV is full
   width and GitHub / LinkedIn share a row). The glow is a radial gradient (no `blur()`), masked to
   fade out before the band ends, so no clipped edge shows against the footer.
+  - **Accent:** the headline's last word (from `home.json`, split in the template) gets a
+    blue→violet gradient text (`.contact-accent`; 6.2–6.7:1 on the band). Copy unchanged.
+  - **Mascot (owner-approved):** `partials/contact-mascot.njk`, inline SVG
+    (no assets, no library), included after the Email Me link inside `.contact-email-wrap`
+    (`margin-top: 50px` makes room). A lopsided lavender square (`--mascot-*` tokens), dot eyes,
+    relaxed arched brows (right one higher: curious), soft smile; two small hands. Two SVG
+    layers: body (z 0, 18px hidden behind the button, z 1) and hands (z 2) on the button's top
+    edge; the wrapper has no z-index so the button sits between them. `aria-hidden`,
+    `pointer-events: none` everywhere: clicks on the hands land on the link.
+    - **State** (data attributes; CSS turns them into poses / faces with transitions):
+      `data-mood` idle · email · approve · cheer, `data-point` left/right (gesturing hand),
+      `data-entrance` pending → playing → done. Three mouths (soft / pleased / open happy),
+      happy eyes via CSS `ry`.
+    - **One-shot moves** are Web Animations from main.js (never CSS keyframes on the same
+      element), each cancelled on the next state change, so rapid pointer moves can't stack:
+      entrance (body pop 1.25s + 250ms delay, hands fade in, right hand taps the button twice),
+      two nods (760ms) after 2s continuous hover / keyboard focus on Email Me (timer cleared on
+      leave, re-armed on return), one approving nod (420ms) per secondary button entered.
+    - **Triggers:** `pointerenter/leave` (mouse / pen only) and `focus/blur` (only when
+      `:focus-visible`, so a tap doesn't count); hover wins over focus. Eyes look at the active
+      button, otherwise follow the pointer in the band (hover-capable devices only).
+    - **Entrance:** IntersectionObserver on Email Me (threshold 0.6), once per load; works on
+      direct `/#contact`; an interaction during it cancels it. The hidden start
+      (`translateY(36px)`, hands transparent) only applies with `.js` and motion allowed, so
+      without JS the mascot simply rests; the body has `transition: none` while playing so CSS
+      transitions don't fight the animation.
+    - **Reduced motion:** no entrance, nods, gestures, poses (`!important` override), eye
+      tracking or blink; the face still changes statically. **Touch:** resting state; taps
+      go straight to the links.
 - **Footer:** content unchanged, 72px tall. On the homepage (`body:has(.contact)`) its full-bleed
   border becomes a container-width divider, so contact and footer read as one closing block;
   other pages keep the full-width border.
+
+## Typography (owner-approved)
+
+- **Inter for headings and body** (owner's pick after comparing Space Grotesk + Inter, Manrope and
+  Plus Jakarta Sans in a temporary dev-only preview, since removed), self-hosted: one
+  variable WOFF2 (`src/assets/fonts/inter-latin-wght-normal.woff2`, weights 100–900, latin
+  subset, Fontsource 5.3.0, OFL in `inter-OFL.txt`), `@font-face` at the top of `base.css`,
+  preloaded in `layouts/base.njk`. Google Fonts now only serves IBM Plex Mono (code, labels).
+  Space Grotesk is gone. Tokens: `--font-body` / `--font-display` = Inter + system fallbacks.
+- **Type system** (owner-approved audit; tokens in `tokens.css` §4, use them, don't add literals):
+
+  | Step | Token | Size | Line height / tracking | Used by |
+  |---|---|---|---|---|
+  | Display | `--text-h1` | 112 / 107 (1440) / 79 / 62 (768); phones 58.5 / 48 | 0.95 / −0.03em | hero name |
+  | H2 | `--text-h2` | 52 / 44.5 (1024) / 39.4 (768) / 34 | 1.1 / −0.022em | `.section-heading`: About, Projects, Skills, Contact headline, project page titles |
+  | H3 | `--text-h3` | 28 / ~27 (1024) / ~26 (768) / 24 | 1.2 / −0.015em | explorer panel titles, project section titles |
+  | H4 | `--text-h4` | 17 | 1.3 | Skills categories, pager titles |
+  | Lead | `--text-lead` | 20 (≥ 1440) / 18 | 1.55 | hero intro, About lead, project intro |
+  | Body | `--text-body` | 17 | 1.65 | every paragraph and list (About, excerpts, Contact, project text, features, challenges) |
+  | UI | `--text-ui` / `--text-sm` | 15 / 14 | 1.4 | buttons + nav / small UI (badges, chips, small buttons, labels) |
+  | Small | `--text-small` | 13 | — | footer, pager label, Show more |
+  | Mono label | `--text-mono` | 12 (badge 11) | 0.08em (`--tracking-label`) | project meta, counts, challenge labels |
+
+  - **Measures:** `--measure-body: 62ch` (About block, project text; in Inter that is up to ~80
+    characters a line), `--measure-lead: 56ch` (project intro). Narrower blocks stay: hero intro
+    36ch, explorer excerpt 60ch, Contact sentence 52ch, Contact headline 18ch.
+  - **Spacing:** section heading → content 48px (32 on phones, `.section-title`); heading → its
+    intro 16 (Contact, project title); H3 → text 16 (12 inside the explorer card); paragraph →
+    paragraph 16; small label → content 8, H4 → content 12.
+  - **Exceptions (deliberate):** hero name sizes; hero editor (12.2–13.7px mono, 1.85); Skills
+    tags 14/13px; explorer picker tabs (16/15px, 1.35; tab index / category); Email Me 15.7px
+    (0.98rem); logo 18.4px; hero pill 0.14em; Contact band padding 80/48.
 
 ## Visual hierarchy principles (all phases)
 
@@ -477,8 +591,13 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
 - **All detail pages (done, commit `2c0ac273c5231a432a8b1efad2b1a13753983df0`):** `detailPage: true`
   for the other six projects (existing data only), summary-only page layout, illustration fixes
   for short strips.
-- **About / Skills / Contact redesign (in progress, awaiting review):** text-only About, Skills
-  as compact rows of tags, compact Contact band merging into the footer.
+- **About / Skills / Contact redesign (done, commit `48b3a0a1555bd399e77a7248313b657ba641005e`):**
+  text-only About, Skills as compact rows of tags, compact Contact band merging into the footer.
+- **Portfolio redesign finalised (owner-approved, committed after `48b3a0a`, pushed to
+  `origin/portfolio-redesign`, not merged):** Skills as five categories with logos and
+  "Show more"; the Contact mascot; section labels and numbers removed; Inter self-hosted with
+  the unified type system; About bottom padding on desktop. The temporary font preview used to
+  choose Inter was removed before this commit.
 - `main` still serves the old hand-written site. This branch has no root `index.html`, so
   **merging before the Actions deploy exists would break the live site.**
 
@@ -500,7 +619,7 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
 - Professional, modern "dark tech + creative developer" look: polished but not cluttered.
 - Keep the 7 animated project illustrations. The hero has no detection box (removed in 3B);
   its signature element is the interactive profile editor.
-- Fonts: Space Grotesk (display), Inter (body), IBM Plex Mono (labels).
+- Fonts: Inter (headings and body, self-hosted), IBM Plex Mono (code and labels).
 - Fully responsive (breakpoints: 1199px for the hero, 850px, 650px), no horizontal scroll
   down to 320px.
 - Respect `prefers-reduced-motion`. Pointer effects only on hover-capable devices. Content must

@@ -1,24 +1,50 @@
 {% from "partials/components.njk" import sectionTitle %}
 {% set section = home.skills %}
 
+{#- One technology tag; the logo (if mapped in skillLogos.json) is decorative,
+    the name is the text #}
+{% macro skillTag(name, kind, logos) %}
+{%- set logo = name | skillLogo(logos) %}
+<li class="skill-tag {{ kind }}{{ ' has-logo' if logo }}">
+    {%- if logo %}<img src="{{ logo }}" alt="" width="20" height="20" loading="lazy" decoding="async">{% endif -%}
+    <span>{{ name }}</span>
+</li>
+{%- endmacro %}
+
 <section id="skills" class="section">
 
     <div class="container">
 
-        {{ sectionTitle(section.number, section.kicker, section.title) }}
+        {{ sectionTitle(section.title) }}
 
-        {#- One row per category: name, then its technologies as tags #}
-        <div class="skills-list" data-stagger>
+        {#- One row per category: name left, technologies right (stacked on
+            phones). `featured` are always shown; `more` sit in the same list
+            behind "Show more". Without JavaScript every skill is shown and the
+            button is hidden. #}
+        <div class="skills-list" data-stagger="4">
             {%- for group in skills %}
+            {%- set id = "skills-" + loop.index %}
+            {%- set more = group.more or [] %}
 
             <div class="skill-row reveal">
-                <h3 class="skill-name" id="skills-{{ loop.index }}">{{ group.name }}</h3>
+                <h3 class="skill-heading" id="{{ id }}">{{ group.name }}</h3>
 
-                <ul class="tech-list skill-tags" aria-labelledby="skills-{{ loop.index }}">
-                    {%- for item in group.items %}
-                    <li class="tech-badge">{{ item }}</li>
-                    {%- endfor %}
-                </ul>
+                <div class="skill-body">
+                    <ul class="skill-tags" id="{{ id }}-list" aria-labelledby="{{ id }}">
+                        {%- for item in group.featured %}
+                        {{ skillTag(item, "is-featured", skillLogos) }}
+                        {%- endfor %}
+                        {%- for item in more %}
+                        {{ skillTag(item, "is-extra", skillLogos) }}
+                        {%- endfor %}
+                    </ul>
+
+                    {%- if more.length %}
+                    <button type="button" class="skill-toggle" aria-expanded="false" aria-controls="{{ id }}-list" data-skill-toggle>
+                        <span data-toggle-label>Show more</span><span class="sr-only"> {{ group.name }} skills</span>
+                    </button>
+                    {%- endif %}
+                </div>
             </div>
             {%- endfor %}
 
