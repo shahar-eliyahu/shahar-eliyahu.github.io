@@ -3,27 +3,15 @@
 
 <section id="about" class="section">
 
-    <div class="container">
+    {#- Text only: the heading sits beside the text on desktop, above it below 1024px #}
+    <div class="container about-layout">
 
         {{ sectionTitle(about.number, about.kicker, about.title) }}
 
-        <div class="about-grid" data-stagger>
-
-            <div class="about-main reveal">
-                {%- for paragraph in about.paragraphs %}
-                <p>{{ paragraph | safe }}</p>
-                {%- endfor %}
-            </div>
-
-            <div class="about-side reveal">
-                {%- for fact in about.facts %}
-                <div class="about-item">
-                    <span>{{ fact.label }}</span>
-                    <strong>{{ fact.value }}</strong>
-                </div>
-                {%- endfor %}
-            </div>
-
+        <div class="about-text reveal">
+            {%- for paragraph in about.paragraphs %}
+            <p>{{ paragraph | safe }}</p>
+            {%- endfor %}
         </div>
 
     </div>

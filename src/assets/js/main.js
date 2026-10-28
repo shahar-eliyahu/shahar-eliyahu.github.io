@@ -152,15 +152,4 @@ if (canHover && !prefersReducedMotion) {
         hero.style.setProperty("--hx", `${event.clientX - rect.left}px`);
         hero.style.setProperty("--hy", `${event.clientY - rect.top}px`);
     });
-
-
-    // Spotlight on skill cards
-    document.querySelectorAll(".skill-category").forEach((card) => {
-        card.addEventListener("pointermove", (event) => {
-            const rect = card.getBoundingClientRect();
-
-            card.style.setProperty("--mx", `${event.clientX - rect.left}px`);
-            card.style.setProperty("--my", `${event.clientY - rect.top}px`);
-        });
-    });
 }

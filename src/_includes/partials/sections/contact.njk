@@ -5,22 +5,26 @@
 
     <div class="contact-glow" aria-hidden="true"></div>
 
+    {#- Text left, actions right on desktop; stacked below 1024px #}
     <div class="container contact-content reveal">
 
-        <p class="contact-label">
-            {{ contact.label }}
-        </p>
+        <div class="contact-text">
+            <p class="contact-label">
+                {{ contact.label }}
+            </p>
 
-        <h2>
-            {{ contact.title }}
-        </h2>
+            <h2>
+                {{ contact.title }}
+            </h2>
 
-        <p>
-            {{ contact.text }}
-        </p>
+            <p>
+                {{ contact.text }}
+            </p>
+        </div>
 
+        {#- Email is the primary action; CV and profiles share the row below #}
         <div class="contact-buttons">
-            {{ button("Email Me", "mailto:" + site.email, "light", icon = "mail") }}
+            {{ button("Email Me", "mailto:" + site.email, "light contact-email", icon = "mail") }}
             {{ profileButtons(site, "dark-outline", "dark-outline") }}
         </div>
 

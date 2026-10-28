@@ -229,7 +229,7 @@ redesigned (Phase 3B), not as a separate churn pass.
 - Contrast after the palette change: every text element meets WCAG AA (lowest 5.4:1, section
   numbers); editor tokens at least 4.98:1; the focus ring is `#93c5fd`, 2px.
 - Section separation comes from tone (bg / bg-alt / contact) plus a 1px line, not heavy borders.
-  Vertical rhythm: sections 104px (72px on phones), title gap 56px (40px), contact 112px (80px).
+  Vertical rhythm: sections 104px (72px on phones), title gap 56px (40px), contact 80px top / 48px bottom (48px on phones).
 - Fixed a long-standing bug: `.hero-label` was `inline-flex` and sat beside the name on wide
   screens. It's now block-level (`flex` + `fit-content`).
 
@@ -250,7 +250,7 @@ redesigned (Phase 3B), not as a separate churn pass.
   library) and adds hidden "(opens in a new tab)" text to external links.
 - GitHub and LinkedIn sit in `.hero-links`, so they wrap together. On mobile, the main actions
   are full width and the profile links share one row.
-- Section numbers align to the kicker baseline. The contact block uses the full container width.
+- Section numbers align to the kicker baseline.
 
 ## Navigation
 
@@ -294,6 +294,32 @@ redesigned (Phase 3B), not as a separate churn pass.
 - Syntax colours are tokens (`--color-code-*`). Strings use a mint (`--palette-mint-300`) that
   appears nowhere else. All tokens meet AA on the (lighter) panel: lowest is keyword 4.98:1,
   punctuation and line numbers 5.6:1.
+
+## About, Skills, Contact (homepage sections)
+
+Design-only redesign (owner request): compact, text-led, no new interactions or widgets. Copy is
+unchanged except the Skills heading ("Tech Stack" → "Skills", matching the nav).
+
+- **Shared grid:** `--split-columns` (`tokens.css`: `minmax(220px, 0.42fr) minmax(0, 1fr)`) is used
+  at 1024px+ by About (heading | text) and the Skills rows (name | tags), so the About accent line
+  and the skill tags start on the same vertical.
+- **About:** text only. The Focus / Interests / Approach list was removed (template, CSS and
+  `home.json → about.facts`). `.about-text`: max 68ch, a 2px blue→violet accent line on the left,
+  the first paragraph as a slightly larger lead (`--text-lead`). Below 1024px the heading sits
+  above the text.
+- **Skills:** `.skills-list` of `.skill-row`s (an `h3` name plus a `ul.tech-list` labelled by it),
+  separated by 1px lines. Tags reuse the explorer's `.tech-badge` (consistent with projects); hover
+  only brightens the border and text. Phones: name above tags; 651px+: 200px name column. The old
+  cards and their cursor spotlight (`main.js`) were removed.
+- **Contact:** a compact band on the inverse surface (grid texture + glow kept). Heading
+  `clamp(2rem, …, 3.25rem)`. Phones and tablet: text, then actions; 1024px+: text left, a 500px
+  action column right. Actions are a grid: **Email Me** (`light`, primary) full width on top;
+  Download CV, GitHub, LinkedIn (`dark-outline`) share one row from 651px (on phones CV is full
+  width and GitHub / LinkedIn share a row). The glow is a radial gradient (no `blur()`), masked to
+  fade out before the band ends, so no clipped edge shows against the footer.
+- **Footer:** content unchanged, 72px tall. On the homepage (`body:has(.contact)`) its full-bleed
+  border becomes a container-width divider, so contact and footer read as one closing block;
+  other pages keep the full-width border.
 
 ## Visual hierarchy principles (all phases)
 
@@ -448,8 +474,11 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
 - **Phase 4B (done, commit `32cc0af9c6166f985836981c0be0a8bdad03559a`):** reusable project
   detail page template (EasyFill as the reviewed example), shared gallery/lightbox/video script,
   "Adding a New Project" docs.
-- **All detail pages (in progress, awaiting review):** `detailPage: true` for the other six
-  projects (existing data only), summary-only page layout, illustration fixes for short strips.
+- **All detail pages (done, commit `2c0ac273c5231a432a8b1efad2b1a13753983df0`):** `detailPage: true`
+  for the other six projects (existing data only), summary-only page layout, illustration fixes
+  for short strips.
+- **About / Skills / Contact redesign (in progress, awaiting review):** text-only About, Skills
+  as compact rows of tags, compact Contact band merging into the footer.
 - `main` still serves the old hand-written site. This branch has no root `index.html`, so
   **merging before the Actions deploy exists would break the live site.**
 
@@ -458,8 +487,8 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
 3. **Dark design system.** 3A (tokens, surfaces) and 3B (hero, editor, hierarchy) are done.
    The palette will be re-evaluated after the layout redesign.
 4. **New sections.** 4A (Project Explorer) and 4B (project detail pages) are done; all seven
-   projects have a page. Then: expanded About (education, hackathon, experience timeline), skills linked to projects,
-   contact upgrades.
+   projects have a page. About, Skills and Contact have been redesigned. Possible later: expanded
+   About (education, hackathon, experience timeline), skills linked to projects.
 5. **Project content:** fill the seven pages with real write-ups and screenshots from the owner
    (Overview, `caseStudy`, `role` / `team`, media). No template changes needed.
 6. **Polish:** accessibility (keyboard, focus, contrast), performance, Open Graph tags, favicon, 404, sitemap.

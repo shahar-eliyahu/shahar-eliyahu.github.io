@@ -93,11 +93,13 @@ so existing links keep working.
 
 ### Hero, About, Contact text
 
-Edit `src/_data/home.json`. About paragraphs may contain simple HTML such as `<strong>`.
+Edit `src/_data/home.json`. About is text only: its `paragraphs` may contain simple HTML such as
+`<strong>`, and the first paragraph is shown as a slightly larger introduction.
 
 ### Skills
 
-Edit `src/_data/skills.json`. Each group has a `name` and a list of `items`.
+Edit `src/_data/skills.json`. Each group has a `name` and a list of `items`. Every group is shown
+as one row (the name, then its items as tags), in the order of the file.
 
 Skills are linked to projects automatically. There's no manual mapping: a skill matches every
 project whose `technologies` list contains the same name, ignoring case. For example,

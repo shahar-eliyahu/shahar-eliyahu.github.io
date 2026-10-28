@@ -7,17 +7,18 @@
 
         {{ sectionTitle(section.number, section.kicker, section.title) }}
 
-        <div class="skills-grid" data-stagger>
+        {#- One row per category: name, then its technologies as tags #}
+        <div class="skills-list" data-stagger>
             {%- for group in skills %}
 
-            <div class="skill-category reveal">
-                <h3>{{ group.name }}</h3>
+            <div class="skill-row reveal">
+                <h3 class="skill-name" id="skills-{{ loop.index }}">{{ group.name }}</h3>
 
-                <div>
+                <ul class="tech-list skill-tags" aria-labelledby="skills-{{ loop.index }}">
                     {%- for item in group.items %}
-                    <span>{{ item }}</span>
+                    <li class="tech-badge">{{ item }}</li>
                     {%- endfor %}
-                </div>
+                </ul>
             </div>
             {%- endfor %}
 

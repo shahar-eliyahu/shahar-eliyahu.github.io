@@ -35,20 +35,6 @@
             "I studied <strong>Software Engineering</strong> at Afeka Academic College, where I developed a strong interest in <strong>Artificial Intelligence</strong> and <strong>Machine Learning</strong>.",
             "My projects span AI/ML, computer vision, big data, mobile applications, and intelligent systems.",
             "I enjoy solving technical problems that combine software engineering, data, and practical implementation, with an emphasis on systems that can operate in real-world environments."
-        ],
-        "facts": [
-            {
-                "label": "Focus",
-                "value": "AI & Machine Learning"
-            },
-            {
-                "label": "Interests",
-                "value": "Computer Vision · Intelligent Systems"
-            },
-            {
-                "label": "Approach",
-                "value": "Practical Problem Solving"
-            }
         ]
     },
     "projects": {
@@ -60,7 +46,7 @@
     "skills": {
         "number": "03",
         "kicker": "TOOLS",
-        "title": "Tech Stack"
+        "title": "Skills"
     },
     "contact": {
         "label": "CONTACT",

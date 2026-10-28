@@ -499,92 +499,90 @@
 }
 
 
-/* ABOUT */
+/* ABOUT
+ * Text only. Phones and tablet: heading above the text. Desktop (1024px+):
+ * heading in a narrow column beside the text, so the line length stays
+ * comfortable without leaving half the row empty. The tag column in Skills
+ * uses the same grid, so both sections line up. */
 
-.about-grid {
-    display: grid;
-
-    grid-template-columns: 1.25fr 0.75fr;
-
-    gap: 100px;
-}
-
-.about-main {
-    max-width: 680px;
-}
-
-.about-main p {
-    margin: 0;
-
-    color: var(--color-text-body);
-
-    font-size: var(--text-lg);
-}
-
-.about-main p + p {
-    margin-top: 24px;
-}
-
-.about-main strong {
-    color: var(--color-text);
-}
-
-.about-side {
-    border-top: 1px solid var(--color-border);
-}
-
-.about-item {
+.about-text {
     position: relative;
 
-    padding: 23px 0;
+    max-width: 68ch;
 
-    border-bottom: 1px solid var(--color-border);
-
-    transition: padding 0.35s var(--ease-out);
+    padding-left: var(--space-5);
 }
 
-.about-item::before {
+/* Thin accent line along the text */
+.about-text::before {
     content: "";
 
     position: absolute;
 
     left: 0;
-    top: 50%;
+    top: 0.4em;
+    bottom: 0.4em;
 
-    width: 0;
-    height: 2px;
+    width: 2px;
 
-    background: var(--color-accent);
+    border-radius: 2px;
 
-    transition: width 0.35s var(--ease-out);
+    background: linear-gradient(
+        180deg,
+        var(--color-primary),
+        color-mix(in srgb, var(--color-accent-strong) 25%, transparent)
+    );
 }
 
-.about-item:hover {
-    padding-left: 24px;
+.about-text p {
+    margin: 0;
+
+    color: var(--color-text-body);
+
+    font-size: var(--text-lg);
+
+    line-height: var(--leading-body);
 }
 
-.about-item:hover::before {
-    width: 12px;
+.about-text p + p {
+    margin-top: var(--space-4);
 }
 
-.about-item span {
-    display: block;
+/* The first paragraph introduces the section: a slightly larger lead */
+.about-text p:first-child {
+    color: var(--color-text-secondary);
 
-    margin-bottom: 4px;
+    font-size: var(--text-lead);
 
-    color: var(--color-text-muted);
-
-    font-family: var(--font-mono);
-
-    font-size: 0.72rem;
-
-    text-transform: uppercase;
+    line-height: var(--leading-lead);
 }
 
-.about-item strong {
-    font-family: var(--font-display);
+.about-text strong {
+    color: var(--color-text);
 
-    font-size: 1rem;
+    font-weight: 600;
+}
+
+@media (min-width: 1024px) {
+
+    .about-layout {
+        display: grid;
+
+        grid-template-columns: var(--split-columns);
+
+        gap: var(--space-8);
+
+        align-items: start;
+    }
+
+    .about-layout .section-title {
+        margin-bottom: 0;
+    }
+
+    /* Start the text level with the heading, not the small kicker above it */
+    .about-text {
+        margin-top: var(--space-5);
+    }
 }
 
 
@@ -2311,100 +2309,85 @@ html:not(.js) .explorer-panel + .explorer-panel {
 }
 
 
-/* SKILLS */
+/* SKILLS
+ * Compact rows: the category name, then its technologies as the same tags
+ * the Project Explorer uses. Phones: name above tags. 651px+: side by side;
+ * 1024px+ on the same grid as About. */
 
-.skills-grid {
+.skills-list {
+    border-top: 1px solid var(--color-border);
+}
+
+.skill-row {
     display: grid;
 
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-3);
 
-    gap: 20px;
+    padding: var(--space-5) 0;
+
+    border-bottom: 1px solid var(--color-border);
 }
 
-.skill-category {
-    position: relative;
+.skill-name {
+    margin: 0;
 
-    padding: 30px;
-
-    overflow: hidden;
-
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-
-    background: var(--color-surface);
-
-    transition: border-color 0.3s ease;
-}
-
-.skill-category::before {
-    content: "";
-
-    position: absolute;
-
-    inset: 0;
-
-    background: radial-gradient(
-        300px circle at var(--mx, 50%) var(--my, 50%),
-        color-mix(in srgb, var(--color-primary) 8%, transparent),
-        transparent 60%
-    );
-
-    opacity: 0;
-
-    pointer-events: none;
-
-    transition: opacity 0.3s ease;
-}
-
-.skill-category:hover {
-    border-color: var(--color-border-strong);
-}
-
-.skill-category:hover::before {
-    opacity: 1;
-}
-
-.skill-category h3 {
-    position: relative;
-
-    margin: 0 0 22px;
+    color: var(--color-text);
 
     font-family: var(--font-display);
 
-    font-size: 1.2rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+
+    line-height: 1.3;
 }
 
-.skill-category div {
-    position: relative;
-
-    display: flex;
-
-    flex-wrap: wrap;
-
-    gap: 8px;
+.skill-tags {
+    gap: var(--space-2);
 }
 
-.skill-category span {
-    padding: 7px 11px;
+.skill-tags .tech-badge {
+    transition:
+        border-color var(--duration-fast) ease,
+        color var(--duration-fast) ease;
+}
 
-    border-radius: var(--radius-sm);
+.skill-tags .tech-badge:hover {
+    border-color: var(--color-primary);
 
-    background: var(--color-bg);
+    color: var(--color-text);
+}
 
-    border: 1px solid var(--color-border);
+@media (min-width: 651px) {
 
-    color: var(--color-text-secondary);
+    .skill-row {
+        grid-template-columns: 200px minmax(0, 1fr);
 
-    font-size: 0.8rem;
+        gap: var(--space-6);
+
+        align-items: center;
+    }
+}
+
+@media (min-width: 1024px) {
+
+    .skill-row {
+        grid-template-columns: var(--split-columns);
+
+        gap: var(--space-8);
+    }
 }
 
 
-/* CONTACT */
+/* CONTACT
+ * A compact closing band on the inverse surface (grid texture and a soft
+ * glow). Phones and tablet: text, then actions. Desktop (1024px+): text
+ * left, actions right. Email is the primary action; CV, GitHub and
+ * LinkedIn share the row below it. */
 
 .contact {
     position: relative;
 
-    padding: 112px 0;
+    padding: var(--space-7) 0;
 
     overflow: hidden;
 
@@ -2439,31 +2422,38 @@ html:not(.js) .explorer-panel + .explorer-panel {
 .contact-glow {
     position: absolute;
 
-    width: 520px;
-    height: 520px;
+    width: 560px;
+    height: 560px;
 
-    right: -120px;
+    right: -200px;
     top: 50%;
 
     z-index: -1;
 
-    border-radius: 50%;
-
-    background: color-mix(in srgb, var(--color-primary-bright) 25%, transparent);
-
-    filter: blur(90px);
+    /* A soft radial gradient (no blur filter, so nothing spills past the box) */
+    background: radial-gradient(
+        closest-side,
+        color-mix(in srgb, var(--color-primary-bright) 24%, transparent),
+        transparent
+    );
 
     transform: translateY(-50%);
+
+    /* Fade out before the band ends, so no clipped edge shows against the footer */
+    -webkit-mask-image: linear-gradient(180deg, black 30%, transparent 75%);
+    mask-image: linear-gradient(180deg, black 30%, transparent 75%);
 
     animation: glow-breathe 9s ease-in-out infinite;
 }
 
 .contact-content {
-    max-width: none;
+    display: grid;
+
+    gap: var(--space-6);
 }
 
 .contact-label {
-    margin: 0 0 20px;
+    margin: 0 0 var(--space-3);
 
     color: var(--color-inverse-label);
 
@@ -2471,43 +2461,55 @@ html:not(.js) .explorer-panel + .explorer-panel {
 
     font-size: 0.75rem;
 
-    letter-spacing: 0.12em;
+    letter-spacing: var(--tracking-label);
 }
 
 .contact h2 {
-    max-width: 800px;
+    max-width: 18ch;
 
     margin: 0;
 
     font-family: var(--font-display);
 
-    font-size: clamp(3rem, 7vw, 6rem);
+    font-size: clamp(2rem, 1.4rem + 2.4vw, 3.25rem);
 
     font-weight: 600;
 
-    line-height: 0.98;
+    line-height: 1.08;
 
-    letter-spacing: -0.04em;
+    letter-spacing: -0.03em;
 
     text-wrap: balance;
 }
 
-.contact-content > p:not(.contact-label) {
-    margin: 30px 0 0;
+.contact-text > p:not(.contact-label) {
+    max-width: 52ch;
+
+    margin: var(--space-4) 0 0;
 
     color: var(--color-inverse-text-muted);
 
-    font-size: 1.05rem;
+    font-size: var(--text-lg);
 }
 
+/* Phones: Email and CV full width, GitHub and LinkedIn side by side */
 .contact-buttons {
-    display: flex;
+    display: grid;
 
-    flex-wrap: wrap;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
 
-    gap: 12px;
+    gap: var(--space-3);
+}
 
-    margin-top: 40px;
+.contact-buttons .button {
+    gap: var(--space-2);
+
+    padding: 0 var(--space-4);
+}
+
+.contact-buttons .contact-email,
+.contact-buttons .button[download] {
+    grid-column: 1 / -1;
 }
 
 .button.light {
@@ -2536,6 +2538,35 @@ html:not(.js) .explorer-panel + .explorer-panel {
     color: var(--color-inverse-text);
 }
 
+/* 651px+: Email on top, the three secondary actions in one row */
+@media (min-width: 651px) {
+
+    .contact {
+        padding: var(--space-8) 0 var(--space-7);
+    }
+
+    .contact-buttons {
+        max-width: 500px;
+
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .contact-buttons .button[download] {
+        grid-column: auto;
+    }
+}
+
+@media (min-width: 1024px) {
+
+    .contact-content {
+        grid-template-columns: minmax(0, 1fr) 500px;
+
+        gap: var(--space-7);
+
+        align-items: center;
+    }
+}
+
 
 /* FOOTER */
 
@@ -2550,12 +2581,26 @@ footer {
 .footer-inner {
     display: flex;
 
-    min-height: 90px;
+    gap: var(--space-1) var(--space-4);
+
+    min-height: 72px;
+
+    flex-wrap: wrap;
 
     align-items: center;
     justify-content: space-between;
 
     font-size: 0.82rem;
+}
+
+/* Homepage: the footer continues the contact band, so a container-width
+   divider replaces the full-bleed border */
+body:has(.contact) footer {
+    border-top-color: transparent;
+}
+
+body:has(.contact) .footer-inner {
+    border-top: 1px solid var(--color-inverse-divider);
 }
 
 
@@ -2636,19 +2681,6 @@ footer {
 }
 
 
-/* TABLET */
-
-@media (max-width: 850px) {
-
-    .about-grid {
-        grid-template-columns: 1fr;
-
-        gap: 55px;
-    }
-
-}
-
-
 /* MOBILE */
 
 @media (max-width: 650px) {
@@ -2708,22 +2740,12 @@ footer {
     }
 
 
-    .skills-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .contact {
-        padding: 80px 0;
-    }
-
     .footer-inner {
-        padding: 25px 0;
+        padding: var(--space-5) 0;
 
         flex-direction: column;
 
         align-items: flex-start;
         justify-content: center;
-
-        gap: 5px;
     }
 }

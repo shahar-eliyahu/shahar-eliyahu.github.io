@@ -221,6 +221,9 @@
     /* 8. LAYOUT & MOTION */
 
     --max-width: 1180px;
+
+    /* Heading or label column + content column (About, Skills on desktop) */
+    --split-columns: minmax(220px, 0.42fr) minmax(0, 1fr);
     --nav-height: 80px;
 
     --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
