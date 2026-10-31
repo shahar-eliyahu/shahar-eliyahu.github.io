@@ -722,6 +722,21 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   cone and receives reports of spotted enemies, wounds and low ammo, and assigns the medic and
   provider; BFS cover is judged against known enemies; one shared "Dynamic Danger Map". "Finite
   State Machines (FSM)" is spelled out on first use. Classical game AI only, no machine learning.
+- **CarKeep integration (done, owner-approved, commit "feat(portfolio): complete carkeep case
+  study", not pushed):** slug, URL, order 5,
+  `applications`, no year (unchanged). Technologies corrected: Flutter, Dart, Supabase,
+  PostgreSQL, Row Level Security (the old "Firebase" tag was wrong; `pubspec.yaml` uses
+  `supabase_flutter`). Media in `src/assets/projects_media/carkeep/`: four portrait phone
+  screenshots (`home.png`, `vehicle_overview.jpg` 738×1600; `history.jpg`, `documents.jpg`
+  945×2048; 54-70 KB), `videos/Demo.mp4` (2.9 MB, 17.9 s, 392×850, H.264 High 3.0, no audio,
+  fast start, red screen-recording indicator accepted) and `carkeep-video-poster.webp` (frame
+  at 5.0 s, Hyundai i20 overview, 392×850, 16 KB). Explorer uses the portrait layout. Six
+  sections; `home.png` appears once (Overview, beside the text), Vehicle Management uses
+  `vehicle_overview.jpg`. Copy checked against the CarKeep repository (RLS on 7 tables, 25
+  policies, owner/admin/member, `delete-account` Edge Function, unit/widget/integration tests).
+  Owner approved publishing vehicle number 34856793 (fictional) and the filename "Shahar
+  Eliyahu.pdf". The CarKeep repository README still says "under active development" (owner's
+  repo, not changed). No code changes.
 - **Pre-publication checkpoint (before any merge or deploy):** verify redistribution rights for
   the three Flickr30k photographs in the Computer Vision examples (the page carries a source
   credit, which doesn't grant rights by itself). (The earlier 2.9 MB PNG cover was replaced by
