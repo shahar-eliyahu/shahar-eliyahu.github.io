@@ -1781,16 +1781,24 @@ html:not(.js) .explorer-panel + .explorer-panel {
         grid-template-columns: minmax(200px, 36%) minmax(0, 1fr);
     }
 
+    /* When the text is taller than the screenshot needs (651-800px and
+       1024-1150px), the image and thumbnails stay together, centred */
     .explorer-panel.has-portrait-media .gallery {
         display: flex;
 
         flex-direction: column;
+        justify-content: center;
+
+        container-type: inline-size;
     }
 
+    /* Never taller than the tallest screenshot (2.17 : 1) needs at this
+       width, so no empty band opens under the image */
     .explorer-panel.has-portrait-media .gallery .gallery-stage {
         flex: 1;
 
         min-height: 340px;
+        max-height: calc((100cqi - 2 * var(--space-3)) * 2.17 + 2 * var(--space-3));
 
         aspect-ratio: auto;
     }

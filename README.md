@@ -454,7 +454,7 @@ Add any of these under `links:`. Each one is shown only if present:
 
 - **Explore Project** opens the project's own detail page (full description, screenshots, videos,
   technical explanation). It's the main button, and appears automatically for every project with
-  `detailPage: true` (currently all seven). Without a detail page it's simply not shown, so
+  `detailPage: true` (currently all eight). Without a detail page it's simply not shown, so
   there's never a broken link.
 - **GitHub** is always available directly in the explorer, so visitors can open the repository
   without visiting the detail page. It's a separate secondary button next to Explore Project, or
@@ -494,7 +494,7 @@ unknown category, or if the category file has a duplicate `id`, an invalid `id` 
 ### Project detail pages
 
 Every project can have its own page at `/projects/<slug>/`, generated from its Markdown file by
-one shared template. You never create HTML pages by hand. **All seven current projects have
+one shared template. You never create HTML pages by hand. **All eight current projects have
 one.** A project with only a summary (no Overview or `caseStudy` yet) gets a compact page with its
 introduction, illustration, technologies and links; it grows automatically as you add sections.
 

@@ -463,8 +463,8 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
 
 - **Layout:** filters on top. **Desktop (1024px+):** a vertical picker (290px, sticky) of numbered
   project names plus category, with the selected one marked by a gradient bar; the preview panel on
-  the right. **Numbers are relative to the visible (filtered) list**: All 01–07, Applications
-  01–02, AI & ML 01–05. `projects.js` renumbers on every filter change; the order and data never
+  the right. **Numbers are relative to the visible (filtered) list**: All 01–08, Applications
+  01–03, AI & ML 01–05. `projects.js` renumbers on every filter change; the order and data never
   change, and the number is `aria-hidden` so tab names stay clean. **Below 1024px:** the picker is a swipeable strip of full-name pills (edge-faded,
   scroll-snap), auto-scrolled to the selection, with the preview below at full width. Filters are a
   swipeable row on phones and wrap from 651px.
@@ -487,7 +487,7 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   directly available in the explorer as a separate button (secondary once Explore exists), so
   visitors never have to open the detail page to reach the repository. Until detail pages exist,
   Explore is *not rendered* (no broken links or placeholder pages) and "View on GitHub" is the
-  primary button. **All seven projects now have a page**, so every panel shows Explore Project
+  primary button. **All eight projects now have a page**, so every panel shows Explore Project
   (primary) + GitHub (secondary, new tab); a project added without `detailPage` falls back to
   "View on GitHub" automatically. Demo if
   `links.demo`; "Watch video" only for videos that can't play inline.
@@ -503,11 +503,20 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   (44px), the "n / N" counter and swipe (`touch-action: pan-y`; a swipe never triggers the image
   link) only appear when there are 2+ items. An illustration alone shows no thumbnails (never fake
   ones). Media changes are announced ("Image 2 of 3: alt").
-- **Portrait media** (EasyFill): when every gallery image is a portrait screenshot (sizes read from
-  the file headers at build time, `imageSize` in `lib/projects.js`), the gallery gets `.is-portrait`
-  (square stage on phones, 48×72 thumbnails) and the panel `.has-portrait-media`: from 651px a
-  two-column grid, media column `minmax(200px, 36%)` whose stage stretches to the text's height
-  (308×454 at 1440, 248×518 at 768). Phones stack it (panel about 1270px tall at 390, because of
+- **Portrait media** (EasyFill, CarKeep, Anyone Can Cook): when every gallery image is a portrait
+  screenshot (sizes read from the file headers at build time, `imageSize` in `lib/projects.js`), the
+  gallery gets `.is-portrait` (square stage on phones, 48×72 thumbnails) and the panel
+  `.has-portrait-media`: from 651px a two-column grid, media column `minmax(200px, 36%)` whose stage
+  stretches to the text's height (308×454 at 1440), **capped** at the height the tallest
+  screenshot needs at the column's width: `max-height: calc((100cqi - 2 × --space-3) × 2.17 +
+  2 × --space-3)` (the gallery is an inline-size container; 2.17 = CarKeep and EasyFill's
+  height / width). Without the cap, a narrow column beside tall text (651-800px, and 1024-1150px
+  where the desktop picker narrows the panel) left an empty band of up to 280px between the
+  image and the thumbnails (owner-approved fix). With the cap, the gallery column is
+  `justify-content: center`: the image, counter and thumbnails stay together, centred beside the
+  text; image sizes are unchanged at every width (Anyone Can Cook's slightly shorter 2.03
+  screenshots keep about 30px inside the stage). A future screenshot taller than 2.17 would show
+  slightly narrower, never cropped. Phones stack it (panel about 1270px tall at 390, because of
   the longer summary). Projects with landscape or no images are unaffected.
 - **Lightbox:** native `<dialog>` + `showModal()` (focus trap, Escape). Focus starts on Close and
   returns to the image link; page scroll is locked while open; arrows and swipe step through that
@@ -534,10 +543,10 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   no per-project HTML files.
 - **Opt-in per project:** `detailPage: true`. `projects.11tydata.js` computes
   `permalink: /projects/<slug>/` only then (otherwise `false`). The URL makes `project.url` truthy,
-  which turns on "Explore Project" (primary) with GitHub secondary in the explorer. **All seven
+  which turns on "Explore Project" (primary) with GitHub secondary in the explorer. **All eight
   projects are enabled** (EasyFill first as the reviewed example, then the other six, owner
-  request). The six have only their existing data (summary, category, year, technologies, GitHub,
-  illustration); their write-ups will be added later.
+  request; Anyone Can Cook was added later with its full write-up). Every page now has its
+  complete owner-approved write-up (see Status).
 - **Data cascade defaults:** `layout`, `templateEngineOverride: "md"` (bodies are plain Markdown,
   so `{{ }}` stays literal), `caseStudy: {}`, and computed `description` = `summary`.
 - **Sections** (each only with real content): Overview (Markdown body), Key features
@@ -781,6 +790,29 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   reviews" across orders and never claim data order caused a difference. Two owner-approved
   caption corrections: the LSTM error pattern holds overall (not in the shuffled run) and
   DistilBERT errors are "roughly balanced" (reversed is 60 vs 41). No code changes.
+- **Anyone Can Cook integration (done, owner-approved, commit "feat(portfolio): add Anyone Can
+  Cook case study and fix portrait gallery spacing", not pushed):** the eighth project. Slug `anyone-can-cook`, URL `/projects/anyone-can-cook/`, `applications`,
+  **`order: 1.5`** (owner decision: second, right after EasyFill, without renumbering the
+  other projects; so EasyFill's "Next" and Computer Vision's "Previous" now link to it), no
+  `year`, no `visual` (real screenshots and a poster cover every case). Personal project in a
+  private Android beta (signed APK for family and friends; not on any store): never claim a
+  public release, users, ratings or production readiness, and never call Gemini a trained
+  model. Media in `src/assets/projects_media/anyone-can-cook/` (the owner's folder was
+  `Anyone-Can-Cook`; renamed to lowercase with approval, because media URLs use the slug and
+  GitHub Pages is case-sensitive; Windows hides such a mismatch in local builds): four
+  portrait screenshots (540×1095 PNG, 22-53 KB), `Architecture.png` (1956×594, white,
+  readable through the viewer), `videos/Demo.mp4` (owner's file, unchanged: 18 MB, 76.8 s,
+  1080×2340, H.264 Main 5.1 about 66 fps, fast start, **silent** AAC track) and
+  `anyone-can-cook-video-poster.webp` (frame at 53 s, cooking step 3 of 4 with a timer,
+  540×1170, 30 KB, headless Chrome). Explorer: portrait layout, home (cover, owner request) →
+  cooking → Remy → catalog. Nine sections; each screenshot once, main video (CarKeep pattern, 249×540 frame) with
+  the caption in the section text. Copy checked against the Anyone-Can-Cook-App repository;
+  owner-approved corrections: rate limits are **per IP**, not per device; links are pasted
+  (no Android share target), so "added as a link" / "paste a link"; the wake phrase works
+  with hands-free mode on in the cooking screen. Test counts are counted test functions
+  (205 Flutter, 148 backend). The same commit holds the portrait gallery spacing fix in
+  `sections.css` (see Portrait media), the only code change. An optional smaller re-export of
+  the video (about 540 wide, 30 fps, no audio) is the owner's choice.
 - **Pre-publication checkpoint (before any push, merge or deploy):** the Flickr30k photo
   cleanup is implemented in the working files (see Computer Vision above), but **git history
   still contains the three photos** in the unpushed local commit `f66c3f5` ("feat(portfolio):
@@ -796,13 +828,14 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
 
 3. **Dark design system.** 3A (tokens, surfaces) and 3B (hero, editor, hierarchy) are done.
    The palette will be re-evaluated after the layout redesign.
-4. **New sections.** 4A (Project Explorer) and 4B (project detail pages) are done; all seven
+4. **New sections.** 4A (Project Explorer) and 4B (project detail pages) are done; all eight
    projects have a page. About, Skills and Contact have been redesigned. Possible later: expanded
    About (education, hackathon, experience timeline), skills linked to projects.
-5. **Project content: done.** All seven project pages are complete and committed locally
-   (EasyFill, Computer Vision, Pacman AI, Tactical AI Battle, CarKeep, Real-Time Retail Trend
+5. **Project content: done.** All eight project pages are complete (EasyFill, Anyone Can
+   Cook, Computer Vision, Pacman AI, Tactical AI Battle, CarKeep, Real-Time Retail Trend
    Detection, NLP Sentiment Analysis), each with owner-approved copy and media in
-   `src/assets/projects_media/<slug>/`. Still open per project: `role` / `team` where wanted.
+   `src/assets/projects_media/<slug>/`, all committed locally. Still open per project:
+   `role` / `team` where wanted.
 6. **Polish:** accessibility (keyboard, focus, contrast), performance, Open Graph tags, favicon, 404, sitemap.
 7. **Launch (with approval only):** GitHub Actions deploy workflow, switch the Pages source to
    Actions, then merge.
