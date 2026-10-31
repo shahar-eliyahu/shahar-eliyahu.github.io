@@ -1010,6 +1010,35 @@ html:not(.js) .explorer-panel + .explorer-panel {
     object-fit: contain;
 }
 
+/* Strip captions sit below their image (not over it) */
+.gallery.is-strip .gallery-caption {
+    position: static;
+
+    max-width: none;
+
+    margin: var(--space-2) 0 0;
+    padding: 0;
+
+    background: none;
+
+    color: var(--color-text-muted);
+
+    font-size: var(--text-sm);
+
+    line-height: var(--leading-ui);
+}
+
+/* Row (several images, not all portrait): one shared height, each image as
+   wide as its aspect ratio allows, so photos line up without cropping.
+   Narrow sections stack them (see @container case below). */
+.gallery.is-strip.is-row .gallery-stage {
+    align-items: flex-start;
+}
+
+.gallery.is-strip.is-row .gallery-item {
+    flex: var(--media-aspect, 1) 1 0%;
+}
+
 .gallery-item {
     position: absolute;
 
@@ -2197,6 +2226,89 @@ html:not(.js) .explorer-panel + .explorer-panel {
     margin-top: var(--space-1);
 }
 
+/* Markdown tables (wrapped in .table-scroll by eleventy.config.js): a framed
+   box that scrolls sideways on its own when the table is wider than the
+   column; the first column stays in view while scrolling */
+.table-scroll {
+    max-width: 100%;
+
+    margin: 0 0 var(--space-4);
+
+    overflow-x: auto;
+
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+
+    overscroll-behavior-x: contain;
+}
+
+.table-scroll:focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+}
+
+.prose table {
+    width: 100%;
+
+    border-collapse: separate;
+    border-spacing: 0;
+
+    font-size: var(--text-sm);
+    font-variant-numeric: tabular-nums;
+
+    line-height: var(--leading-ui);
+}
+
+.prose th,
+.prose td {
+    padding: 10px 14px;
+
+    border-bottom: 1px solid var(--color-border);
+
+    text-align: left;
+
+    white-space: nowrap;
+}
+
+.prose th {
+    background: var(--color-surface-raised);
+
+    color: var(--color-text);
+
+    font-weight: 600;
+}
+
+.prose tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+/* Row labels: may wrap (long configuration names), stay visible while the
+   numbers scroll */
+.prose th:first-child,
+.prose td:first-child {
+    position: sticky;
+
+    left: 0;
+
+    z-index: 1;
+
+    min-width: 8.5rem;
+
+    border-right: 1px solid var(--color-border);
+
+    white-space: normal;
+}
+
+.prose td:first-child {
+    background: var(--color-surface);
+
+    color: var(--color-text);
+}
+
+.prose td strong {
+    color: var(--color-text);
+}
+
 .feature-list {
     display: grid;
 
@@ -2281,8 +2393,12 @@ html:not(.js) .explorer-panel + .explorer-panel {
     container: case / inline-size;
 }
 
+/* One column that never grows past the section (minmax 0), so wide content
+   such as a table scrolls inside its own box instead of widening the page */
 .case-body {
     display: grid;
+
+    grid-template-columns: minmax(0, 1fr);
 
     gap: var(--space-5);
 }
@@ -2299,8 +2415,32 @@ html:not(.js) .explorer-panel + .explorer-panel {
     gap: var(--space-5);
 }
 
-.case-body + .case-items {
+.case-body + .case-items,
+.case-note + .case-items {
     margin-top: var(--space-6);
+}
+
+/* `note`: small print after the media (sources, caveats) */
+.case-note {
+    max-width: var(--measure-body);
+
+    color: var(--color-text-muted);
+
+    font-size: var(--text-sm);
+
+    line-height: var(--leading-body);
+}
+
+.case-body + .case-note {
+    margin-top: var(--space-4);
+}
+
+.case-note p {
+    margin: 0;
+}
+
+.case-note p + p {
+    margin-top: var(--space-2);
 }
 
 .case-item:not(.is-video) + .case-item:not(.is-video) {
@@ -2311,6 +2451,8 @@ html:not(.js) .explorer-panel + .explorer-panel {
 
 .case-item.is-image {
     display: grid;
+
+    grid-template-columns: minmax(0, 1fr);
 
     gap: var(--space-4);
 }
@@ -2405,6 +2547,26 @@ html:not(.js) .explorer-panel + .explorer-panel {
     margin-top: var(--space-5);
 }
 
+/* Narrow sections: photo rows stack, one image per line, each centred and
+   capped in height so a portrait photo doesn't fill the whole screen */
+@container case (max-width: 29.99rem) {
+
+    .gallery.is-strip.is-row .gallery-stage {
+        flex-direction: column;
+
+        gap: var(--space-5);
+
+        align-items: center;
+    }
+
+    .gallery.is-strip.is-row .gallery-item {
+        flex: none;
+
+        width: 100%;
+        max-width: min(100%, calc(22rem * var(--media-aspect, 1)));
+    }
+}
+
 /* Video cards side by side once both fit */
 @container case (min-width: 30rem) {
 
@@ -2417,11 +2579,12 @@ html:not(.js) .explorer-panel + .explorer-panel {
     }
 }
 
-/* Text beside portrait screenshots; tools as a two-column list */
+/* Text beside portrait screenshots (wide charts and photo rows stay below
+   their text); tools as a two-column list */
 @container case (min-width: 36rem) {
 
     .case-section.has-side-media .case-body,
-    .case-item.is-image {
+    .case-item.is-image.has-portrait-media {
         grid-template-columns: minmax(0, 1fr) auto;
 
         gap: var(--space-6);

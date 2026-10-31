@@ -116,7 +116,7 @@ Front matter fields: `title`, `summary`, `order` (required), plus `subtitle`, `y
 `gallery[{src,alt,caption,fit,position}]`, `videoPoster`,
 `links{github,demo,video}`, `visual{id,label,kicker,headline}`,
 `detailPage`, `caseStudy{features[],architecture,challenges[{challenge,solution}],results,lessons,
-sections[{id,title,text,media[],items[{title,text,media[]}],tools[{name,use}],links[{label,url}]}]}`
+sections[{id,title,text,media[],note,items[{title,text,media[],note}],tools[{name,use}],links[{label,url}]}]}`
 (a `media` entry is an image `{src,alt,caption,fit,position}` or a video `{video,title,poster}`).
 The Markdown body is the detail page's Overview. Step-by-step guide and a complete example:
 README → "Adding a New Project"; full field reference: README → "Managing projects".
@@ -554,7 +554,24 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   - Images: a **strip** (`.gallery.is-strip`, `data-gallery-strip`): every image visible at its
     intrinsic ratio (`--media-ratio`, `width` / `height` attributes), portrait ones 170px wide
     (220 beside the overview text), shrinking together on phones (no wrap); each opens the
-    lightbox, which steps through that strip. `gallery.js` skips swipe for strips.
+    lightbox, which steps through that strip. `gallery.js` skips swipe for strips. Several
+    images that aren't all portrait get `.is-row`: each item grows by `--media-aspect`
+    (width / height, set only in row mode), giving one shared height (223px at 1440 for the
+    Computer Vision examples); below a 30rem section they stack, each centred and capped at
+    `22rem × aspect` wide. Single landscape images keep their natural width up to the column.
+    A strip image's `caption` sits below it (`.gallery.is-strip .gallery-caption`, static).
+  - Optional `note` (Markdown) on a section or item: `.case-note`, small muted text after that
+    block's media (sources, caveats). Section notes follow `.case-body`, item notes follow the
+    item's media (or its text, for text and video items).
+  - Items: `has-portrait-media` (all images portrait) is the only case that puts media beside
+    the text (36rem+); landscape images and rows sit below the text. `.case-body` and image
+    items use `grid-template-columns: minmax(0, 1fr)`, otherwise a wide table stretches the
+    section instead of scrolling (found at 390px).
+  - **Tables** (Markdown in `text`): `eleventy.config.js` wraps every Markdown table in
+    `.table-scroll` (`role="region"`, `tabindex="0"`), which scrolls sideways inside a framed
+    box; cells don't wrap except the sticky first column (min 8.5rem); header row on
+    `--color-surface-raised`; tabular numbers; `|---:|` alignment comes inline from markdown-it.
+    The CV tables fit from 768px and scroll at 390 and below.
   - Videos: the normal stage with Play, inside a **video card** (`.case-item.is-video`) with a
     square stage, so landscape and portrait videos share one frame and are letterboxed by the
     native `<video>` (contain), never cropped. Two cards side by side when the section is 30rem+.
@@ -663,6 +680,22 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   `src/assets/projects_media/easyfill/` (the new media convention for all projects), `subtitle`,
   portrait explorer layout, custom case-study sections with image strips and video cards, lightbox
   enlarges small images.
+- **Computer Vision integration (done, owner-approved, commit "feat(portfolio): complete computer
+  vision case study", not pushed):** slug and URL stay
+  `computer-vision`; media in `src/assets/projects_media/computer-vision/images/` (detection
+  examples `object-detection2.webp` (cover, about 380 KB), `object-detection1.webp`,
+  `object-detection3.webp`; four charts as PNG). New title "Computer Vision: YOLO Object
+  Detection", subtitle, no `year`
+  (owner request), eight custom sections, two Markdown tables. Numbers are the owner-approved
+  chart values (the CV repository README shows 0.829 / 0.713 / 0.563 for "original + aug";
+  the portfolio uses 0.827 / 0.716 / 0.564). Keep the baseline comparison (default Ultralytics
+  augmentation, 0.576) and the controlled runs (0.564) separate. The detection examples are
+  illustrations from YOLO26n trained with augmentation; never attribute them to a run or
+  dataset variant. Shared additions: photo rows, captions below strips, `note`, tables.
+- **Pre-publication checkpoint (before any merge or deploy):** verify redistribution rights for
+  the three Flickr30k photographs in the Computer Vision examples (the page carries a source
+  credit, which doesn't grant rights by itself). (The earlier 2.9 MB PNG cover was replaced by
+  the owner's optimized `object-detection2.webp`, about 380 KB, within the 500 KB guideline.)
 - `main` still serves the old hand-written site. This branch has no root `index.html`, so
   **merging before the Actions deploy exists would break the live site.**
 
@@ -690,6 +723,9 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
 - Respect `prefers-reduced-motion`. Pointer effects only on hover-capable devices. Content must
   stay visible without JS (`.js` class gates reveal animations).
 - Real screenshots only, with descriptive alt text. Keep images small (webp, under 500 KB).
+- **No em dashes (—) or en dashes (–) in any user-facing text** (owner rule): titles, copy,
+  captions, alt text, labels, metadata. Use a comma, colon, period or parentheses, or reword;
+  ranges use a plain hyphen ("6-13 Hz"). Code comments and internal docs are exempt.
 
 ## Open questions for the owner
 

@@ -7,7 +7,10 @@
     Case-study sections pass their own media instead (set before including):
     - `galleryItems`: items from the `sectionMedia` filter
     - `galleryStrip`: true shows every image side by side at its own aspect
-      ratio (a short visual sequence) instead of one stage with thumbnails
+      ratio (a short visual sequence) instead of one stage with thumbnails.
+      Several images that aren't all portrait form a row of equal height
+      (`.is-row`, each item grows by its aspect ratio) that stacks when narrow.
+      Captions sit below strip images.
     - `galleryNoVideoSource`: true leaves out the "Open video in a new tab" link
       (the Play link itself still points to the video)
 
@@ -22,13 +25,15 @@
 {%- set visualId = data.visual.id if data.visual else "" %}
 {%- set count = items.length %}
 {%- set stepped = count > 1 and not strip %}
+{%- set row = strip and count > 1 and not (items | mediaIsPortrait) %}
 
 {#- Illustration only (no real media yet): a shorter, compact stage.
     Portrait screenshots only: a taller stage that shows them whole. #}
 <div class="gallery
     {{- ' is-illustration-only' if count == 1 and items[0].kind == 'illustration' }}
     {{- ' is-portrait' if items | mediaIsPortrait }}
-    {{- ' is-strip' if strip }}" data-gallery{{ ' data-gallery-strip' if strip }}>
+    {{- ' is-strip' if strip }}
+    {{- ' is-row' if row }}" data-gallery{{ ' data-gallery-strip' if strip }}>
 
     <div class="gallery-stage" data-gallery-stage>
         {%- for item in items %}
@@ -38,7 +43,8 @@
             data-gallery-item
             data-kind="{{ item.kind }}"
             {%- if item.kind == "image" %} data-src="{{ item.src }}" data-alt="{{ item.alt }}" data-caption="{{ item.caption }}"{% endif %}
-            {%- if strip and item.width %} style="--media-ratio: {{ item.width }} / {{ item.height }}; --media-width: {{ item.width }}px"{% endif %}
+            {%- if strip and item.width %} style="--media-ratio: {{ item.width }} / {{ item.height }}; --media-width: {{ item.width }}px
+                {{- '; --media-aspect: ' + (item.width / item.height) | round(4) if row }}"{% endif %}
             {%- if not loop.first and not strip %} hidden{% endif %}
         >
 

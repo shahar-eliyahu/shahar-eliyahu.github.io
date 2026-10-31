@@ -47,6 +47,12 @@ export default function (eleventyConfig) {
     let markdownLibrary;
     eleventyConfig.amendLibrary("md", (library) => {
         markdownLibrary = library;
+
+        // Tables scroll inside their own box on narrow screens (never the
+        // page); the box is focusable so keyboard users can scroll it too
+        library.renderer.rules.table_open = () =>
+            '<div class="table-scroll" role="region" aria-label="Table" tabindex="0">\n<table>\n';
+        library.renderer.rules.table_close = () => "</table>\n</div>\n";
     });
     eleventyConfig.addFilter("markdown", (text) => (text ? markdownLibrary.render(String(text)) : ""));
     eleventyConfig.addFilter("markdownInline", (text) => (text ? markdownLibrary.renderInline(String(text)) : ""));

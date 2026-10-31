@@ -136,7 +136,9 @@ layout: layouts/base.njk
                 {%- endif %}
 
                 {#- Custom sections (caseStudy.sections). Portrait screenshots sit
-                    beside the text when there is room; other media goes below it. #}
+                    beside the text when there is room; other media goes below it.
+                    An optional `note` (small print: sources, caveats) follows the
+                    media of its section or item. #}
                 {%- for section in custom %}
                 {%- set bodyMedia = section.media | sectionMedia(project) %}
                 <section
@@ -156,12 +158,16 @@ layout: layouts/base.njk
                     </div>
                     {%- endif %}
 
+                    {%- if section.note %}
+                    <div class="case-note">{{ section.note | markdown | safe }}</div>
+                    {%- endif %}
+
                     {%- if section.items and section.items.length %}
                     <div class="case-items">
                         {%- for item in section.items %}
                         {%- set itemMedia = item.media | sectionMedia(project) %}
                         {%- set itemKind = itemMedia[0].kind if itemMedia.length else "text" %}
-                        <article class="case-item is-{{ itemKind }}" aria-labelledby="{{ section.id }}-item-{{ loop.index }}">
+                        <article class="case-item is-{{ itemKind }}{{ ' has-portrait-media' if itemMedia | mediaIsPortrait }}" aria-labelledby="{{ section.id }}-item-{{ loop.index }}">
                             {%- if itemKind == "video" %}
                             {%- set caseMedia = itemMedia %}
                             {% include "partials/project/case-media.njk" %}
@@ -171,10 +177,16 @@ layout: layouts/base.njk
                                 {%- if item.text %}
                                 <div class="prose">{{ item.text | markdown | safe }}</div>
                                 {%- endif %}
+                                {%- if item.note and itemKind != "image" %}
+                                <div class="case-note">{{ item.note | markdown | safe }}</div>
+                                {%- endif %}
                             </div>
                             {%- if itemKind == "image" %}
                             {%- set caseMedia = itemMedia %}
                             {% include "partials/project/case-media.njk" %}
+                            {%- if item.note %}
+                            <div class="case-note">{{ item.note | markdown | safe }}</div>
+                            {%- endif %}
                             {%- endif %}
                         </article>
                         {%- endfor %}

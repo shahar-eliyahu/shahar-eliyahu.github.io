@@ -535,19 +535,22 @@ caseStudy:
   sections:
     - id: features                 # required: lowercase-with-hyphens, becomes the #anchor
       title: Key Features          # required: the section heading
-      text: |-                     # Markdown paragraphs
+      text: |-                     # Markdown: paragraphs, lists, tables (see below)
         One or two short paragraphs.
       media:                       # images (a strip, each opens the viewer) or videos, not both
         - src: screen.jpg          # a file in images/, `alt` required
           alt: What the screen shows
+          caption: Shown under the image and in the viewer   # optional
+      note: Small print after the media (sources, caveats).   # optional, Markdown
       items:                       # sub-sections: a feature, a demo…
         - title: A feature
           text: What it does.
-          media:                   # images: shown beside the text; a video: a card
+          media:                   # portrait images: beside the text; others: below it; a video: a card
             - src: step-1.jpg
               alt: First step
             - src: step-2.jpg
               alt: Second step
+          note: Optional small print after this item's media.
         - title: A demo
           media:
             - video: demo.mp4      # a file in videos/, or a YouTube / Vimeo URL
@@ -562,7 +565,14 @@ caseStudy:
 ```
 
 - **Images** keep their own shape (nothing is cropped) and open the full-size viewer. Portrait
-  screenshots sit beside the text when there's room; other images (diagrams) go below it.
+  screenshots sit beside the text when there's room; other images (charts, diagrams, photos) go
+  below it. Several images that aren't all portrait form a row of equal height (each as wide as
+  its shape allows), which stacks one per line on phones. A `caption` sits under its image.
+- **Tables:** write a normal Markdown table in `text` (`|---:|` right-aligns a numeric column).
+  It gets the site's table style, and on narrow screens it scrolls sideways inside its own box
+  (keyboard-focusable) with the first column kept in view, so the page never scrolls sideways.
+- **`note`:** optional small print after the media of a section or item: a source credit, a
+  caveat about how results compare. Keep it to one or two sentences.
 - **Videos** are cards of one size, so landscape and portrait videos line up (shown whole, never
   cropped). Nothing loads until the visitor presses Play; the player has the normal controls and
   fullscreen. Two video items sit side by side when there's room. Cards show only the Play button
@@ -577,7 +587,7 @@ caseStudy:
   `summary`). A section with `tools` replaces the side "Technologies" box.
 - The Markdown body still works and comes first, as "Overview"; don't also add a section for it.
 - The build fails on a missing `id` / `title`, a duplicate `id`, a missing file or `alt` text, a list
-  mixing images and videos, or a link without `label` / `url`.
+  mixing images and videos, a `text` / `note` that isn't text, or a link without `label` / `url`.
 
 Developer notes (template helpers, architecture) are in [CLAUDE.md](CLAUDE.md).
 

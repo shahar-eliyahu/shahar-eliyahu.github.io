@@ -117,7 +117,7 @@ caseStudy:
         The following demonstrations highlight two of its detection channels: hand movement analysis and voice analysis.
       items:
         - title: Hand Distress Detection
-          text: Accelerometer and gyroscope data are filtered and analyzed with an FFT to find rhythmic movement in the 6–13 Hz tremor range. Movement that exceeds the user's personal baseline and persists across overlapping time windows produces a hand distress score from 0 to 4.
+          text: Accelerometer and gyroscope data are filtered and analyzed with an FFT to find rhythmic movement in the 6-13 Hz tremor range. Movement that exceeds the user's personal baseline and persists across overlapping time windows produces a hand distress score from 0 to 4.
           media:
             - video: Hand_Distress_Detection_Demo.mp4
               title: Hand Distress Detection demo
