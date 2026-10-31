@@ -568,6 +568,8 @@ caseStudy:
   screenshots sit beside the text when there's room; other images (charts, diagrams, photos) go
   below it. Several images that aren't all portrait form a row of equal height (each as wide as
   its shape allows), which stacks one per line on phones. A `caption` sits under its image.
+  A single image inside an item is at most about 34rem (544px) tall, so a square screenshot
+  doesn't take over its block.
 - **Tables:** write a normal Markdown table in `text` (`|---:|` right-aligns a numeric column).
   It gets the site's table style, and on narrow screens it scrolls sideways inside its own box
   (keyboard-focusable) with the first column kept in view, so the page never scrolls sideways.
@@ -577,6 +579,9 @@ caseStudy:
   cropped). Nothing loads until the visitor presses Play; the player has the normal controls and
   fullscreen. Two video items sit side by side when there's room. Cards show only the Play button
   (no separate "Open video in a new tab" link).
+- **A main video** (a video in a section's own `media`, not in an item) gets a single framed
+  player shaped like the video, taken from its `poster` (16:9 without one), at most about 34rem
+  tall and full width on phones. Pacman AI is the example.
 - **Video thumbnails** (`poster`, optional): a real frame from the video, saved as a small `.webp`
   in `images/`. It's shown whole in the card, letterboxed like the video itself, with the Play
   button on top. Without one, the project's illustration is shown instead. Take the frame from the

@@ -5,13 +5,15 @@
     lightbox. Video: the shared stage with the play button (nothing loads
     until Play is pressed), without the extra "Open video in a new tab" link:
     Play, the native controls and fullscreen are enough in a card. Both use
-    partials/project/gallery.njk.
+    partials/project/gallery.njk. A video with a poster passes the poster's
+    shape (`--media-aspect`), used by a video placed directly in a section.
 #}
 {%- if caseMedia.length %}
 {%- set galleryItems = caseMedia %}
 {%- set galleryStrip = caseMedia[0].kind == "image" %}
 {%- set galleryNoVideoSource = true %}
-<div class="case-media{{ ' is-video' if not galleryStrip }}">
+<div class="case-media{{ ' is-video' if not galleryStrip }}"
+    {%- if not galleryStrip and caseMedia[0].width %} style="--media-aspect: {{ (caseMedia[0].width / caseMedia[0].height) | round(4) }}"{% endif %}>
     {% include "partials/project/gallery.njk" %}
 </div>
 {%- endif %}

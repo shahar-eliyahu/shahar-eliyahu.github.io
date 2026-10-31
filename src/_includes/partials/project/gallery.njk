@@ -44,7 +44,7 @@
             data-kind="{{ item.kind }}"
             {%- if item.kind == "image" %} data-src="{{ item.src }}" data-alt="{{ item.alt }}" data-caption="{{ item.caption }}"{% endif %}
             {%- if strip and item.width %} style="--media-ratio: {{ item.width }} / {{ item.height }}; --media-width: {{ item.width }}px
-                {{- '; --media-aspect: ' + (item.width / item.height) | round(4) if row }}"{% endif %}
+                {{- '; --media-aspect: ' + (item.width / item.height) | round(4) }}"{% endif %}
             {%- if not loop.first and not strip %} hidden{% endif %}
         >
 

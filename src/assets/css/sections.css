@@ -2512,6 +2512,28 @@ html:not(.js) .explorer-panel + .explorer-panel {
     aspect-ratio: 1 / 1;
 }
 
+/* A video placed directly in a section (the main demo, not a card): a framed
+   player shaped like the video (from its poster, 16:9 without one), at most
+   34rem tall, full width on phones */
+.case-body > .case-media.is-video {
+    width: min(100%, calc(34rem * var(--media-aspect, 1.7778)));
+
+    overflow: hidden;
+
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+}
+
+.case-body > .case-media.is-video .gallery-stage {
+    aspect-ratio: var(--media-aspect, 16 / 9);
+}
+
+/* A single image inside an item (not a row, not portrait): at most 34rem tall,
+   so a near-square screenshot doesn't dominate its block */
+.case-item .gallery.is-strip:not(.is-row):not(.is-portrait) .gallery-item {
+    max-width: min(100%, calc(34rem * var(--media-aspect, 1)));
+}
+
 /* Tools: technology badge + what it was used for */
 .case-tools {
     display: grid;

@@ -566,7 +566,10 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   - Items: `has-portrait-media` (all images portrait) is the only case that puts media beside
     the text (36rem+); landscape images and rows sit below the text. `.case-body` and image
     items use `grid-template-columns: minmax(0, 1fr)`, otherwise a wide table stretches the
-    section instead of scrolling (found at 390px).
+    section instead of scrolling (found at 390px). A single image inside an item (not a row,
+    not portrait) is capped at `34rem × --media-aspect` wide, i.e. 34rem tall (Pacman's fleeing
+    screenshot: 500×542); the CV item charts are wide enough never to hit it. Every strip item
+    now carries `--media-aspect` (no visual change for EasyFill).
   - **Tables** (Markdown in `text`): `eleventy.config.js` wraps every Markdown table in
     `.table-scroll` (`role="region"`, `tabindex="0"`), which scrolls sideways inside a framed
     box; cells don't wrap except the sticky first column (min 8.5rem); header row on
@@ -583,6 +586,11 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
     `gallery.njk` honours; the explorer gallery keeps the link. The Play link still points to
     the file (no-JS fallback), and if a file fails to play, `gallery.js` marks it
     `data-failed` so the next Play opens it in a new tab (the error message says so).
+    The `<video>` is created on Play with `preload="none"` (nothing is fetched before Play).
+  - **Main video** (a video in a section's own `media`, `.case-body > .case-media.is-video`): a
+    framed player whose stage takes the poster's shape (`--media-aspect`, set by
+    `case-media.njk` from the poster's size, which `sectionMedia` reads at build time; 16:9
+    without a poster), width `min(100%, 34rem × aspect)`. Cards are unaffected.
   - Layouts use container queries on the section (`container: case / inline-size`): 36rem+ puts
     portrait media beside the text and lays tools out as a subgrid (badge | use). The detail
     page's main column is narrower at 1024 (526px inside) than at 768 (627px), so viewport
@@ -692,6 +700,15 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   augmentation, 0.576) and the controlled runs (0.564) separate. The detection examples are
   illustrations from YOLO26n trained with augmentation; never attribute them to a run or
   dataset variant. Shared additions: photo rows, captions below strips, `note`, tables.
+- **Pacman AI integration (done, owner-approved, commit "feat(portfolio): complete pacman ai
+  case study", not pushed):** slug, URL, order 6,
+  `ai-ml`, no year (unchanged). Media in `src/assets/projects_media/pacman-ai/`:
+  `collecting-coins.png` (cover, 862 KB, kept by owner decision), `Fleeing_from_a_ghost.png`,
+  `videos/PacmanCoinsEscape.mp4` (398 KB, 15.2 s, 960×1040, H.264 High + AAC, fast start), and
+  `pacman-video-poster.webp` (frame at 5 s, 560×607, 57 KB, made with headless Chrome).
+  Subtitle, `type` "Classical AI & Search Algorithms Project", five sections. Copy checked
+  against the PacMan-CPP source: classical search-based game AI, no machine learning; ties go to
+  the cell nearer the target coin and only the previous cell is avoided (no longer history).
 - **Pre-publication checkpoint (before any merge or deploy):** verify redistribution rights for
   the three Flickr30k photographs in the Computer Vision examples (the page carries a source
   credit, which doesn't grant rights by itself). (The earlier 2.9 MB PNG cover was replaced by

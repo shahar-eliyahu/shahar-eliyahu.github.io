@@ -246,7 +246,8 @@
             player.src = container.dataset.src;
             player.controls = true;
             player.playsInline = true;
-            player.preload = "metadata";
+            // Created only on Play; nothing is fetched ahead of playback
+            player.preload = "none";
             player.addEventListener("loadeddata", () => container.classList.remove("is-loading"), { once: true });
             player.addEventListener("error", () => showVideoError(container, announce), { once: true });
             player.play?.().catch(() => {}); // user-initiated; ignore if the browser declines
