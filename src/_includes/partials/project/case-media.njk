@@ -1,0 +1,17 @@
+{#
+    Media of one case-study section or section item (layouts/project.njk).
+    Expects `project` and `caseMedia` (items from the `sectionMedia` filter).
+    Images: a strip, every image at its own aspect ratio, each opening the
+    lightbox. Video: the shared stage with the play button (nothing loads
+    until Play is pressed), without the extra "Open video in a new tab" link:
+    Play, the native controls and fullscreen are enough in a card. Both use
+    partials/project/gallery.njk.
+#}
+{%- if caseMedia.length %}
+{%- set galleryItems = caseMedia %}
+{%- set galleryStrip = caseMedia[0].kind == "image" %}
+{%- set galleryNoVideoSource = true %}
+<div class="case-media{{ ' is-video' if not galleryStrip }}">
+    {% include "partials/project/gallery.njk" %}
+</div>
+{%- endif %}

@@ -62,7 +62,8 @@ for example `npx serve _site`.
 │   │       ├── components.njk  # Reusable macros: sectionTitle, button, profileButtons
 │   │       ├── project/
 │   │       │   ├── panel.njk   # One project preview in the Project Explorer
-│   │       │   ├── gallery.njk # Screenshots / video / illustration fallback
+│   │       │   ├── gallery.njk # Screenshots / video / illustration fallback (also image strips)
+│   │       │   ├── case-media.njk # Media of one detail-page section (uses gallery.njk)
 │   │       │   └── macros.njk  # techTags, categoryList, projectActions
 │   │       ├── sections/       # hero, about, projects, skills, contact
 │   │       └── visuals/        # Optional animated illustration per project
@@ -73,11 +74,12 @@ for example `npx serve _site`.
 │       │   ├── base.css        # Reset, nav, buttons, section titles, reveal
 │       │   ├── sections.css    # Homepage sections
 │       │   └── visuals.css     # Project illustrations
-│       ├── img/projects/<slug>/  # Project images (create when needed)
+│       ├── projects_media/<slug>/  # Project media: images/ and videos/ (create when needed)
 │       └── js/
 │           ├── main.js         # Navigation, scroll effects, reveal, active link, pointer effects
 │           ├── editor.js       # Hero Java / Python / C++ editor (tabs, typing)
-│           └── projects.js     # Project Explorer (filters, picker, gallery, lightbox, video)
+│           ├── gallery.js      # Shared gallery, lightbox and video (explorer and detail pages)
+│           └── projects.js     # Project Explorer (filters, picker tabs)
 └── _site/                      # Build output (generated, git-ignored)
 ```
 
@@ -149,7 +151,7 @@ filter counts, its gallery, its buttons and (optionally) its own detail page.
 Create `src/projects/<slug>.md`. The **file name is the project's slug**. Use lowercase letters,
 digits and hyphens only (e.g. `face-recognition-app.md`). The slug is used for:
 
-- the image folder: `src/assets/img/projects/<slug>/`
+- the media folder: `src/assets/projects_media/<slug>/` (`images/` and `videos/`)
 - the detail page address: `/projects/<slug>/` (only if you enable it)
 - explorer links: `/?project=<slug>`
 
@@ -164,6 +166,7 @@ optional. Leave out what you don't have (no empty placeholders).
 | What | Field | Notes |
 |---|---|---|
 | Title | `title` | The project name |
+| Subtitle | `subtitle` | A short tagline under the title (explorer and detail page) |
 | Summary | `summary` | 2–4 sentences. Introduction on the detail page; fallback text in the explorer |
 | Short description | `excerpt` | About two lines (under ~120 characters) for the explorer. The build warns if it's longer |
 | Year | `year` | Text in quotes, e.g. `"2026"` or `"2025–2026"` |
@@ -180,14 +183,18 @@ fails if you use an id that doesn't exist. To add a new category, see [Categorie
 
 ### Step 3: Add screenshots and a video (optional)
 
-1. Create the folder `src/assets/img/projects/<slug>/` and put the files there
-   (`.webp`, `.png`, `.jpg` or `.gif`; at most ~1600px wide, well under 500 KB each).
+1. Put images in `src/assets/projects_media/<slug>/images/` and videos in
+   `src/assets/projects_media/<slug>/videos/` (images: `.webp`, `.png`, `.jpg` or `.gif`, at most
+   ~2000px tall, well under 500 KB each; videos: short `.mp4` / `.webm`, 720p, a few MB).
+   Everything in these folders is published, so keep only files meant for the site there.
 2. Reference them by **file name only**:
    - `cover`: the first image shown (`src` and `alt` are required).
    - `gallery`: more screenshots (each needs `src` and `alt`; `caption`, `fit` and `position` are optional).
-   - `fit: contain` shows a **portrait phone screenshot** whole instead of cropping it.
+   - `fit: contain` shows a **portrait phone screenshot** whole instead of cropping it. When
+     *every* image is a portrait screenshot (taller than wide, detected automatically), the explorer
+     shows them in a tall column beside the text.
 3. For a video, set `links.video` to a **YouTube or Vimeo URL** (plays inside the page after the
-   visitor presses Play) or to a small local **`.mp4` / `.webm`** file in the same folder.
+   visitor presses Play) or to a small local **`.mp4` / `.webm`** file in the `videos/` folder.
    `videoPoster` is an optional preview image. Any other video URL becomes a "Watch video" button.
 
 Without any images, the explorer shows the project's animated illustration (`visual`), or a
@@ -207,6 +214,8 @@ Long-form content is shown on the project's **detail page**:
   - `challenges`: a list of `challenge` / `solution` pairs (Challenges & solutions)
   - `results`: Markdown text (Results & evaluation)
   - `lessons`: Markdown text (Lessons learned)
+  - `sections`: your own sections with their own titles and media (see
+    [Custom sections](#custom-sections)). Use them when the fixed sections above don't fit.
 - **`role`** and **`team`** fill the "At a glance" box.
 
 Write only real, verified information. The page has no fixed minimum: a project with only a few
@@ -260,12 +269,13 @@ npm run build     # production build into _site/ (also validates every project f
 
 A copyable file using every supported field. Save it as `src/projects/<slug>.md`, replace the
 values, and **delete every line you don't have real content for**. The image and video files
-must exist in `src/assets/img/projects/<slug>/`, or the build stops and tells you which one is
+must exist in `src/assets/projects_media/<slug>/images/` (videos in `.../videos/`), or the build stops and tells you which one is
 missing.
 
 ```markdown
 ---
 title: My New Project
+subtitle: A short tagline under the title
 summary: >-
   Two to four sentences describing what the project does and why. This is the
   introduction at the top of the detail page.
@@ -311,6 +321,17 @@ caseStudy:
     What the project achieved and how it was evaluated.
   lessons: >-
     What you learned.
+  # Custom sections (optional): see "Custom sections" below
+  sections:
+    - id: demos
+      title: Demonstrations
+      text: One or two sentences introducing the videos.
+      items:
+        - title: First demo
+          text: What this video shows.
+          media:
+            - video: first-demo.mp4
+              title: First demo
 ---
 
 The Overview: a few paragraphs of plain Markdown about the motivation
@@ -334,7 +355,8 @@ These sections are the detailed reference for the steps above.
 | Field | Required | Notes |
 |---|---|---|
 | `title` | yes | Display name |
-| `summary` | yes | Full description (detail pages; cards fall back to it if there's no `excerpt`) |
+| `subtitle` | | Short tagline under the title in the explorer and on the detail page |
+| `summary` | yes | Full description (detail-page introduction, unless the page uses `caseStudy.sections`; the explorer shows it if there's no `excerpt`) |
 | `excerpt` | | About two lines (under ~120 characters) shown on the card. Condense the summary; don't add new facts |
 | `order` | yes | Number, lower comes first. Gaps are fine (10, 20, 30…) |
 | `year` | | Text, e.g. `"2025"` or `"2025–2026"` (quote it) |
@@ -346,11 +368,11 @@ These sections are the detailed reference for the steps above.
 | `featured`, `featuredOrder` | | Marks highlight projects (`collections.featuredProjects`). Not shown differently on the homepage right now |
 | `cover` | | `{ src, alt, fit, position }`. First gallery image. `alt` is required. `fit: contain` shows the whole image (portrait phone screenshots); the default fills the frame, anchored to the top. `position` (e.g. `center`, `50% 30%`) chooses which part stays visible |
 | `gallery` | | More screenshots: list of `{ src, alt, caption, fit, position }` (only `src` and `alt` required). GIFs work like any image |
-| `videoPoster` | | Preview image for the video's play button (file in the project's image folder) |
-| `links.github`, `links.demo`, `links.video` | | Each one shown only if present. `links.video` is a YouTube / Vimeo URL or a local `.mp4` / `.webm` (plays in the gallery); other URLs become a "Watch video" button |
+| `videoPoster` | | Preview image for the video's play button (file in the project's `images/` folder) |
+| `links.github`, `links.demo`, `links.video` | | Each one shown only if present. `links.video` is a YouTube / Vimeo URL or a local `.mp4` / `.webm` in `videos/` (plays in the gallery); other URLs become a "Watch video" button |
 | `visual` | | Animated illustration and its captions (fallback when there's no `cover`) |
 | `detailPage` | | `true` publishes the project's own page at `/projects/<slug>/` and shows "Explore Project" in the explorer. Default `false` |
-| `caseStudy` | | Detail-page sections, all optional: `features` (list), `architecture` (Markdown), `challenges` (list of `{ challenge, solution }`), `results` (Markdown), `lessons` (Markdown) |
+| `caseStudy` | | Detail-page sections, all optional: `features` (list), `architecture` (Markdown), `challenges` (list of `{ challenge, solution }`), `results` (Markdown), `lessons` (Markdown), `sections` (custom sections, see [Custom sections](#custom-sections)) |
 | Markdown body | | The detail page's Overview (plain Markdown) |
 
 Defaults for every field live in `src/projects/projects.11tydata.js`, so a project file
@@ -360,7 +382,7 @@ only contains what is specific to that project.
 
 - **Edit:** change the project's file. The homepage updates automatically.
 - **Reorder:** change `order`. The Project Explorer list follows it (EasyFill is `order: 1`, so it comes first).
-- **Remove:** delete the file and its image folder.
+- **Remove:** delete the file and its media folder.
 - **Change categories or technologies:** edit the lists in the front matter (see [Categories](#categories)).
 
 ### Screenshots and videos
@@ -371,7 +393,7 @@ Until a project has real media, its animated illustration is shown (no empty or 
 
 **Add screenshots:**
 
-1. Put the files in `src/assets/img/projects/<slug>/`, e.g. `src/assets/img/projects/easyfill/`.
+1. Put the files in `src/assets/projects_media/<slug>/images/`, e.g. `src/assets/projects_media/easyfill/images/`.
    Prefer `.webp` (or optimized `.png` / `.jpg`), at most ~1600px wide, well under 500 KB each.
 2. In the project's `.md`, add a `cover` (the first image shown) and optionally more under `gallery`:
 
@@ -399,7 +421,7 @@ gallery:
 ```yaml
 links:
   video: https://www.youtube.com/watch?v=VIDEO_ID   # YouTube or Vimeo: plays inside the page
-  # video: demo.mp4                                 # or a small local .mp4 / .webm in the image folder
+  # video: demo.mp4                                 # or a small local .mp4 / .webm in videos/
 videoPoster: video-poster.webp                       # optional preview image for the play button
 ```
 
@@ -488,6 +510,8 @@ introduction, illustration, technologies and links; it grows automatically as yo
    - **At a glance:** `role` and `team`.
 3. Add screenshots or a video as described above. They appear in the page's gallery.
 
+For a richer page with media inside the sections, use [custom sections](#custom-sections) instead.
+
 Then the site automatically:
 
 - builds `/projects/<slug>/` with your title, category, year, badges, introduction (`summary`),
@@ -499,6 +523,61 @@ Then the site automatically:
 
 The build fails with a clear message if a section has the wrong shape (for example a challenge
 without a solution).
+
+### Custom sections
+
+`caseStudy.sections` is an ordered list of sections, each with its own heading and media. It's for
+pages that need screenshots or videos *inside* the sections (EasyFill is the example). Each
+section can have any of these parts, shown in this order:
+
+```yaml
+caseStudy:
+  sections:
+    - id: features                 # required: lowercase-with-hyphens, becomes the #anchor
+      title: Key Features          # required: the section heading
+      text: |-                     # Markdown paragraphs
+        One or two short paragraphs.
+      media:                       # images (a strip, each opens the viewer) or videos, not both
+        - src: screen.jpg          # a file in images/, `alt` required
+          alt: What the screen shows
+      items:                       # sub-sections: a feature, a demo…
+        - title: A feature
+          text: What it does.
+          media:                   # images: shown beside the text; a video: a card
+            - src: step-1.jpg
+              alt: First step
+            - src: step-2.jpg
+              alt: Second step
+        - title: A demo
+          media:
+            - video: demo.mp4      # a file in videos/, or a YouTube / Vimeo URL
+              title: Demo of the feature   # names the play button for screen readers
+              poster: demo-poster.webp     # optional: a frame of the video (in images/), shown before Play
+      tools:                       # technology + what it was used for
+        - name: Kotlin
+          use: Android application development.
+      links:                       # secondary buttons
+        - label: View Evaluation Repository on GitHub
+          url: https://github.com/…
+```
+
+- **Images** keep their own shape (nothing is cropped) and open the full-size viewer. Portrait
+  screenshots sit beside the text when there's room; other images (diagrams) go below it.
+- **Videos** are cards of one size, so landscape and portrait videos line up (shown whole, never
+  cropped). Nothing loads until the visitor presses Play; the player has the normal controls and
+  fullscreen. Two video items sit side by side when there's room. Cards show only the Play button
+  (no separate "Open video in a new tab" link).
+- **Video thumbnails** (`poster`, optional): a real frame from the video, saved as a small `.webp`
+  in `images/`. It's shown whole in the card, letterboxed like the video itself, with the Play
+  button on top. Without one, the project's illustration is shown instead. Take the frame from the
+  published (already redacted) video and check it for personal information. `videoPoster` does
+  the same for `links.video` in the explorer gallery.
+- With custom sections, the page's media come from the sections: the gallery under the header and
+  the `summary` introduction are left out (the explorer still uses `cover`, `gallery` and
+  `summary`). A section with `tools` replaces the side "Technologies" box.
+- The Markdown body still works and comes first, as "Overview"; don't also add a section for it.
+- The build fails on a missing `id` / `title`, a duplicate `id`, a missing file or `alt` text, a list
+  mixing images and videos, or a link without `label` / `url`.
 
 Developer notes (template helpers, architecture) are in [CLAUDE.md](CLAUDE.md).
 

@@ -62,9 +62,26 @@
     lbPrev?.addEventListener("click", () => showLightboxImage(lbIndex - 1));
     lbNext?.addEventListener("click", () => showLightboxImage(lbIndex + 1));
 
+    // The image box fills the viewer (object-fit: contain); true when a click
+    // lands in its empty margin rather than on the picture itself
+    function outsidePicture(event) {
+        const box = lbImage.getBoundingClientRect();
+        const scale = Math.min(box.width / lbImage.naturalWidth, box.height / lbImage.naturalHeight);
+        const marginX = (box.width - lbImage.naturalWidth * scale) / 2;
+        const marginY = (box.height - lbImage.naturalHeight * scale) / 2;
+        const x = event.clientX - box.left;
+        const y = event.clientY - box.top;
+
+        return x < marginX || x > box.width - marginX || y < marginY || y > box.height - marginY;
+    }
+
     // Click on the dimmed backdrop (outside the image) closes
     lightbox?.addEventListener("click", (event) => {
-        if (event.target === lightbox || event.target.classList.contains("lightbox-figure")) {
+        if (
+            event.target === lightbox ||
+            event.target.classList.contains("lightbox-figure") ||
+            (event.target === lbImage && lbImage.naturalWidth && outsidePicture(event))
+        ) {
             lightbox.close();
         }
     });
@@ -174,7 +191,8 @@
         panel.querySelector("[data-gallery-prev]")?.addEventListener("click", () => show(index - 1));
         panel.querySelector("[data-gallery-next]")?.addEventListener("click", () => show(index + 1));
 
-        if (items.length > 1) {
+        // A strip shows every image at once: nothing to step through
+        if (items.length > 1 && !panel.hasAttribute("data-gallery-strip")) {
             onSwipe(stage, (direction) => show(index + direction));
         }
 
@@ -199,8 +217,11 @@
             play.addEventListener("click", (event) => {
                 const provider = video.dataset.provider;
 
-                if (provider !== "youtube" && provider !== "vimeo" && provider !== "file") {
-                    return; // external: keep the normal link
+                if (
+                    (provider !== "youtube" && provider !== "vimeo" && provider !== "file") ||
+                    video.dataset.failed
+                ) {
+                    return; // external, or failed to play here: keep the normal link
                 }
 
                 event.preventDefault();
@@ -249,9 +270,14 @@
         container.classList.remove("is-playing", "is-loading");
         container.closest("[data-gallery-stage]").classList.remove("is-video-playing");
 
+        // From now on Play opens the file itself (in a new tab)
+        container.dataset.failed = "true";
+
         const message = document.createElement("p");
         message.className = "gallery-video-error";
-        message.textContent = "This video can't be played here. Use the link below to open it.";
+        message.textContent = container.querySelector(".gallery-video-source")
+            ? "This video can't be played here. Use the link below to open it."
+            : "This video can't be played here. Press Play to open it in a new tab.";
         container.append(message);
         announce(message.textContent);
     }

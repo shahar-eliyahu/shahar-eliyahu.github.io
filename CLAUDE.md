@@ -87,7 +87,8 @@ src/assets/js/main.js     nav, scroll progress, reveal, active link, pointer eff
 src/assets/js/editor.js   hero profile editor (tabs, typing)
 src/assets/js/gallery.js  shared media: gallery, lightbox, video (explorer and detail pages)
 src/assets/js/projects.js Project Explorer (filters, picker tabs); uses ProjectGallery
-src/assets/img/projects/<slug>/     project images (create when real images exist)
+src/assets/projects_media/<slug>/   project media: images/ and videos/ (owner-supplied, permanent;
+                                    copied as-is by the `src/assets` passthrough)
 src/Shahar_Eliyahu_CV.pdf           must stay published at /Shahar_Eliyahu_CV.pdf
 ```
 
@@ -110,11 +111,13 @@ src/Shahar_Eliyahu_CV.pdf           must stay published at /Shahar_Eliyahu_CV.pd
 
 ## Projects
 
-Front matter fields: `title`, `summary`, `order` (required), plus `year`, `type`, `role`, `team`,
+Front matter fields: `title`, `summary`, `order` (required), plus `subtitle`, `year`, `type`, `role`, `team`,
 `excerpt`, `categories[]`, `technologies[]`, `featured`, `featuredOrder`, `cover{src,alt,fit,position}`,
 `gallery[{src,alt,caption,fit,position}]`, `videoPoster`,
 `links{github,demo,video}`, `visual{id,label,kicker,headline}`,
-`detailPage`, `caseStudy{features[],architecture,challenges[{challenge,solution}],results,lessons}`.
+`detailPage`, `caseStudy{features[],architecture,challenges[{challenge,solution}],results,lessons,
+sections[{id,title,text,media[],items[{title,text,media[]}],tools[{name,use}],links[{label,url}]}]}`
+(a `media` entry is an image `{src,alt,caption,fit,position}` or a video `{video,title,poster}`).
 The Markdown body is the detail page's Overview. Step-by-step guide and a complete example:
 README → "Adding a New Project"; full field reference: README → "Managing projects".
 
@@ -128,8 +131,10 @@ Follow README → "Adding a New Project". Don't re-derive the process; these rul
 2. **Follow the schema above exactly.** Use only existing fields and category ids from
    `src/_data/projectCategories.json`. A new field or category is a schema change (see rule 9).
 3. **Reuse the shared media components:** `partials/project/gallery.njk`, `lightbox.njk` and
-   `assets/js/gallery.js` (`ProjectGallery`). Images go in `src/assets/img/projects/<slug>/`;
-   videos use `links.video` (YouTube / Vimeo / local `.mp4`/`.webm`). No new gallery or player code.
+   `assets/js/gallery.js` (`ProjectGallery`). Images go in `src/assets/projects_media/<slug>/images/`,
+   local videos in `.../videos/` (file names as the owner gave them; never rename or move them);
+   videos use `links.video` or a case-study `media` entry (YouTube / Vimeo / local `.mp4`/`.webm`).
+   No new gallery or player code.
 4. **Preserve the Project Explorer:** filters and counts, relative numbering, and the direct
    **GitHub** button on every project. "Explore Project" comes only from `detailPage: true`;
    never hard-code it or link to a page that isn't built.
@@ -184,7 +189,9 @@ Follow README → "Adding a New Project". Don't re-derive the process; these rul
 | `projects \| projectsUsing("Python")` | projects whose `technologies` include it (case-insensitive) |
 | `ids \| categoryDetails` | category objects for a list of ids |
 | `projects \| categoryCounts` | non-empty categories with counts for that list (filter chips) |
-| `src \| projectAsset(slug)` | public image URL |
+| `src \| projectAsset(slug)` | public image URL (`projectAsset(slug, "videos")` for videos; file names URL-encoded) |
+| `section.media \| sectionMedia(project)` | a case-study `media` list as gallery items (images with intrinsic size, videos) |
+| `items \| mediaIsPortrait` | true when every item is a portrait image (height > 1.2 × width) |
 | `n \| pad` | `1` → `"01"` |
 | `project \| projectMedia` | ordered gallery items: `image` / `video` / `illustration` |
 | `project \| projectVideo` | `links.video` classified: youtube / vimeo / file / external (+ embed URL) |
@@ -496,10 +503,18 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   (44px), the "n / N" counter and swipe (`touch-action: pan-y`; a swipe never triggers the image
   link) only appear when there are 2+ items. An illustration alone shows no thumbnails (never fake
   ones). Media changes are announced ("Image 2 of 3: alt").
+- **Portrait media** (EasyFill): when every gallery image is a portrait screenshot (sizes read from
+  the file headers at build time, `imageSize` in `lib/projects.js`), the gallery gets `.is-portrait`
+  (square stage on phones, 48×72 thumbnails) and the panel `.has-portrait-media`: from 651px a
+  two-column grid, media column `minmax(200px, 36%)` whose stage stretches to the text's height
+  (308×454 at 1440, 248×518 at 768). Phones stack it (panel about 1270px tall at 390, because of
+  the longer summary). Projects with landscape or no images are unaffected.
 - **Lightbox:** native `<dialog>` + `showModal()` (focus trap, Escape). Focus starts on Close and
   returns to the image link; page scroll is locked while open; arrows and swipe step through that
   project's images; backdrop click closes. Images are links to the full file, so it works
-  without JS.
+  without JS. The image fills the viewer (`object-fit: contain`), so small files such as the
+  565px EasyFill diagram are enlarged; a click in the empty margin beside the picture still
+  closes (`outsidePicture` in `gallery.js`).
 - **Video:** nothing loads until Play is pressed (no autoplay, no third-party requests before
   then). The player (iframe or `<video controls playsinline>`) replaces the poster and takes focus;
   a loading ring shows until ready. A file `error` shows a message and keeps the "Open video in a
@@ -531,8 +546,39 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   filter). "At a glance" appears only with `role` / `team`. "On this page" appears with 3+
   sections. Previous / next only links projects that have a page. Validation fails on a wrong shape
   and rejects the old `caseStudy.enabled`.
+- **Custom sections** (`caseStudy.sections`, owner-approved, first used by EasyFill): an ordered
+  list rendered after the Overview body by the same template (`.case-section`), each with `id`
+  (anchor), `title`, Markdown `text`, `media`, `items` (sub-sections with their own media),
+  `tools` (tech badge + use) and `links` (secondary buttons, GitHub icon for github.com). Media go
+  through `partials/project/case-media.njk` → `gallery.njk` with `galleryItems` / `galleryStrip`:
+  - Images: a **strip** (`.gallery.is-strip`, `data-gallery-strip`): every image visible at its
+    intrinsic ratio (`--media-ratio`, `width` / `height` attributes), portrait ones 170px wide
+    (220 beside the overview text), shrinking together on phones (no wrap); each opens the
+    lightbox, which steps through that strip. `gallery.js` skips swipe for strips.
+  - Videos: the normal stage with Play, inside a **video card** (`.case-item.is-video`) with a
+    square stage, so landscape and portrait videos share one frame and are letterboxed by the
+    native `<video>` (contain), never cropped. Two cards side by side when the section is 30rem+.
+    Optional `poster` (a frame of the video in `images/`): `.gallery-poster` is `object-fit:
+    contain` on black, matching the player, so nothing shifts on Play (this also applies to
+    `videoPoster`). Without a poster the illustration is the backdrop. The poster is a normal
+    lazy `<img>`; the video file is still requested only on Play. Cards have **no "Open video in
+    a new tab" link** (owner request): `case-media.njk` sets `galleryNoVideoSource`, which
+    `gallery.njk` honours; the explorer gallery keeps the link. The Play link still points to
+    the file (no-JS fallback), and if a file fails to play, `gallery.js` marks it
+    `data-failed` so the next Play opens it in a new tab (the error message says so).
+  - Layouts use container queries on the section (`container: case / inline-size`): 36rem+ puts
+    portrait media beside the text and lays tools out as a subgrid (badge | use). The detail
+    page's main column is narrower at 1024 (526px inside) than at 768 (627px), so viewport
+    breakpoints would get this wrong.
+  - With sections: no gallery under the header and no `summary` introduction (the sections carry
+    the media and the overview); a section with `tools` hides the aside Technologies card.
+    Validation: `id` / `title` required, unique ids not clashing with a fixed `caseStudy` key,
+    existing files and `alt`, no mixed image/video list, links with `label` and `url`.
+  - The page-top gallery sizes are scoped to `.project-page-media .gallery-stage` so they never
+    reach section media.
 - **Header:** back link `/?project=<slug>#projects` (the explorer re-selects the project), meta
-  (category · year · `type` badge), h1, `summary` as the introduction, actions with
+  (category · year · `type` badge), h1, optional `subtitle` (`.project-subtitle`, lead size),
+  `summary` as the introduction (unless custom sections are used), actions with
   `showExplore = false` (no link to the page itself; GitHub is primary).
 - **Media:** the same `gallery.njk` with page-level sizes: real media 16:10 on phones, 16:9 on
   tablet, then a fixed `clamp(360px, 38vw, 540px)` height at full width on desktop (a capped
@@ -556,9 +602,23 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   page.
 - **Nav on detail pages:** links point to `/#…` and "Projects" gets `aria-current="page"`.
   `main.js` runs the section highlight only on the homepage (`onHomepage`), so it can't clear that.
-- **EasyFill content** comes only from the summary and the CV (5 features; evaluation with
-  real-user tests and synthetic data). Overview, architecture, challenges, lessons, role, team and
-  screenshots are still missing and intentionally left out.
+- **EasyFill content** (owner-supplied copy and media, used verbatim): subtitle, summary, six
+  technologies, explorer gallery (welcome screen, autofill, recommendation; all portrait), and five
+  custom sections: Project Overview, Key Features (four items, three with screenshots), Technology
+  & Architecture (diagram + eight tools), Distress Detection Demonstrations (hand and voice videos,
+  720p, about 8 and 5.5 MB) and Testing & Evaluation (secondary link to
+  `github.com/shahar-eliyahu/EasyFill-Testing`; the main repository stays `links.github`). No
+  `year` (owner request). Terminology was checked against the EasyFill source: hand and voice
+  detection are signal processing, statistics and threshold rules (no trained models); the only
+  ML is MediaPipe's pre-trained face landmarker, so never call the demos "AI detection". The long
+  `Backup_Demo.mp4` was removed by the owner and must not come back. `form-upload-loading.jpg`
+  is in the folder but unused (it's still published by the passthrough). Video thumbnails
+  (owner request): `hand-distress-detection-poster.webp` (frame at 3s) and
+  `voice-distress-detection-poster.webp` (8s, the recording dialog), about 16 KB each, grabbed from
+  the redacted videos with headless Chrome (seek → canvas → WebP, no ffmpeg) and checked for
+  personal data. The architecture PNG is
+  only 565×511. The videos keep their index at the end of the file (no fast-start); they play,
+  but a "web optimized" re-export would start faster. Role and team are still missing.
 
 ## Validation workflow
 
@@ -598,6 +658,11 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   "Show more"; the Contact mascot; section labels and numbers removed; Inter self-hosted with
   the unified type system; About bottom padding on desktop. The temporary font preview used to
   choose Inter was removed before this commit.
+- **EasyFill integration (done, owner-approved, commit "feat(portfolio): complete EasyFill
+  project integration", not pushed):** owner media in
+  `src/assets/projects_media/easyfill/` (the new media convention for all projects), `subtitle`,
+  portrait explorer layout, custom case-study sections with image strips and video cards, lightbox
+  enlarges small images.
 - `main` still serves the old hand-written site. This branch has no root `index.html`, so
   **merging before the Actions deploy exists would break the live site.**
 
@@ -629,4 +694,4 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
 ## Open questions for the owner
 
 - Should projects list programming languages (for example Python) in `technologies` so skills link to them?
-- Role, team size, type and missing years for projects. EasyFill case-study content and screenshots.
+- Role, team size, type and missing years for projects. EasyFill role and team.

@@ -9,6 +9,8 @@ import {
     categoryCounts,
     projectMedia,
     projectVideo,
+    sectionMedia,
+    mediaIsPortrait,
     projectNeighbors,
     findProject,
 } from "./lib/projects.js";
@@ -35,6 +37,8 @@ export default function (eleventyConfig) {
     eleventyConfig.addFilter("categoryCounts", categoryCounts);
     eleventyConfig.addFilter("projectMedia", projectMedia);
     eleventyConfig.addFilter("projectVideo", projectVideo);
+    eleventyConfig.addFilter("sectionMedia", sectionMedia);
+    eleventyConfig.addFilter("mediaIsPortrait", mediaIsPortrait);
     eleventyConfig.addFilter("projectNeighbors", projectNeighbors);
     eleventyConfig.addFilter("findProject", findProject);
 

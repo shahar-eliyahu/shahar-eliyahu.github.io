@@ -12,13 +12,23 @@ layout: layouts/base.njk
     - caseStudy.challenges      → Challenges & solutions ({ challenge, solution })
     - caseStudy.results         → Results & evaluation (Markdown)
     - caseStudy.lessons         → Lessons learned (Markdown)
+    - caseStudy.sections        → custom sections, in order, each with its own
+                                  title, text, media (images / videos), items,
+                                  tools and links (see README)
     - role / team               → "At a glance"
+
+    With `caseStudy.sections` the sections carry the media, so the gallery
+    under the header and the summary introduction are left out (no duplicates),
+    and a section `tools` list replaces the Technologies card.
 #}
 {%- from "partials/project/macros.njk" import techTags, projectActions %}
+{%- from "partials/components.njk" import button %}
 {%- from "partials/icons.njk" import icon %}
 
 {%- set project = collections.projects | findProject(page.url) %}
 {%- set cs = caseStudy or {} %}
+{%- set custom = cs.sections or [] %}
+{%- set hasTools = custom | selectattr("tools") | length %}
 {%- set video = project | projectVideo %}
 {%- set pager = collections.projects | projectNeighbors(page.url) %}
 {%- set overview = content | striptags | trim %}
@@ -26,6 +36,7 @@ layout: layouts/base.njk
 {#- Sections present on this page, in order (drives the "On this page" list) #}
 {%- set sections = [] %}
 {%- if overview %}{% set _ = sections.push({ id: "overview", label: "Overview" }) %}{% endif %}
+{%- for section in custom %}{% set _ = sections.push({ id: section.id, label: section.title }) %}{% endfor %}
 {%- if cs.features and cs.features.length %}{% set _ = sections.push({ id: "features", label: "Key features" }) %}{% endif %}
 {%- if cs.architecture %}{% set _ = sections.push({ id: "architecture", label: "Architecture & implementation" }) %}{% endif %}
 {%- if cs.challenges and cs.challenges.length %}{% set _ = sections.push({ id: "challenges", label: "Challenges & solutions" }) %}{% endif %}
@@ -57,14 +68,22 @@ layout: layouts/base.njk
 
             <h1 class="section-heading project-page-title" id="project-page-title">{{ title }}</h1>
 
+            {%- if subtitle %}
+            <p class="project-subtitle">{{ subtitle }}</p>
+            {%- endif %}
+
+            {%- if not custom.length %}
             <p class="project-intro">{{ summary }}</p>
+            {%- endif %}
 
             {{ projectActions(project, "primary", video and video.provider == "external", false) }}
         </header>
 
+        {%- if not custom.length %}
         <div class="project-page-media">
             {% include "partials/project/gallery.njk" %}
         </div>
+        {%- endif %}
 
         {#- With no sections yet (summary only), the details span the full width
             instead of sitting beside an empty column #}
@@ -72,7 +91,7 @@ layout: layouts/base.njk
 
             <aside class="project-aside" aria-label="Project details">
 
-                {%- if technologies.length %}
+                {%- if technologies.length and not hasTools %}
                 <div class="aside-card">
                     <h2 class="aside-title">Technologies</h2>
                     {{ techTags(technologies) }}
@@ -115,6 +134,75 @@ layout: layouts/base.njk
                     <div class="prose">{{ content | safe }}</div>
                 </section>
                 {%- endif %}
+
+                {#- Custom sections (caseStudy.sections). Portrait screenshots sit
+                    beside the text when there is room; other media goes below it. #}
+                {%- for section in custom %}
+                {%- set bodyMedia = section.media | sectionMedia(project) %}
+                <section
+                    class="project-section case-section{{ ' has-side-media' if section.text and bodyMedia | mediaIsPortrait }}"
+                    id="{{ section.id }}"
+                    aria-labelledby="{{ section.id }}-title"
+                >
+                    <h2 class="project-section-title" id="{{ section.id }}-title">{{ section.title }}</h2>
+
+                    {%- if section.text or bodyMedia.length %}
+                    <div class="case-body">
+                        {%- if section.text %}
+                        <div class="prose">{{ section.text | markdown | safe }}</div>
+                        {%- endif %}
+                        {%- set caseMedia = bodyMedia %}
+                        {% include "partials/project/case-media.njk" %}
+                    </div>
+                    {%- endif %}
+
+                    {%- if section.items and section.items.length %}
+                    <div class="case-items">
+                        {%- for item in section.items %}
+                        {%- set itemMedia = item.media | sectionMedia(project) %}
+                        {%- set itemKind = itemMedia[0].kind if itemMedia.length else "text" %}
+                        <article class="case-item is-{{ itemKind }}" aria-labelledby="{{ section.id }}-item-{{ loop.index }}">
+                            {%- if itemKind == "video" %}
+                            {%- set caseMedia = itemMedia %}
+                            {% include "partials/project/case-media.njk" %}
+                            {%- endif %}
+                            <div class="case-item-text">
+                                <h3 class="case-item-title" id="{{ section.id }}-item-{{ loop.index }}">{{ item.title }}</h3>
+                                {%- if item.text %}
+                                <div class="prose">{{ item.text | markdown | safe }}</div>
+                                {%- endif %}
+                            </div>
+                            {%- if itemKind == "image" %}
+                            {%- set caseMedia = itemMedia %}
+                            {% include "partials/project/case-media.njk" %}
+                            {%- endif %}
+                        </article>
+                        {%- endfor %}
+                    </div>
+                    {%- endif %}
+
+                    {%- if section.tools and section.tools.length %}
+                    <ul class="case-tools">
+                        {%- for tool in section.tools %}
+                        <li>
+                            <span class="tech-badge">{{ tool.name }}</span>
+                            {%- if tool.use %}
+                            <span class="case-tool-use">{{ tool.use }}</span>
+                            {%- endif %}
+                        </li>
+                        {%- endfor %}
+                    </ul>
+                    {%- endif %}
+
+                    {%- if section.links and section.links.length %}
+                    <div class="project-actions case-links">
+                        {%- for link in section.links %}
+                        {{ button(link.label | escape, link.url, "secondary small", "external", icon = "github" if "github.com" in link.url else "arrow-up-right") }}
+                        {%- endfor %}
+                    </div>
+                    {%- endif %}
+                </section>
+                {%- endfor %}
 
                 {%- if cs.features and cs.features.length %}
                 <section class="project-section" id="features" aria-labelledby="features-title">

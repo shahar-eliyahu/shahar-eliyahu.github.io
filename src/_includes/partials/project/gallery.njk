@@ -1,21 +1,34 @@
 {#
-    Media gallery for one project. Expects `project`.
+    Media gallery. Expects `project`.
     Items come from the `projectMedia` filter (lib/projects.js): real images
     (cover, gallery), an embeddable/native video, or, with no real media,
     the project's illustration. Only real images open in the lightbox.
 
+    Case-study sections pass their own media instead (set before including):
+    - `galleryItems`: items from the `sectionMedia` filter
+    - `galleryStrip`: true shows every image side by side at its own aspect
+      ratio (a short visual sequence) instead of one stage with thumbnails
+    - `galleryNoVideoSource`: true leaves out the "Open video in a new tab" link
+      (the Play link itself still points to the video)
+
     Without JavaScript: the first item is shown, images link to the full-size
-    file and the video links to its source. assets/js/projects.js adds
+    file and the video links to its source. assets/js/gallery.js adds
     switching, thumbnails, swipe, the lightbox and the in-page player.
 #}
 {%- from "partials/icons.njk" import icon %}
 {%- set data = project.data %}
-{%- set items = project | projectMedia %}
+{%- set items = galleryItems if galleryItems else (project | projectMedia) %}
+{%- set strip = galleryStrip and galleryItems %}
 {%- set visualId = data.visual.id if data.visual else "" %}
 {%- set count = items.length %}
+{%- set stepped = count > 1 and not strip %}
 
-{#- Illustration only (no real media yet): a shorter, compact stage #}
-<div class="gallery{{ ' is-illustration-only' if count == 1 and items[0].kind == 'illustration' }}" data-gallery>
+{#- Illustration only (no real media yet): a shorter, compact stage.
+    Portrait screenshots only: a taller stage that shows them whole. #}
+<div class="gallery
+    {{- ' is-illustration-only' if count == 1 and items[0].kind == 'illustration' }}
+    {{- ' is-portrait' if items | mediaIsPortrait }}
+    {{- ' is-strip' if strip }}" data-gallery{{ ' data-gallery-strip' if strip }}>
 
     <div class="gallery-stage" data-gallery-stage>
         {%- for item in items %}
@@ -25,16 +38,18 @@
             data-gallery-item
             data-kind="{{ item.kind }}"
             {%- if item.kind == "image" %} data-src="{{ item.src }}" data-alt="{{ item.alt }}" data-caption="{{ item.caption }}"{% endif %}
-            {%- if not loop.first %} hidden{% endif %}
+            {%- if strip and item.width %} style="--media-ratio: {{ item.width }} / {{ item.height }}; --media-width: {{ item.width }}px"{% endif %}
+            {%- if not loop.first and not strip %} hidden{% endif %}
         >
 
             {%- if item.kind == "image" %}
 
             <a class="gallery-zoom" href="{{ item.src }}" data-lightbox-open>
                 <img
-                    class="gallery-image{{ ' is-contain' if item.fit == 'contain' }}"
+                    class="gallery-image{{ ' is-contain' if item.fit == 'contain' and not strip }}"
                     src="{{ item.src }}"
                     alt="{{ item.alt }}"
+                    {%- if item.width %} width="{{ item.width }}" height="{{ item.height }}"{% endif %}
                     {%- if item.position %} style="object-position: {{ item.position }}"{% endif %}
                     loading="lazy"
                     decoding="async"
@@ -69,9 +84,11 @@
                     <span class="sr-only">: {{ item.title }}</span>
                 </a>
 
+                {%- if not galleryNoVideoSource %}
                 <a class="gallery-video-source" href="{{ item.url }}" target="_blank" rel="noopener">
                     Open video in a new tab {{ icon("arrow-up-right") }}
                 </a>
+                {%- endif %}
             </div>
 
             {%- else %}
@@ -93,14 +110,14 @@
         </div>
         {%- endfor %}
 
-        {%- if count > 1 %}
+        {%- if stepped %}
         <button type="button" class="gallery-nav is-prev" data-gallery-prev aria-label="Previous media">{{ icon("arrow-right") }}</button>
         <button type="button" class="gallery-nav is-next" data-gallery-next aria-label="Next media">{{ icon("arrow-right") }}</button>
         <p class="gallery-count" aria-hidden="true"><span data-gallery-index>1</span> / {{ count }}</p>
         {%- endif %}
     </div>
 
-    {%- if count > 1 %}
+    {%- if stepped %}
     <ul class="gallery-thumbs" aria-label="{{ data.title }} media">
         {%- for item in items %}
         <li>

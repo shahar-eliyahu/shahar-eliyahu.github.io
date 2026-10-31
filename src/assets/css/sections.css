@@ -935,6 +935,81 @@ html:not(.js) .explorer-panel + .explorer-panel {
     aspect-ratio: 5 / 2;
 }
 
+/* Portrait screenshots only: a square stage on phones so they stay readable
+   (beside the text from 651px, see .has-portrait-media) */
+.gallery.is-portrait:not(.is-strip) .gallery-stage {
+    aspect-ratio: 1 / 1;
+}
+
+.gallery.is-portrait .gallery-thumb {
+    width: 48px;
+    height: 72px;
+}
+
+.gallery.is-portrait .gallery-thumb img {
+    object-position: center top;
+}
+
+/* Strip (case-study sections): every image visible at its own aspect ratio,
+   side by side, shrinking together on narrow screens. Each opens the lightbox. */
+.gallery.is-strip .gallery-stage {
+    display: flex;
+
+    gap: var(--space-3);
+
+    aspect-ratio: auto;
+
+    overflow: visible;
+
+    background: none;
+
+    touch-action: auto;
+}
+
+.gallery.is-strip .gallery-item {
+    position: relative;
+
+    inset: auto;
+
+    flex: 0 1 var(--media-width, 100%);
+
+    min-width: 0;
+    max-width: 100%;
+}
+
+.gallery.is-strip.is-portrait .gallery-item {
+    flex-basis: var(--strip-portrait-width, 170px);
+}
+
+.gallery.is-strip .gallery-zoom {
+    position: relative;
+
+    inset: auto;
+
+    overflow: hidden;
+
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-md);
+
+    background: var(--viz-card);
+
+    transition: border-color var(--duration-fast) ease;
+}
+
+.gallery.is-strip .gallery-zoom:hover {
+    border-color: var(--color-primary);
+}
+
+.gallery.is-strip .gallery-image {
+    display: block;
+
+    height: auto;
+
+    aspect-ratio: var(--media-ratio, auto);
+
+    object-fit: contain;
+}
+
 .gallery-item {
     position: absolute;
 
@@ -1081,6 +1156,8 @@ html:not(.js) .explorer-panel + .explorer-panel {
     place-items: center;
 }
 
+/* A frame from the video, shown whole and letterboxed exactly like the
+   player that replaces it (so nothing jumps or gets cropped on Play) */
 .gallery-poster {
     position: absolute;
 
@@ -1089,7 +1166,9 @@ html:not(.js) .explorer-panel + .explorer-panel {
     width: 100%;
     height: 100%;
 
-    object-fit: cover;
+    object-fit: contain;
+
+    background: var(--palette-black);
 }
 
 .gallery-play {
@@ -1161,6 +1240,15 @@ html:not(.js) .explorer-panel + .explorer-panel {
 .gallery-video-source .icon {
     width: 14px;
     height: 14px;
+}
+
+/* A 44px tap area around the small link */
+.gallery-video-source::after {
+    content: "";
+
+    position: absolute;
+
+    inset: -8px 0;
 }
 
 .gallery-player {
@@ -1368,6 +1456,18 @@ html:not(.js) .explorer-panel + .explorer-panel {
     font-size: 0.6875rem;
 }
 
+/* `subtitle`: a short tagline under the title (explorer and detail page) */
+.project-subtitle {
+    margin: calc(var(--space-1) * -1) 0 0;
+
+    color: var(--color-text-secondary);
+
+    font-size: var(--text-body);
+    font-weight: 500;
+
+    line-height: var(--leading-ui);
+}
+
 .explorer-title {
     margin: 0;
 
@@ -1539,7 +1639,11 @@ html:not(.js) .explorer-panel + .explorer-panel {
     place-items: center;
 }
 
+/* Fills the viewer, so small images (diagrams) are enlarged too */
 .lightbox-image {
+    width: 100%;
+    height: 100%;
+
     max-width: 100%;
     max-height: 100%;
 
@@ -1638,6 +1742,33 @@ html:not(.js) .explorer-panel + .explorer-panel {
 
     .explorer-info .project-actions .button:first-child {
         flex: 0 1 auto;
+    }
+
+    /* Portrait screenshots: a media column beside the text; the stage takes
+       the text's height, so the screenshot and the description balance */
+    .explorer-panel.has-portrait-media {
+        display: grid;
+
+        grid-template-columns: minmax(200px, 36%) minmax(0, 1fr);
+    }
+
+    .explorer-panel.has-portrait-media .gallery {
+        display: flex;
+
+        flex-direction: column;
+    }
+
+    .explorer-panel.has-portrait-media .gallery .gallery-stage {
+        flex: 1;
+
+        min-height: 340px;
+
+        aspect-ratio: auto;
+    }
+
+    .explorer-panel.has-portrait-media .explorer-info {
+        border-top: 0;
+        border-left: 1px solid var(--color-border);
     }
 
     .lightbox-inner {
@@ -1822,6 +1953,12 @@ html:not(.js) .explorer-panel + .explorer-panel {
     color: var(--palette-gray-100);
 }
 
+.project-hero .project-subtitle {
+    margin: 0;
+
+    font-size: var(--text-lead);
+}
+
 .project-intro {
     max-width: var(--measure-lead);
 
@@ -1857,11 +1994,11 @@ html:not(.js) .explorer-panel + .explorer-panel {
     box-shadow: var(--shadow-card);
 }
 
-.project-page .gallery-stage {
+.project-page-media .gallery-stage {
     aspect-ratio: 16 / 10;
 }
 
-.project-page .gallery.is-illustration-only .gallery-stage {
+.project-page-media .gallery.is-illustration-only .gallery-stage {
     aspect-ratio: 5 / 2;
 }
 
@@ -2137,6 +2274,183 @@ html:not(.js) .explorer-panel + .explorer-panel {
     color: var(--color-tag-text);
 }
 
+/* Custom sections (caseStudy.sections). Layouts follow the section's own
+   width (container queries), since the main column is narrower beside the
+   sticky details column than on tablets. Phones: everything stacks. */
+.case-section {
+    container: case / inline-size;
+}
+
+.case-body {
+    display: grid;
+
+    gap: var(--space-5);
+}
+
+/* A single screenshot beside the text (overview) can be a little larger */
+.case-section.has-side-media .case-body {
+    --strip-portrait-width: 220px;
+}
+
+/* Items: feature rows and video cards */
+.case-items {
+    display: grid;
+
+    gap: var(--space-5);
+}
+
+.case-body + .case-items {
+    margin-top: var(--space-6);
+}
+
+.case-item:not(.is-video) + .case-item:not(.is-video) {
+    padding-top: var(--space-5);
+
+    border-top: 1px solid var(--color-border);
+}
+
+.case-item.is-image {
+    display: grid;
+
+    gap: var(--space-4);
+}
+
+.case-item-title {
+    display: flex;
+
+    gap: var(--space-2);
+
+    margin: 0 0 var(--space-3);
+
+    align-items: center;
+
+    color: var(--color-text);
+
+    font-family: var(--font-display);
+    font-size: var(--text-h4);
+    font-weight: 600;
+
+    line-height: var(--leading-h4);
+}
+
+/* The blue -> violet marker of the Skills and About headings */
+.case-item-title::before {
+    content: "";
+
+    flex: none;
+
+    width: 3px;
+    height: 1em;
+
+    border-radius: 2px;
+
+    background: linear-gradient(180deg, var(--color-primary), var(--color-accent-strong));
+}
+
+/* Video cards: one frame size for landscape and portrait, the video shown
+   whole inside it (letterboxed, never cropped or stretched) */
+.case-item.is-video {
+    overflow: hidden;
+
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+
+    background: color-mix(in srgb, var(--color-surface-raised) 50%, transparent);
+}
+
+.case-item.is-video .case-item-text {
+    padding: var(--space-4) var(--space-5) var(--space-5);
+}
+
+.case-media.is-video {
+    border-bottom: 1px solid var(--color-border);
+}
+
+.case-media.is-video .gallery-stage {
+    aspect-ratio: 1 / 1;
+}
+
+/* Tools: technology badge + what it was used for */
+.case-tools {
+    display: grid;
+
+    gap: var(--space-4);
+
+    margin: var(--space-6) 0 0;
+    padding: 0;
+
+    list-style: none;
+}
+
+/* Phones: the badge above its description, the same for every row */
+.case-tools li {
+    display: flex;
+
+    gap: var(--space-2);
+
+    flex-direction: column;
+
+    align-items: flex-start;
+}
+
+.case-tool-use {
+    color: var(--color-text-body);
+
+    font-size: var(--text-body);
+
+    line-height: var(--leading-ui);
+}
+
+.case-links {
+    margin-top: var(--space-5);
+}
+
+/* Video cards side by side once both fit */
+@container case (min-width: 30rem) {
+
+    .case-items:has(.is-video) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .case-items .case-item:not(.is-video) {
+        grid-column: 1 / -1;
+    }
+}
+
+/* Text beside portrait screenshots; tools as a two-column list */
+@container case (min-width: 36rem) {
+
+    .case-section.has-side-media .case-body,
+    .case-item.is-image {
+        grid-template-columns: minmax(0, 1fr) auto;
+
+        gap: var(--space-6);
+
+        align-items: start;
+    }
+
+    .case-tools {
+        grid-template-columns: max-content minmax(0, 1fr);
+
+        gap: var(--space-3) var(--space-5);
+    }
+
+    .case-tools li {
+        display: grid;
+
+        gap: var(--space-5);
+
+        grid-column: 1 / -1;
+        grid-template-columns: subgrid;
+
+        align-items: center;
+    }
+
+    .case-tools .tech-badge {
+        justify-self: start;
+    }
+}
+
 /* Previous / next */
 .project-pager {
     display: grid;
@@ -2217,11 +2531,11 @@ html:not(.js) .explorer-panel + .explorer-panel {
         flex: 0 1 auto;
     }
 
-    .project-page .gallery-stage {
+    .project-page-media .gallery-stage {
         aspect-ratio: 16 / 9;
     }
 
-    .project-page .gallery.is-illustration-only .gallery-stage {
+    .project-page-media .gallery.is-illustration-only .gallery-stage {
         aspect-ratio: 4 / 1;
     }
 
@@ -2250,13 +2564,13 @@ html:not(.js) .explorer-panel + .explorer-panel {
 
     /* Full card width at a bounded height (a capped aspect ratio would
        shrink the width and leave an empty band) */
-    .project-page .gallery-stage {
+    .project-page-media .gallery-stage {
         height: clamp(360px, 38vw, 540px);
 
         aspect-ratio: auto;
     }
 
-    .project-page .gallery.is-illustration-only .gallery-stage {
+    .project-page-media .gallery.is-illustration-only .gallery-stage {
         height: auto;
 
         aspect-ratio: 5 / 1;

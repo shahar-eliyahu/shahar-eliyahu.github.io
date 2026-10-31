@@ -6,8 +6,9 @@
 {%- set data = project.data %}
 {%- set video = project | projectVideo %}
 
+{#- Portrait screenshots sit beside the text from tablet width up #}
 <article
-    class="explorer-panel{{ ' is-selected' if isFirst }}"
+    class="explorer-panel{{ ' is-selected' if isFirst }}{{ ' has-portrait-media' if project | projectMedia | mediaIsPortrait }}"
     id="project-{{ data.slug }}"
     data-panel
     data-project="{{ data.slug }}"
@@ -32,6 +33,10 @@
         </p>
 
         <h3 class="explorer-title" id="project-{{ data.slug }}-title">{{ data.title }}</h3>
+
+        {%- if data.subtitle %}
+        <p class="project-subtitle">{{ data.subtitle }}</p>
+        {%- endif %}
 
         <p class="explorer-excerpt">{{ data.excerpt or data.summary }}</p>
 
