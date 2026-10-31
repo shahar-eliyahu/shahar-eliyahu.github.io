@@ -755,6 +755,22 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   Forest at 0.25. The streaming output rows are model alerts; their `Y` is the heuristic label
   from the dataset, never the prediction. The stage-2 chart is the two-stage experiment
   (threshold 0.35, candidate subset), captioned as such.
+- **NLP Sentiment Analysis integration (done, owner-approved, commit "feat(portfolio): complete
+  NLP sentiment analysis case study", not pushed):** slug `nlp-sentiment`, URL, order 4, `ai-ml`
+  unchanged; title changed from "NLP
+  Final Project" (so Retail's "Next" and CarKeep's "Previous" links show the new title);
+  `year` removed (owner request). Course project, no team or authorship statements. Media:
+  five landscape result charts already in `src/assets/projects_media/nlp-sentiment/images/`
+  (34-48 KB; no copy needed, no video). Eight sections: workflow as a numbered list, two text
+  model sub-blocks, one Markdown table (6 runs, accuracy and F1), four full-width chart
+  sub-blocks (F1 Score, Accuracy, Word2Vec + LSTM, DistilBERT). Table values were checked
+  against the confusion-matrix counts; averages 0.736 / 0.907. Copy checked against the
+  NLP-Final-Project code (spaCy, IMDb + Wikipedia Word2Vec, LSTM 128 with frozen embeddings,
+  distilbert-base-uncased, 2,500 + 2,500 sample, stratified 20% split). Reordering happens
+  before the split, so each data order has its own test set: never write "the same 1,000 test
+  reviews" across orders and never claim data order caused a difference. Two owner-approved
+  caption corrections: the LSTM error pattern holds overall (not in the shuffled run) and
+  DistilBERT errors are "roughly balanced" (reversed is 60 vs 41). No code changes.
 - **Pre-publication checkpoint (before any merge or deploy):** verify redistribution rights for
   the three Flickr30k photographs in the Computer Vision examples (the page carries a source
   credit, which doesn't grant rights by itself). (The earlier 2.9 MB PNG cover was replaced by
@@ -769,8 +785,10 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
 4. **New sections.** 4A (Project Explorer) and 4B (project detail pages) are done; all seven
    projects have a page. About, Skills and Contact have been redesigned. Possible later: expanded
    About (education, hackathon, experience timeline), skills linked to projects.
-5. **Project content:** fill the seven pages with real write-ups and screenshots from the owner
-   (Overview, `caseStudy`, `role` / `team`, media). No template changes needed.
+5. **Project content: done.** All seven project pages are complete and committed locally
+   (EasyFill, Computer Vision, Pacman AI, Tactical AI Battle, CarKeep, Real-Time Retail Trend
+   Detection, NLP Sentiment Analysis), each with owner-approved copy and media in
+   `src/assets/projects_media/<slug>/`. Still open per project: `role` / `team` where wanted.
 6. **Polish:** accessibility (keyboard, focus, contrast), performance, Open Graph tags, favicon, 404, sitemap.
 7. **Launch (with approval only):** GitHub Actions deploy workflow, switch the Pages source to
    Actions, then merge.
