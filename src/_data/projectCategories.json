@@ -6,5 +6,9 @@
     {
         "id": "applications",
         "label": "Applications"
+    },
+    {
+        "id": "software-engineering",
+        "label": "Software Engineering"
     }
 ]

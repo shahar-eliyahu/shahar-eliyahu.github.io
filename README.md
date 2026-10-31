@@ -171,13 +171,13 @@ optional. Leave out what you don't have (no empty placeholders).
 | Short description | `excerpt` | About two lines (under ~120 characters) for the explorer. The build warns if it's longer |
 | Year | `year` | Text in quotes, e.g. `"2026"` or `"2025–2026"` |
 | Badge | `type` | e.g. `Final degree project`, `Course project`, `Hackathon`. Shown as a small badge |
-| Categories | `categories` | A list of category ids: `[ai-ml]`, `[applications]` or both |
+| Categories | `categories` | A list of category ids: `[ai-ml]`, `[applications]`, `[software-engineering]`, or several |
 | Technologies | `technologies` | A list, shown in this order (all of them) |
 | GitHub | `links.github` | The repository URL. Always shown as a direct button |
 | Position | `order` | A number; lower comes first (see [Order and numbering](#order-and-numbering)) |
 
 **Categories and filters.** The available ids are defined in `src/_data/projectCategories.json`
-(currently `ai-ml` and `applications`). The explorer's filter buttons and their counts are
+(currently `ai-ml`, `applications` and `software-engineering`). The explorer's filter buttons and their counts are
 generated automatically. A new project appears under every category it lists, and the build
 fails if you use an id that doesn't exist. To add a new category, see [Categories](#categories).
 
@@ -454,7 +454,7 @@ Add any of these under `links:`. Each one is shown only if present:
 
 - **Explore Project** opens the project's own detail page (full description, screenshots, videos,
   technical explanation). It's the main button, and appears automatically for every project with
-  `detailPage: true` (currently all eight). Without a detail page it's simply not shown, so
+  `detailPage: true` (currently all nine). Without a detail page it's simply not shown, so
   there's never a broken link.
 - **GitHub** is always available directly in the explorer, so visitors can open the repository
   without visiting the detail page. It's a separate secondary button next to Explore Project, or
@@ -467,7 +467,8 @@ All categories are defined in **one file**, `src/_data/projectCategories.json`:
 ```json
 [
     { "id": "ai-ml", "label": "AI & Machine Learning" },
-    { "id": "applications", "label": "Applications" }
+    { "id": "applications", "label": "Applications" },
+    { "id": "software-engineering", "label": "Software Engineering" }
 ]
 ```
 
@@ -494,7 +495,7 @@ unknown category, or if the category file has a duplicate `id`, an invalid `id` 
 ### Project detail pages
 
 Every project can have its own page at `/projects/<slug>/`, generated from its Markdown file by
-one shared template. You never create HTML pages by hand. **All eight current projects have
+one shared template. You never create HTML pages by hand. **All nine current projects have
 one.** A project with only a summary (no Overview or `caseStudy` yet) gets a compact page with its
 introduction, illustration, technologies and links; it grows automatically as you add sections.
 

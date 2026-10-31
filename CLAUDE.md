@@ -162,7 +162,9 @@ Follow README → "Adding a New Project". Don't re-derive the process; these rul
 ## Categories
 
 - Defined only in `src/_data/projectCategories.json`: ordered list of `{ id, label }`.
-  Current categories: `ai-ml` (AI & Machine Learning) and `applications` (Applications).
+  Current categories, in this order: `ai-ml` (AI & Machine Learning), `applications`
+  (Applications) and `software-engineering` (Software Engineering; owner-added for Zoo
+  Management System. Pacman AI and Tactical AI Battle stay in AI & ML).
 - Projects reference ids in `categories: [...]`. Multiple ids are allowed.
 - `collections.projectCategories` = each category plus `projects` and `count`. Empty categories
   stay in the list with `count: 0`. UIs should hide or disable them.
@@ -463,8 +465,8 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
 
 - **Layout:** filters on top. **Desktop (1024px+):** a vertical picker (290px, sticky) of numbered
   project names plus category, with the selected one marked by a gradient bar; the preview panel on
-  the right. **Numbers are relative to the visible (filtered) list**: All 01–08, Applications
-  01–03, AI & ML 01–05. `projects.js` renumbers on every filter change; the order and data never
+  the right. **Numbers are relative to the visible (filtered) list**: All 01–09, Applications
+  01–03, AI & ML 01–05, Software Engineering 01. `projects.js` renumbers on every filter change; the order and data never
   change, and the number is `aria-hidden` so tab names stay clean. **Below 1024px:** the picker is a swipeable strip of full-name pills (edge-faded,
   scroll-snap), auto-scrolled to the selection, with the preview below at full width. Filters are a
   swipeable row on phones and wrap from 651px.
@@ -487,7 +489,7 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   directly available in the explorer as a separate button (secondary once Explore exists), so
   visitors never have to open the detail page to reach the repository. Until detail pages exist,
   Explore is *not rendered* (no broken links or placeholder pages) and "View on GitHub" is the
-  primary button. **All eight projects now have a page**, so every panel shows Explore Project
+  primary button. **All nine projects now have a page**, so every panel shows Explore Project
   (primary) + GitHub (secondary, new tab); a project added without `detailPage` falls back to
   "View on GitHub" automatically. Demo if
   `links.demo`; "Watch video" only for videos that can't play inline.
@@ -543,9 +545,10 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   no per-project HTML files.
 - **Opt-in per project:** `detailPage: true`. `projects.11tydata.js` computes
   `permalink: /projects/<slug>/` only then (otherwise `false`). The URL makes `project.url` truthy,
-  which turns on "Explore Project" (primary) with GitHub secondary in the explorer. **All eight
+  which turns on "Explore Project" (primary) with GitHub secondary in the explorer. **All nine
   projects are enabled** (EasyFill first as the reviewed example, then the other six, owner
-  request; Anyone Can Cook was added later with its full write-up). Every page now has its
+  request; Anyone Can Cook and Zoo Management System were added later with their full
+  write-ups). Every page now has its
   complete owner-approved write-up (see Status).
 - **Data cascade defaults:** `layout`, `templateEngineOverride: "md"` (bodies are plain Markdown,
   so `{{ }}` stays literal), `caseStudy: {}`, and computed `description` = `summary`.
@@ -697,12 +700,12 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   the unified type system; About bottom padding on desktop. The temporary font preview used to
   choose Inter was removed before this commit.
 - **EasyFill integration (done, owner-approved, commit "feat(portfolio): complete EasyFill
-  project integration", not pushed):** owner media in
+  project integration", pushed):** owner media in
   `src/assets/projects_media/easyfill/` (the new media convention for all projects), `subtitle`,
   portrait explorer layout, custom case-study sections with image strips and video cards, lightbox
   enlarges small images.
 - **Computer Vision integration (done, owner-approved, commit "feat(portfolio): complete computer
-  vision case study", not pushed):** slug and URL stay
+  vision case study", pushed):** slug and URL stay
   `computer-vision`; media in `src/assets/projects_media/computer-vision/images/` (four charts
   as PNG). New title "Computer Vision: YOLO Object
   Detection", subtitle, no `year`
@@ -724,7 +727,7 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
     The Flickr30k *dataset* references (dataset text, the "Flickr30k" tool badge, the
     annotation limitation) stay. Don't re-add Flickr30k photos without verified rights.
 - **Pacman AI integration (done, owner-approved, commit "feat(portfolio): complete pacman ai
-  case study", not pushed):** slug, URL, order 6,
+  case study", pushed):** slug, URL, order 6,
   `ai-ml`, no year (unchanged). Media in `src/assets/projects_media/pacman-ai/`:
   `collecting-coins.png` (cover, 862 KB, kept by owner decision), `Fleeing_from_a_ghost.png`,
   `videos/PacmanCoinsEscape.mp4` (398 KB, 15.2 s, 960×1040, H.264 High + AAC, fast start), and
@@ -733,7 +736,7 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   against the PacMan-CPP source: classical search-based game AI, no machine learning; ties go to
   the cell nearer the target coin and only the previous cell is avoided (no longer history).
 - **Tactical AI Battle integration (done, owner-approved, commit "feat(portfolio): complete
-  tactical ai battle case study", not pushed):** slug, URL,
+  tactical ai battle case study", pushed):** slug, URL,
   order 7 (last), `ai-ml`, no year (unchanged). Media in
   `src/assets/projects_media/tactical-ai-battle/`: `battle.png` (cover), `visibility.png`,
   `danger_map.png` (1088×800, about 20 KB each), `videos/Demo.mp4` (owner's web-optimized
@@ -746,7 +749,7 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   provider; BFS cover is judged against known enemies; one shared "Dynamic Danger Map". "Finite
   State Machines (FSM)" is spelled out on first use. Classical game AI only, no machine learning.
 - **CarKeep integration (done, owner-approved, commit "feat(portfolio): complete carkeep case
-  study", not pushed):** slug, URL, order 5,
+  study", pushed):** slug, URL, order 5,
   `applications`, no year (unchanged). Technologies corrected: Flutter, Dart, Supabase,
   PostgreSQL, Row Level Security (the old "Firebase" tag was wrong; `pubspec.yaml` uses
   `supabase_flutter`). Media in `src/assets/projects_media/carkeep/`: four portrait phone
@@ -761,7 +764,7 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   Eliyahu.pdf". The CarKeep repository README still says "under active development" (owner's
   repo, not changed). No code changes.
 - **Real-Time Retail Trend Detection integration (done, owner-approved, commit "feat(portfolio):
-  complete retail trend detection case study", not pushed):**
+  complete retail trend detection case study", pushed):**
   slug, URL, order 3, `ai-ml` unchanged; `year` removed (owner request). Five-person team project
   for a Big Data Analysis course (no teammate names). Media: five landscape matplotlib charts in
   `src/assets/projects_media/retail-trend-detection/images/` (32-109 KB; no video). Seven
@@ -775,7 +778,7 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   from the dataset, never the prediction. The stage-2 chart is the two-stage experiment
   (threshold 0.35, candidate subset), captioned as such.
 - **NLP Sentiment Analysis integration (done, owner-approved, commit "feat(portfolio): complete
-  NLP sentiment analysis case study", not pushed):** slug `nlp-sentiment`, URL, order 4, `ai-ml`
+  NLP sentiment analysis case study", pushed):** slug `nlp-sentiment`, URL, order 4, `ai-ml`
   unchanged; title changed from "NLP
   Final Project" (so Retail's "Next" and CarKeep's "Previous" links show the new title);
   `year` removed (owner request). Course project, no team or authorship statements. Media:
@@ -791,7 +794,7 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   caption corrections: the LSTM error pattern holds overall (not in the shuffled run) and
   DistilBERT errors are "roughly balanced" (reversed is 60 vs 41). No code changes.
 - **Anyone Can Cook integration (done, owner-approved, commit "feat(portfolio): add Anyone Can
-  Cook case study and fix portrait gallery spacing", not pushed):** the eighth project. Slug `anyone-can-cook`, URL `/projects/anyone-can-cook/`, `applications`,
+  Cook case study and fix portrait gallery spacing", pushed):** the eighth project. Slug `anyone-can-cook`, URL `/projects/anyone-can-cook/`, `applications`,
   **`order: 1.5`** (owner decision: second, right after EasyFill, without renumbering the
   other projects; so EasyFill's "Next" and Computer Vision's "Previous" now link to it), no
   `year`, no `visual` (real screenshots and a poster cover every case). Personal project in a
@@ -813,14 +816,35 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   (205 Flutter, 148 backend). The same commit holds the portrait gallery spacing fix in
   `sections.css` (see Portrait media), the only code change. An optional smaller re-export of
   the video (about 540 wide, 30 fps, no audio) is the owner's choice.
-- **Pre-publication checkpoint (before any push, merge or deploy):** the Flickr30k photo
-  cleanup is implemented in the working files (see Computer Vision above), but **git history
-  still contains the three photos** in the unpushed local commit `f66c3f5` ("feat(portfolio):
-  complete computer vision case study"); `origin/portfolio-redesign` doesn't have them yet.
-  The GitHub repository is public, so pushing this branch as it is would publish them. Before
-  publishing, the owner must decide on a history cleanup (rewriting the unpushed commits) or
-  an alternative clean publishing approach (for example a fresh squashed branch). Never push
-  until this is resolved.
+- **Zoo Management System integration (implemented, owner-approved plan, not yet committed):**
+  the ninth project, a Java OOP course project. File `src/projects/zoo-management-system-oop.md`,
+  slug and URL `zoo-management-system-oop` (they must match the owner's media folder,
+  `src/assets/projects_media/zoo-management-system-oop/images/`), `software-engineering`
+  (owner decision; first added as `applications`), `order: 8`
+  (last; so Tactical AI Battle's "Next" links to it), no `year`, no `visual`. The OOP design
+  is the original console course project; the Swing dashboard is a **later extension**, never
+  part of the course submission. No AI or ML, no team or contribution statements, no
+  deployment or user claims, no bug-fix history. Media: 12 owner PNG screenshots (seven
+  1380×900 dashboard screens, four smaller dialogs; replaced once by the owner during the
+  work, same layouts); **8 are used**: explorer 01 overview (cover) → 06 aquarium → 05 cats →
+  02 penguins (landscape gallery); page 01 (Overview), 05 / 02 / 04 (three data-structure
+  sub-blocks), 06 (Dashboard section, full width) and a "Dashboard Actions" sub-block with a
+  row of 08 add-animal, 10 next-year, 09 feeding (one shared height, about 205px at 1440;
+  stacked on phones). 03, 07, 11 and 12 stay in the folder, unreferenced and untracked
+  (owner decision; the `src/assets` passthrough would still publish them if committed).
+  Six sections: Overview, Object-Oriented Design, Hand-Written Data Structures, The Swing
+  Dashboard, Technology & Methodology, Explore the Source Code. Owner-approved changes to the
+  supplied copy: Section 1 in third person ("A Swing dashboard was later added…"), and the
+  "Dashboard Actions" title. Copy checked against Zoo-OOP-Java-Project commit `ab2c880`
+  (the owner's local copy at `C:\Users\shaha\Projects\Zoo-OOP-Java-Project` has 49 tracked
+  files deleted in its working tree, including `src/gui`; never touch it). No code changes.
+- **Pushed to `origin/portfolio-redesign` (owner-approved backup, 2026-10-31, up to
+  `64b3d23`):** not a release; `main` and the live site are unchanged. The owner accepted
+  that the earlier Computer Vision commit `f66c3f5`, which still contains the three
+  Flickr30k photos, is now in the public branch history. The current files no longer
+  contain them. Before the site is published (merge and deploy), the owner may still decide
+  on a clean publishing approach (for example a fresh squashed branch); pushing further
+  commits to `portfolio-redesign` as backups is fine with approval.
 - `main` still serves the old hand-written site. This branch has no root `index.html`, so
   **merging before the Actions deploy exists would break the live site.**
 
@@ -828,14 +852,15 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
 
 3. **Dark design system.** 3A (tokens, surfaces) and 3B (hero, editor, hierarchy) are done.
    The palette will be re-evaluated after the layout redesign.
-4. **New sections.** 4A (Project Explorer) and 4B (project detail pages) are done; all eight
+4. **New sections.** 4A (Project Explorer) and 4B (project detail pages) are done; all nine
    projects have a page. About, Skills and Contact have been redesigned. Possible later: expanded
    About (education, hackathon, experience timeline), skills linked to projects.
-5. **Project content: done.** All eight project pages are complete (EasyFill, Anyone Can
-   Cook, Computer Vision, Pacman AI, Tactical AI Battle, CarKeep, Real-Time Retail Trend
-   Detection, NLP Sentiment Analysis), each with owner-approved copy and media in
-   `src/assets/projects_media/<slug>/`, all committed locally. Still open per project:
-   `role` / `team` where wanted.
+5. **Project content.** Nine project pages (EasyFill, Anyone Can Cook, Computer Vision,
+   Real-Time Retail Trend Detection, NLP Sentiment Analysis, CarKeep, Pacman AI, Tactical AI
+   Battle, Zoo Management System), each with owner-approved copy and media in
+   `src/assets/projects_media/<slug>/`. The first eight are committed and pushed to
+   `origin/portfolio-redesign`; Zoo awaits review and commit. More projects may follow.
+   Still open per project: `role` / `team` where wanted.
 6. **Polish:** accessibility (keyboard, focus, contrast), performance, Open Graph tags, favicon, 404, sitemap.
 7. **Launch (with approval only):** GitHub Actions deploy workflow, switch the Pages source to
    Actions, then merge.

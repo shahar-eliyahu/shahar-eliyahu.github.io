@@ -18,6 +18,7 @@
     const EASE = "cubic-bezier(0.22, 1, 0.36, 1)";
 
     const status = root.querySelector("[data-explorer-status]");
+    const filterRow = root.querySelector("[data-project-filters]");
     const filterButtons = [...root.querySelectorAll("[data-filter]")];
     const list = root.querySelector("[data-explorer-list]");
     const listItems = [...list.children];
@@ -86,22 +87,32 @@
         panel.tabIndex = -1;
     });
 
-    // Scroll the strip (phones/tablets) so the selected tab is in view,
-    // without moving the page vertically.
-    function revealTab(tab) {
-        if (desktop.matches || list.scrollWidth <= list.clientWidth) {
+    // Scroll a swipeable row (phones) so an item is in view, without moving
+    // the page vertically. Does nothing if the row doesn't scroll, the item is
+    // already clear of the faded edges (12px left, 28px right), or the row is
+    // already at that end (the first and last items rest in the fade there).
+    function revealIn(row, item) {
+        if (!row || !item || row.scrollWidth <= row.clientWidth) {
             return;
         }
 
-        const listBox = list.getBoundingClientRect();
-        const tabBox = tab.getBoundingClientRect();
+        const rowBox = row.getBoundingClientRect();
+        const itemBox = item.getBoundingClientRect();
+        const atStart = row.scrollLeft <= 0;
+        const atEnd = row.scrollLeft >= row.scrollWidth - row.clientWidth - 1;
 
-        // Keep clear of the faded edges (12px left, 28px right)
-        if (tabBox.left < listBox.left + 12 || tabBox.right > listBox.right - 28) {
-            list.scrollBy({
-                left: tabBox.left - listBox.left - 16,
+        if ((itemBox.left < rowBox.left + 12 && !atStart) || (itemBox.right > rowBox.right - 28 && !atEnd)) {
+            row.scrollBy({
+                left: itemBox.left - rowBox.left - 16,
                 behavior: reducedMotion.matches ? "auto" : "smooth",
             });
+        }
+    }
+
+    // The project strip (phones/tablets)
+    function revealTab(tab) {
+        if (!desktop.matches) {
+            revealIn(list, tab);
         }
     }
 
@@ -191,6 +202,8 @@
         filter = f;
 
         filterButtons.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.filter === f)));
+        // The chosen chip, whether tapped or restored from the URL (phones)
+        revealIn(filterRow, filterButtons.find((b) => b.dataset.filter === f));
         listItems.forEach((item) => (item.hidden = !matches(item, f)));
 
         // Number projects within the visible list (01, 02, …), keeping the order
