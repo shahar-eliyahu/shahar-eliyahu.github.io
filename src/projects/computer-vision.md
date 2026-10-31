@@ -16,20 +16,17 @@ links:
   github: https://github.com/shahar-eliyahu/Computer-Vision-Final-Project
 
 # Explorer gallery. Media: src/assets/projects_media/computer-vision/images/
-# All shown whole (`fit: contain`), so boxes, labels and chart text are never cropped.
+# Result charts, all shown whole (`fit: contain`), so chart text is never cropped.
 cover:
-  src: object-detection2.webp
-  alt: "Street scene under an archway with YOLO detection boxes: three people are marked person (a pedestrian in the alley, a woman holding flowers, and a partly visible person at the right edge), and a parked car and a bicycle are marked vehicle. The street signs and shopfront are not marked."
+  src: baseline_model_comparison.png
+  alt: "Bar chart of baseline validation precision, recall, mAP50 and mAP50-95 for YOLO26n, YOLO11n and YOLOv8n"
   fit: contain
 gallery:
-  - src: object-detection1.webp
-    alt: "Off-road motorcycle and rider on moorland, with a person box around the rider and a vehicle box around the motorcycle"
+  - src: final_model_comparison.png
+    alt: "Four bar charts comparing the original and vehicle-balanced datasets, both with augmentation: precision 0.827 vs 0.802, recall 0.716 vs 0.690, mAP50 0.786 vs 0.774, mAP50-95 0.564 vs 0.553"
     fit: contain
-  - src: object-detection3.webp
-    alt: "Mountain-bike rider jumping in a forest, with person and vehicle boxes around the rider and the bike"
-    fit: contain
-  - src: baseline_model_comparison.png
-    alt: "Bar chart of baseline validation precision, recall, mAP50 and mAP50-95 for YOLO26n, YOLO11n and YOLOv8n"
+  - src: confusion_matrix_final_model.png
+    alt: "Detection confusion matrix for the original dataset with augmentation, with predicted classes as rows and true classes as columns, including a background category"
     fit: contain
 
 # Detail page: /projects/computer-vision/. All copy and results are owner-approved
@@ -47,23 +44,6 @@ caseStudy:
         Three generations of nano-sized YOLO models (YOLOv8n, YOLO11n, and YOLO26n) were evaluated under a consistent baseline training configuration.
 
         The project also investigates how data augmentation and class balancing affect detection performance.
-      items:
-        - title: Object Detection Examples
-          text: Example detections produced by the trained YOLO26n model.
-          media:
-            - src: object-detection2.webp
-              alt: "Street scene under an archway with YOLO detection boxes: three people are marked person (a pedestrian in the alley, a woman holding flowers, and a partly visible person at the right edge), and a parked car and a bicycle are marked vehicle. The street signs and shopfront are not marked."
-              caption: Street scene with pedestrians, a parked car, and a bicycle.
-            - src: object-detection1.webp
-              alt: "Off-road motorcycle and rider on moorland, with a person box around the rider and a vehicle box around the motorcycle"
-              caption: Off-road motorcycle and rider.
-            - src: object-detection3.webp
-              alt: "Mountain-bike rider jumping in a forest, with person and vehicle boxes around the rider and the bike"
-              caption: Mountain-bike rider in a forest.
-          note: >-
-            Source images: Flickr30k dataset (Young et al., 2014). The photographs
-            remain the property of their original Flickr authors and are shown
-            here for non-commercial research demonstration.
 
     - id: dataset
       title: Building a Custom Object Detection Dataset

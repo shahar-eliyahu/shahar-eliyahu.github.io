@@ -694,16 +694,26 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   enlarges small images.
 - **Computer Vision integration (done, owner-approved, commit "feat(portfolio): complete computer
   vision case study", not pushed):** slug and URL stay
-  `computer-vision`; media in `src/assets/projects_media/computer-vision/images/` (detection
-  examples `object-detection2.webp` (cover, about 380 KB), `object-detection1.webp`,
-  `object-detection3.webp`; four charts as PNG). New title "Computer Vision: YOLO Object
+  `computer-vision`; media in `src/assets/projects_media/computer-vision/images/` (four charts
+  as PNG). New title "Computer Vision: YOLO Object
   Detection", subtitle, no `year`
   (owner request), eight custom sections, two Markdown tables. Numbers are the owner-approved
   chart values (the CV repository README shows 0.829 / 0.713 / 0.563 for "original + aug";
   the portfolio uses 0.827 / 0.716 / 0.564). Keep the baseline comparison (default Ultralytics
-  augmentation, 0.576) and the controlled runs (0.564) separate. The detection examples are
-  illustrations from YOLO26n trained with augmentation; never attribute them to a run or
-  dataset variant. Shared additions: photo rows, captions below strips, `note`, tables.
+  augmentation, 0.576) and the controlled runs (0.564) separate. Shared additions: photo rows,
+  captions below strips, `note`, tables.
+  - **Image cleanup (owner-approved Option A, implemented, not yet committed):** the three
+    Flickr30k detection photos (`object-detection1/2/3.webp`) are **no longer part of the
+    current portfolio files**: removed from `projects_media`, from the Explorer gallery and
+    from the Overview (the "Object Detection Examples" sub-block, its captions and the photo
+    credit note are gone; the Overview is text only). Reason: the photos belong to their
+    Flickr authors (one CC BY-NC-ND 2.0, one all rights reserved, one unverified), and the
+    Flickr30k terms don't grant redistribution. The originals are kept outside the repository
+    in `C:\Users\shaha\Projects\portfolio-private-media\computer-vision\` (SHA-256 verified).
+    Explorer gallery now: `baseline_model_comparison.png` (cover) →
+    `final_model_comparison.png` → `confusion_matrix_final_model.png`, all `fit: contain`.
+    The Flickr30k *dataset* references (dataset text, the "Flickr30k" tool badge, the
+    annotation limitation) stay. Don't re-add Flickr30k photos without verified rights.
 - **Pacman AI integration (done, owner-approved, commit "feat(portfolio): complete pacman ai
   case study", not pushed):** slug, URL, order 6,
   `ai-ml`, no year (unchanged). Media in `src/assets/projects_media/pacman-ai/`:
@@ -771,10 +781,14 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   reviews" across orders and never claim data order caused a difference. Two owner-approved
   caption corrections: the LSTM error pattern holds overall (not in the shuffled run) and
   DistilBERT errors are "roughly balanced" (reversed is 60 vs 41). No code changes.
-- **Pre-publication checkpoint (before any merge or deploy):** verify redistribution rights for
-  the three Flickr30k photographs in the Computer Vision examples (the page carries a source
-  credit, which doesn't grant rights by itself). (The earlier 2.9 MB PNG cover was replaced by
-  the owner's optimized `object-detection2.webp`, about 380 KB, within the 500 KB guideline.)
+- **Pre-publication checkpoint (before any push, merge or deploy):** the Flickr30k photo
+  cleanup is implemented in the working files (see Computer Vision above), but **git history
+  still contains the three photos** in the unpushed local commit `f66c3f5` ("feat(portfolio):
+  complete computer vision case study"); `origin/portfolio-redesign` doesn't have them yet.
+  The GitHub repository is public, so pushing this branch as it is would publish them. Before
+  publishing, the owner must decide on a history cleanup (rewriting the unpushed commits) or
+  an alternative clean publishing approach (for example a fresh squashed branch). Never push
+  until this is resolved.
 - `main` still serves the old hand-written site. This branch has no root `index.html`, so
   **merging before the Actions deploy exists would break the live site.**
 
