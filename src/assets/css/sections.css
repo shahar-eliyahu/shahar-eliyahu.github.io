@@ -2409,8 +2409,12 @@ html:not(.js) .explorer-panel + .explorer-panel {
 }
 
 /* Items: feature rows and video cards */
+/* Same single column as .case-body: minmax(0) keeps wide content inside an
+   item (a table) scrolling in its own box instead of widening every item */
 .case-items {
     display: grid;
+
+    grid-template-columns: minmax(0, 1fr);
 
     gap: var(--space-5);
 }

@@ -566,7 +566,11 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   - Items: `has-portrait-media` (all images portrait) is the only case that puts media beside
     the text (36rem+); landscape images and rows sit below the text. `.case-body` and image
     items use `grid-template-columns: minmax(0, 1fr)`, otherwise a wide table stretches the
-    section instead of scrolling (found at 390px). A single image inside an item (not a row,
+    section instead of scrolling (found at 390px). `.case-items` got the same single
+    `minmax(0, 1fr)` column in the Retail round (owner-approved): a table inside an item had
+    widened the whole item list on phones (page overflow of 20-87px at 390-320px) instead of
+    scrolling in its own box. The video-card two-column rule still overrides it; other pages
+    were pixel-checked unchanged. A single image inside an item (not a row,
     not portrait) is capped at `34rem × --media-aspect` wide, i.e. 34rem tall (Pacman's fleeing
     screenshot: 500×542); the CV item charts are wide enough never to hit it. Every strip item
     now carries `--media-aspect` (no visual change for EasyFill).
@@ -737,6 +741,20 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   Owner approved publishing vehicle number 34856793 (fictional) and the filename "Shahar
   Eliyahu.pdf". The CarKeep repository README still says "under active development" (owner's
   repo, not changed). No code changes.
+- **Real-Time Retail Trend Detection integration (done, owner-approved, commit "feat(portfolio):
+  complete retail trend detection case study", not pushed):**
+  slug, URL, order 3, `ai-ml` unchanged; `year` removed (owner request). Five-person team project
+  for a Big Data Analysis course (no teammate names). Media: five landscape matplotlib charts in
+  `src/assets/projects_media/retail-trend-detection/images/` (32-109 KB; no video). Seven
+  sections: two Markdown tables (validation, test; values match the repository README rounded
+  to three decimals), workflow as a numbered list, three chart sub-blocks, a "Two-Stage
+  Experiment" sub-block and a "Test Results" sub-block. Copy checked against the repository:
+  topic `retail_stream`, simulated bursty replay of Online Retail II on one machine,
+  `applyInPandasWithState`, history = each product's last 60 days *with activity*, exactly 45
+  features (`numFeatures 45`), 10 s trigger, 1-day watermark, checkpointing, single Random
+  Forest at 0.25. The streaming output rows are model alerts; their `Y` is the heuristic label
+  from the dataset, never the prediction. The stage-2 chart is the two-stage experiment
+  (threshold 0.35, candidate subset), captioned as such.
 - **Pre-publication checkpoint (before any merge or deploy):** verify redistribution rights for
   the three Flickr30k photographs in the Computer Vision examples (the page carries a source
   credit, which doesn't grant rights by itself). (The earlier 2.9 MB PNG cover was replaced by
