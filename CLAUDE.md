@@ -709,6 +709,19 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   Subtitle, `type` "Classical AI & Search Algorithms Project", five sections. Copy checked
   against the PacMan-CPP source: classical search-based game AI, no machine learning; ties go to
   the cell nearer the target coin and only the previous cell is avoided (no longer history).
+- **Tactical AI Battle integration (done, owner-approved, commit "feat(portfolio): complete
+  tactical ai battle case study", not pushed):** slug, URL,
+  order 7 (last), `ai-ml`, no year (unchanged). Media in
+  `src/assets/projects_media/tactical-ai-battle/`: `battle.png` (cover), `visibility.png`,
+  `danger_map.png` (1088×800, about 20 KB each), `videos/Demo.mp4` (owner's web-optimized
+  re-export: 537 KB, 21.9 s, 1278×940 (decodes 1280×941), H.264 High 4.0 + AAC, fast start, no
+  window title bar) and `tactical-video-poster.webp` (frame at 6.6 s with two grenade blasts,
+  700×515, 36 KB). Seven sections, built only from existing components (no code changes). Copy
+  checked against the Tactical-AI-Battle C++ source; owner-approved corrections: rocks and
+  trees (not water) block sight and fire; the commander computes and merges every member's view
+  cone and receives reports of spotted enemies, wounds and low ammo, and assigns the medic and
+  provider; BFS cover is judged against known enemies; one shared "Dynamic Danger Map". "Finite
+  State Machines (FSM)" is spelled out on first use. Classical game AI only, no machine learning.
 - **Pre-publication checkpoint (before any merge or deploy):** verify redistribution rights for
   the three Flickr30k photographs in the Computer Vision examples (the page carries a source
   credit, which doesn't grant rights by itself). (The earlier 2.9 MB PNG cover was replaced by
