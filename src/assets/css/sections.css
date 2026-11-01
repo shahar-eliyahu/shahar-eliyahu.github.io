@@ -1,0 +1,3960 @@
+/*
+ * SECTIONS
+ * Homepage sections: hero, about, projects, skills, contact and footer.
+ * Per-project illustrations live in visuals.css.
+ */
+
+
+/* HERO */
+
+.hero {
+    --hx: 70%;
+    --hy: 35%;
+
+    position: relative;
+
+    display: flex;
+
+    min-height: calc(100vh - var(--nav-height));
+
+    overflow: hidden;
+
+    align-items: center;
+
+    border-bottom: 1px solid var(--color-border);
+
+    isolation: isolate;
+}
+
+.hero-grid {
+    position: absolute;
+
+    inset: 0;
+
+    z-index: -3;
+
+    background-image:
+        linear-gradient(color-mix(in srgb, var(--color-primary) 8%, transparent) 1px, transparent 1px),
+        linear-gradient(90deg, color-mix(in srgb, var(--color-primary) 8%, transparent) 1px, transparent 1px);
+
+    background-size: 56px 56px;
+
+    -webkit-mask-image: radial-gradient(ellipse at 65% 40%, black 15%, transparent 72%);
+    mask-image: radial-gradient(ellipse at 65% 40%, black 15%, transparent 72%);
+}
+
+.hero-spotlight {
+    position: absolute;
+
+    inset: 0;
+
+    z-index: -2;
+
+    background: radial-gradient(
+        520px circle at var(--hx) var(--hy),
+        color-mix(in srgb, var(--color-primary-bright) 14%, transparent),
+        transparent 60%
+    );
+
+    pointer-events: none;
+}
+
+.hero-blob {
+    position: absolute;
+
+    z-index: -1;
+
+    border-radius: 50%;
+
+    filter: blur(70px);
+
+    pointer-events: none;
+}
+
+.hero-blob-one {
+    width: 540px;
+    height: 540px;
+
+    right: -140px;
+    top: -160px;
+
+    background: color-mix(in srgb, var(--color-primary) 20%, transparent);
+
+    animation: drift-one 20s ease-in-out infinite;
+}
+
+.hero-blob-two {
+    width: 340px;
+    height: 340px;
+
+    right: 20%;
+    bottom: -170px;
+
+    background: color-mix(in srgb, var(--color-accent) 18%, transparent);
+
+    animation: drift-two 24s ease-in-out infinite;
+}
+
+.hero-layout {
+    position: relative;
+
+    z-index: 2;
+
+    display: grid;
+
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
+
+    gap: var(--space-7);
+
+    padding: 110px 0;
+
+    align-items: center;
+}
+
+.hero-content {
+    min-width: 0;
+}
+
+.hero-label {
+    display: flex;
+
+    width: fit-content;
+
+    gap: 10px;
+
+    margin: 0 0 var(--space-6);
+
+    padding: 7px 14px;
+
+    align-items: center;
+
+    border: 1px solid color-mix(in srgb, var(--color-accent) 35%, transparent);
+    border-radius: var(--radius-pill);
+
+    background: color-mix(in srgb, var(--color-surface) 60%, transparent);
+
+    color: var(--color-accent);
+
+    font-family: var(--font-mono);
+
+    font-size: 0.78rem;
+
+    letter-spacing: 0.14em;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+
+    border-radius: 50%;
+
+    background: var(--color-accent);
+
+    animation: pulse 2.2s ease-out infinite;
+}
+
+.hero h1 {
+    max-width: 900px;
+
+    margin: 0;
+
+    color: var(--color-text);
+
+    font-family: var(--font-display);
+
+    font-size: var(--text-h1);
+
+    font-weight: 600;
+
+    line-height: var(--leading-display);
+
+    letter-spacing: var(--tracking-display);
+}
+
+
+.hero-subtitle {
+    max-width: 36ch;
+
+    margin: var(--space-6) 0 0;
+
+    color: var(--color-text-secondary);
+
+    font-size: var(--text-lead);
+
+    line-height: var(--leading-lead);
+
+    /* No single word left alone on the last line (phones) */
+    text-wrap: balance;
+}
+
+.hero-buttons {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: var(--space-3);
+
+    margin-top: var(--space-7);
+
+    align-items: center;
+}
+
+/* Profile links: a quieter row under the main actions. The negative margin
+   lines the first icon up with the buttons above (ghost padding is 16px). */
+.hero-links {
+    display: flex;
+
+    flex: 1 1 100%;
+
+    gap: var(--space-1);
+
+    margin-left: -16px;
+}
+
+
+/* HERO CODE EDITOR
+ * Markup: partials/sections/hero.njk. Code: lib/code-samples.js.
+ * Behaviour (tabs, typing): assets/js/editor.js. */
+
+.hero-editor {
+    --gutter: 3rem;
+
+    position: relative;
+
+    min-width: 0;
+
+    overflow: hidden;
+
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+
+    background: color-mix(in srgb, var(--color-surface) 82%, transparent);
+
+    box-shadow: var(--shadow-card);
+
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+}
+
+.hero-editor::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+    right: 0;
+
+    height: 1px;
+
+    background: var(--gradient-accent-line);
+
+    opacity: 0.7;
+}
+
+.editor-bar {
+    display: flex;
+
+    min-height: 48px;
+
+    gap: var(--space-4);
+
+    padding: 0 var(--space-4) 0 18px;
+
+    align-items: stretch;
+
+    border-bottom: 1px solid var(--color-border);
+}
+
+.editor-dots {
+    display: flex;
+
+    gap: 6px;
+
+    align-items: center;
+}
+
+.editor-dots i {
+    width: 10px;
+    height: 10px;
+
+    border-radius: 50%;
+
+    background: var(--color-border-strong);
+}
+
+/* Tabs need JavaScript; without it the default language is shown alone */
+.editor-tabs {
+    display: none;
+
+    gap: 2px;
+}
+
+.js .editor-tabs {
+    display: flex;
+}
+
+.editor-tab {
+    position: relative;
+
+    padding: 0 14px;
+
+    border: 0;
+
+    background: transparent;
+
+    color: var(--color-text-muted);
+
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+
+    cursor: pointer;
+
+    transition: color var(--duration-fast) ease, background var(--duration-fast) ease;
+}
+
+.editor-tab:hover {
+    color: var(--color-text);
+}
+
+.editor-tab[aria-selected="true"] {
+    background: color-mix(in srgb, var(--color-surface-raised) 80%, transparent);
+
+    color: var(--color-text);
+}
+
+.editor-tab[aria-selected="true"]::after {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    right: 0;
+    bottom: -1px;
+
+    height: 2px;
+
+    background: var(--gradient-accent-line);
+}
+
+.editor-tab:focus-visible {
+    outline-offset: -3px;
+}
+
+.editor-title {
+    min-width: 0;
+
+    margin-left: auto;
+
+    align-self: center;
+
+    overflow: hidden;
+
+    color: var(--color-text-muted);
+
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+/* All languages share one grid cell, so the panel always has the height
+   of the longest snippet and never jumps while typing or switching. */
+.editor-stack {
+    display: grid;
+
+    grid-template-columns: minmax(0, 1fr);
+
+    padding: var(--space-5) var(--space-5) var(--space-5) 0;
+}
+
+.editor-code {
+    grid-area: 1 / 1;
+
+    margin: 0;
+
+    counter-reset: line;
+
+    color: var(--color-code-field);
+
+    font-family: var(--font-mono);
+    font-size: clamp(0.76rem, 0.45rem + 0.45vw, 0.86rem);
+
+    line-height: 1.85;
+
+    /* Source lines are never broken; a long one scrolls inside its own panel */
+    white-space: pre;
+
+    overflow-x: auto;
+
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border-strong) transparent;
+
+    tab-size: 4;
+}
+
+.editor-code code {
+    display: block;
+
+    font: inherit;
+}
+
+/* Inactive languages keep their size (for a stable height) but are hidden */
+.editor-code[role="tabpanel"]:not(.is-active) {
+    visibility: hidden;
+}
+
+.editor-code:focus-visible {
+    outline-offset: 4px;
+}
+
+/* Typing overlay (aria-hidden copy). The real code underneath stays in the
+   accessibility tree and is only made invisible while typing. */
+.editor-typing {
+    display: none;
+
+    overflow-x: hidden;
+
+    pointer-events: none;
+}
+
+.hero-editor.is-typing .editor-typing {
+    display: block;
+}
+
+.hero-editor.is-typing .editor-code.is-active {
+    opacity: 0;
+}
+
+.code-line {
+    position: relative;
+
+    display: block;
+
+    min-height: 1.85em;
+
+    padding-left: var(--gutter);
+
+    counter-increment: line;
+}
+
+.code-line::before {
+    content: counter(line);
+
+    position: absolute;
+
+    left: 0;
+
+    width: calc(var(--gutter) - 1rem);
+
+    color: var(--color-code-punct);
+
+    text-align: right;
+}
+
+.code-line.is-pending::before {
+    visibility: hidden;
+}
+
+.tok-keyword {
+    color: var(--color-code-keyword);
+}
+
+.tok-type {
+    color: var(--color-code-type);
+}
+
+.tok-name {
+    color: var(--color-code-name);
+}
+
+.tok-field {
+    color: var(--color-code-field);
+}
+
+.tok-string {
+    color: var(--color-code-string);
+}
+
+.tok-punct {
+    color: var(--color-code-punct);
+}
+
+.tok-meta {
+    color: var(--color-code-meta);
+}
+
+.code-caret {
+    display: inline-block;
+
+    width: 2px;
+    height: 1.2em;
+
+    margin-left: 1px;
+
+    vertical-align: text-bottom;
+
+    background: var(--color-accent);
+
+    animation: caret-blink 1.1s steps(1) infinite;
+}
+
+/* Solid caret while typing, like a real editor */
+.editor-typing .code-caret {
+    animation: none;
+}
+
+
+/* ABOUT
+ * Phones and tablet: heading above the text. Desktop (1024px+): heading in a
+ * narrow column beside the text, so the line length stays comfortable without
+ * leaving half the row empty. The tag column in Skills uses the same grid, so
+ * both sections line up. The basketball sits under the heading on desktop and
+ * beside it on tablets; phones (below 768px) don't show it. */
+
+.about-text {
+    position: relative;
+
+    max-width: var(--measure-body);
+
+    font-size: var(--text-body);
+
+    padding-left: var(--space-5);
+}
+
+/* Thin accent line along the text */
+.about-text::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 0.4em;
+    bottom: 0.4em;
+
+    width: 2px;
+
+    border-radius: 2px;
+
+    background: linear-gradient(
+        180deg,
+        var(--color-primary),
+        color-mix(in srgb, var(--color-accent-strong) 25%, transparent)
+    );
+}
+
+.about-text p {
+    margin: 0;
+
+    color: var(--color-text-body);
+
+    font-size: var(--text-body);
+
+    line-height: var(--leading-body);
+}
+
+.about-text p + p {
+    margin-top: var(--space-4);
+}
+
+/* The first paragraph introduces the section: a slightly larger lead */
+.about-text p:first-child {
+    color: var(--color-text-secondary);
+
+    font-size: var(--text-lead);
+
+    line-height: var(--leading-lead);
+}
+
+.about-text strong {
+    color: var(--color-text);
+
+    font-weight: 600;
+}
+
+/* Basketball: thin lines, low opacity. Paths: partials/about-ball.njk */
+.about-ball {
+    --ball-line: 1.6;
+
+    display: none;
+
+    pointer-events: none;
+}
+
+.about-ball-stop-a {
+    stop-color: var(--color-primary-bright);
+}
+
+.about-ball-stop-b {
+    stop-color: var(--color-accent);
+}
+
+.ball-line {
+    stroke-width: var(--ball-line);
+}
+
+.ball-outline {
+    stroke-opacity: 0.6;
+}
+
+.ball-seam {
+    stroke-width: calc(var(--ball-line) * 0.8);
+    stroke-opacity: 0.55;
+}
+
+.ball-hidden {
+    stroke-width: calc(var(--ball-line) * 0.7);
+    stroke-opacity: 0.14;
+}
+
+.ball-hatch {
+    stroke-width: calc(var(--ball-line) * 0.7);
+    stroke-opacity: 0.2;
+}
+
+.ball-tick {
+    stroke-opacity: 0.35;
+}
+
+/* Drawn once (about 1.5s in total), then static. Without JavaScript or with
+   reduced motion, the lines are simply complete. */
+@media (prefers-reduced-motion: no-preference) {
+
+    .js .about-ball .ball-line {
+        stroke-dasharray: 1 1;
+        stroke-dashoffset: 1;
+
+        transition: stroke-dashoffset 0.7s ease-in-out;
+    }
+
+    .js .about-ball.is-drawn .ball-line {
+        stroke-dashoffset: 0;
+    }
+
+    .js .about-ball .ball-hidden {
+        transition-delay: 0.2s;
+    }
+
+    .js .about-ball .ball-seam {
+        transition-delay: 0.35s;
+    }
+
+    .js .about-ball .ball-seam-side {
+        transition-delay: 0.55s;
+    }
+
+    .js .about-ball .ball-hatch,
+    .js .about-ball .ball-tick {
+        transition-delay: 0.8s;
+    }
+}
+
+@media (min-width: 768px) {
+
+    .about-aside {
+        display: flex;
+
+        margin-bottom: var(--space-2);
+
+        align-items: flex-start;
+        justify-content: space-between;
+
+        gap: var(--space-5);
+    }
+
+    .about-aside .section-title {
+        margin-bottom: 0;
+    }
+
+    .about-ball {
+        display: block;
+
+        flex: none;
+
+        width: 112px;
+        height: 112px;
+    }
+}
+
+@media (min-width: 1024px) {
+
+    .about-layout {
+        display: grid;
+
+        grid-template-columns: var(--split-columns);
+
+        gap: var(--space-8);
+
+        align-items: start;
+    }
+
+    .about-layout .section-title {
+        margin-bottom: 0;
+    }
+
+    .about-aside {
+        display: block;
+
+        margin-bottom: 0;
+    }
+
+    .about-ball {
+        --ball-line: 1;
+
+        width: min(100%, 216px);
+        height: auto;
+
+        margin-top: var(--space-6);
+    }
+
+    /* Side by side, the content is short, so the usual 104px under it (plus
+       the next section's 104px) read as a gap; 72px is the phone rhythm */
+    .about-section {
+        padding-bottom: 72px;
+    }
+}
+
+
+/* PROJECTS: PROJECT EXPLORER
+ * Markup: partials/sections/projects.njk, project/panel.njk, project/gallery.njk.
+ * Behaviour: assets/js/projects.js. Written mobile first: the base rules are
+ * the phone layout, `min-width` queries add the tablet and desktop layouts. */
+
+.projects-section {
+    background: var(--color-bg-alt);
+}
+
+
+/* ILLUSTRATIONS (media fallback) */
+
+.project-visual {
+    position: absolute;
+
+    inset: 0;
+
+    overflow: hidden;
+
+    background: var(--viz-card);
+
+    /* Lets illustrations adapt to short strips (@container in visuals.css) */
+    container-type: size;
+}
+
+/* No illustration either: a quiet grid pattern with the title */
+.project-visual.is-fallback {
+    background:
+        linear-gradient(color-mix(in srgb, var(--color-primary) 7%, transparent) 1px, transparent 1px),
+        linear-gradient(90deg, color-mix(in srgb, var(--color-primary) 7%, transparent) 1px, transparent 1px),
+        radial-gradient(circle at 70% 30%, color-mix(in srgb, var(--color-accent-strong) 14%, transparent), transparent 55%),
+        var(--viz-card);
+
+    background-size: 28px 28px, 28px 28px, auto, auto;
+}
+
+.visual-label {
+    position: absolute;
+
+    top: 18px;
+    left: 20px;
+
+    z-index: 3;
+
+    color: var(--color-text-muted);
+
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+
+    letter-spacing: 0.08em;
+}
+
+.visual-center {
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    z-index: 3;
+
+    width: 80%;
+
+    transform: translate(-50%, -50%);
+
+    text-align: center;
+}
+
+.visual-center strong {
+    display: block;
+
+    font-family: var(--font-display);
+    font-size: clamp(1.4rem, 1.1rem + 1.2vw, 2rem);
+
+    line-height: 1.1;
+}
+
+/* The title sits right below the media, so the headline only shows on the
+   plain fallback panel. */
+.project-visual:not(.is-fallback) .visual-center {
+    display: none;
+}
+
+/* Illustration behind a video's play button */
+.project-visual.is-backdrop {
+    opacity: 0.45;
+}
+
+
+/* FILTERS */
+
+/* Phones: one swipeable row (wraps from 651px up) */
+.project-filters {
+    display: none;
+
+    gap: var(--space-2);
+
+    margin: 0 calc(var(--space-2) * -1);
+    padding: var(--space-1) var(--space-2) var(--space-2);
+
+    overflow-x: auto;
+
+    scrollbar-width: none;
+}
+
+.js .project-filters {
+    display: flex;
+
+    margin-bottom: var(--space-3);
+}
+
+.filter-chip {
+    flex: none;
+}
+
+/* Swipeable strips fade at the edges so they read as scrollable */
+.project-filters,
+.explorer-list {
+    -webkit-mask-image: linear-gradient(90deg, transparent, black 12px, black calc(100% - 28px), transparent);
+    mask-image: linear-gradient(90deg, transparent, black 12px, black calc(100% - 28px), transparent);
+}
+
+.filter-chip {
+    display: inline-flex;
+
+    gap: var(--space-2);
+
+    min-height: 44px;
+
+    padding: 0 var(--space-4);
+
+    align-items: center;
+
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-pill);
+
+    background: transparent;
+
+    color: var(--color-text-secondary);
+
+    font-size: var(--text-sm);
+    font-weight: 500;
+
+    cursor: pointer;
+
+    transition:
+        background var(--duration-fast) ease,
+        border-color var(--duration-fast) ease,
+        color var(--duration-fast) ease;
+}
+
+.filter-chip:hover {
+    border-color: var(--color-primary);
+
+    color: var(--color-text);
+}
+
+.filter-chip[aria-pressed="true"] {
+    border-color: color-mix(in srgb, var(--color-primary) 60%, transparent);
+
+    background: color-mix(in srgb, var(--color-primary) 18%, transparent);
+
+    color: var(--color-text);
+}
+
+.filter-count {
+    min-width: 1.6em;
+
+    padding: 1px 6px;
+
+    border-radius: var(--radius-pill);
+
+    background: var(--color-surface-raised);
+
+    color: var(--color-text-secondary);
+
+    font-family: var(--font-mono);
+    font-size: var(--text-mono);
+
+    text-align: center;
+}
+
+.filter-chip[aria-pressed="true"] .filter-count {
+    background: color-mix(in srgb, var(--color-primary) 32%, transparent);
+
+    color: var(--color-text);
+}
+
+
+/* EXPLORER LAYOUT
+ * Phones and tablets: picker strip above the preview.
+ * Desktop (1024px+): vertical picker beside the preview. */
+
+.explorer {
+    display: grid;
+
+    gap: var(--space-4);
+}
+
+.explorer-picker {
+    min-width: 0;
+}
+
+
+/* PROJECT PICKER: horizontal, swipeable strip of full project names */
+
+.explorer-list {
+    display: flex;
+
+    gap: var(--space-2);
+
+    margin: 0 calc(var(--space-2) * -1);
+    padding: var(--space-1) var(--space-2) var(--space-3);
+
+    overflow-x: auto;
+
+    list-style: none;
+
+    scroll-snap-type: x proximity;
+    scroll-padding-inline: var(--space-2);
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border-strong) transparent;
+}
+
+.explorer-list > li {
+    flex: none;
+
+    scroll-snap-align: start;
+}
+
+.explorer-list > li[hidden] {
+    display: none;
+}
+
+.explorer-tab {
+    position: relative;
+
+    display: flex;
+
+    gap: var(--space-2);
+
+    min-height: 44px;
+
+    padding: 10px 16px;
+
+    align-items: center;
+
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-pill);
+
+    background: var(--color-surface);
+
+    color: var(--color-text-secondary);
+
+    font-size: 0.9375rem;
+    font-weight: 500;
+
+    text-decoration: none;
+
+    white-space: nowrap;
+
+    transition:
+        background var(--duration-fast) ease,
+        border-color var(--duration-fast) ease,
+        color var(--duration-fast) ease;
+}
+
+.explorer-tab:hover {
+    border-color: var(--color-primary);
+
+    color: var(--color-text);
+}
+
+.explorer-tab[aria-selected="true"] {
+    border-color: color-mix(in srgb, var(--color-primary) 70%, transparent);
+
+    background: color-mix(in srgb, var(--color-primary) 20%, var(--color-surface));
+
+    color: var(--color-text);
+}
+
+.explorer-tab:focus-visible {
+    outline-offset: 2px;
+}
+
+.explorer-tab-index {
+    color: var(--color-accent);
+
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+}
+
+/* The selected pill's blue tint needs a lighter violet to stay readable */
+.explorer-tab[aria-selected="true"] .explorer-tab-index {
+    color: var(--color-accent-bright);
+}
+
+.explorer-tab-category {
+    display: none;
+}
+
+
+/* PREVIEW PANEL */
+
+.explorer-panels {
+    min-width: 0;
+}
+
+.explorer-panel {
+    overflow: hidden;
+
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+
+    background: var(--color-surface);
+
+    box-shadow: var(--shadow-card);
+
+    scroll-margin-top: calc(var(--nav-height) + var(--space-4));
+}
+
+/* With JavaScript only the selected project is shown (no-JS: all, stacked) */
+.js .explorer-panel:not(.is-selected) {
+    display: none;
+}
+
+/* Spacing for the stacked no-JS layout only (hidden panels are still siblings) */
+html:not(.js) .explorer-panel + .explorer-panel {
+    margin-top: var(--space-5);
+}
+
+
+/* GALLERY */
+
+.gallery-stage {
+    position: relative;
+
+    aspect-ratio: 16 / 10;
+
+    overflow: hidden;
+
+    background: var(--viz-card);
+
+    /* Vertical drags scroll the page; horizontal swipes change media */
+    touch-action: pan-y;
+}
+
+/* No real media yet: the illustration gets a compact strip */
+.gallery.is-illustration-only .gallery-stage {
+    aspect-ratio: 5 / 2;
+}
+
+/* Portrait screenshots only: a square stage on phones so they stay readable
+   (beside the text from 651px, see .has-portrait-media) */
+.gallery.is-portrait:not(.is-strip) .gallery-stage {
+    aspect-ratio: 1 / 1;
+}
+
+.gallery.is-portrait .gallery-thumb {
+    width: 48px;
+    height: 72px;
+}
+
+.gallery.is-portrait .gallery-thumb img {
+    object-position: center top;
+}
+
+/* Strip (case-study sections): every image visible at its own aspect ratio,
+   side by side, shrinking together on narrow screens. Each opens the lightbox. */
+.gallery.is-strip .gallery-stage {
+    display: flex;
+
+    gap: var(--space-3);
+
+    aspect-ratio: auto;
+
+    overflow: visible;
+
+    background: none;
+
+    touch-action: auto;
+}
+
+.gallery.is-strip .gallery-item {
+    position: relative;
+
+    inset: auto;
+
+    flex: 0 1 var(--media-width, 100%);
+
+    min-width: 0;
+    max-width: 100%;
+}
+
+/* The explicit width holds the space while an image is still loading: without it
+   the item collapses, the page grows as images arrive, and links to a section land
+   short because the browser has already aimed its jump. */
+.gallery.is-strip.is-portrait .gallery-item {
+    flex-basis: var(--strip-portrait-width, 170px);
+
+    width: var(--strip-portrait-width, 170px);
+}
+
+.gallery.is-strip .gallery-zoom {
+    position: relative;
+
+    inset: auto;
+
+    overflow: hidden;
+
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-md);
+
+    background: var(--viz-card);
+
+    transition: border-color var(--duration-fast) ease;
+}
+
+.gallery.is-strip .gallery-zoom:hover {
+    border-color: var(--color-primary);
+}
+
+.gallery.is-strip .gallery-image {
+    display: block;
+
+    height: auto;
+
+    aspect-ratio: var(--media-ratio, auto);
+
+    object-fit: contain;
+}
+
+/* Strip captions sit below their image (not over it) */
+.gallery.is-strip .gallery-caption {
+    position: static;
+
+    max-width: none;
+
+    margin: var(--space-2) 0 0;
+    padding: 0;
+
+    background: none;
+
+    color: var(--color-text-muted);
+
+    font-size: var(--text-sm);
+
+    line-height: var(--leading-ui);
+}
+
+/* Row (several images, not all portrait): one shared height, each image as
+   wide as its aspect ratio allows, so photos line up without cropping.
+   Narrow sections stack them (see @container case below). */
+.gallery.is-strip.is-row .gallery-stage {
+    align-items: flex-start;
+}
+
+.gallery.is-strip.is-row .gallery-item {
+    flex: var(--media-aspect, 1) 1 0%;
+}
+
+.gallery-item {
+    position: absolute;
+
+    inset: 0;
+}
+
+.gallery-item[hidden] {
+    display: none;
+}
+
+.gallery-zoom {
+    position: absolute;
+
+    inset: 0;
+
+    display: block;
+
+    cursor: zoom-in;
+}
+
+.gallery-image {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+    object-position: center top;
+}
+
+/* fit: contain. Portrait phone screenshots and diagrams are shown whole */
+.gallery-image.is-contain {
+    padding: var(--space-3);
+
+    object-fit: contain;
+
+    background:
+        radial-gradient(circle at 50% 40%, color-mix(in srgb, var(--color-primary) 14%, transparent), transparent 65%),
+        var(--viz-card);
+}
+
+.gallery-caption {
+    position: absolute;
+
+    left: var(--space-3);
+    bottom: var(--space-3);
+
+    max-width: calc(100% - 7rem);
+
+    margin: 0;
+    padding: 4px 10px;
+
+    border-radius: var(--radius-sm);
+
+    background: color-mix(in srgb, var(--color-bg) 85%, transparent);
+
+    color: var(--color-text-secondary);
+
+    font-size: 0.8rem;
+}
+
+.gallery-count {
+    position: absolute;
+
+    right: var(--space-3);
+    bottom: var(--space-3);
+
+    margin: 0;
+    padding: 3px 10px;
+
+    border-radius: var(--radius-pill);
+
+    background: color-mix(in srgb, var(--color-bg) 85%, transparent);
+
+    color: var(--color-text-secondary);
+
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+}
+
+/* Previous / next (JavaScript only) */
+.gallery-nav {
+    position: absolute;
+
+    top: 50%;
+
+    z-index: 4;
+
+    display: none;
+
+    width: 44px;
+    height: 44px;
+
+    place-items: center;
+
+    border: 1px solid var(--color-border-strong);
+    border-radius: 50%;
+
+    background: color-mix(in srgb, var(--color-bg) 80%, transparent);
+
+    color: var(--color-text);
+
+    cursor: pointer;
+
+    transform: translateY(-50%);
+
+    transition: background var(--duration-fast) ease, border-color var(--duration-fast) ease;
+}
+
+.js .gallery-nav {
+    display: grid;
+}
+
+.gallery-nav .icon {
+    width: 20px;
+    height: 20px;
+}
+
+.gallery-nav.is-prev {
+    left: var(--space-3);
+}
+
+.gallery-nav.is-prev .icon,
+.lightbox-nav.is-prev .icon {
+    transform: rotate(180deg);
+}
+
+.gallery-nav.is-next {
+    right: var(--space-3);
+}
+
+.gallery-nav:hover {
+    border-color: var(--color-primary);
+
+    background: var(--color-surface-raised);
+}
+
+/* Video: poster (or illustration) with a play button; the player replaces it */
+.gallery-video {
+    position: absolute;
+
+    inset: 0;
+
+    display: grid;
+
+    place-items: center;
+}
+
+/* A frame from the video, shown whole and letterboxed exactly like the
+   player that replaces it (so nothing jumps or gets cropped on Play) */
+.gallery-poster {
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+
+    background: var(--palette-black);
+}
+
+.gallery-play {
+    position: relative;
+
+    z-index: 4;
+
+    display: inline-flex;
+
+    gap: var(--space-2);
+
+    min-height: 52px;
+
+    padding: 0 var(--space-5);
+
+    align-items: center;
+
+    border-radius: var(--radius-pill);
+
+    background: var(--gradient-brand);
+
+    color: var(--color-on-primary);
+
+    font-weight: 600;
+
+    text-decoration: none;
+
+    box-shadow: var(--shadow-primary);
+
+    transition: transform var(--duration-fast) ease;
+}
+
+.gallery-play .icon {
+    width: 22px;
+    height: 22px;
+}
+
+.gallery-play:hover {
+    transform: scale(1.04);
+}
+
+.gallery-video-source {
+    position: absolute;
+
+    left: var(--space-3);
+    bottom: var(--space-3);
+
+    z-index: 4;
+
+    display: inline-flex;
+
+    gap: 4px;
+
+    padding: 4px 10px;
+
+    align-items: center;
+
+    border-radius: var(--radius-sm);
+
+    background: color-mix(in srgb, var(--color-bg) 85%, transparent);
+
+    color: var(--color-text-secondary);
+
+    font-size: 0.78rem;
+
+    text-decoration: none;
+}
+
+.gallery-video-source .icon {
+    width: 14px;
+    height: 14px;
+}
+
+/* A 44px tap area around the small link */
+.gallery-video-source::after {
+    content: "";
+
+    position: absolute;
+
+    inset: -8px 0;
+}
+
+.gallery-player {
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    border: 0;
+
+    background: var(--palette-black);
+}
+
+/* While a video plays, gallery overlays step aside for the native controls
+   (thumbnails below still switch media) */
+.gallery-stage.is-video-playing .gallery-nav,
+.gallery-stage.is-video-playing .gallery-count,
+.gallery-video.is-playing .gallery-video-source,
+.gallery-video.is-playing .gallery-play,
+.gallery-video.is-playing .gallery-poster,
+.gallery-video.is-playing .project-visual {
+    display: none;
+}
+
+/* Loading: a small ring until the player is ready */
+.gallery-video.is-loading::after {
+    content: "";
+
+    position: absolute;
+
+    z-index: 5;
+
+    width: 36px;
+    height: 36px;
+
+    border: 3px solid color-mix(in srgb, var(--color-text) 25%, transparent);
+    border-top-color: var(--color-primary-bright);
+    border-radius: 50%;
+
+    animation: spin 0.9s linear infinite;
+}
+
+.gallery-video-error {
+    position: relative;
+
+    z-index: 5;
+
+    max-width: 80%;
+
+    margin: 0;
+    padding: var(--space-3) var(--space-4);
+
+    border-radius: var(--radius-md);
+
+    background: color-mix(in srgb, var(--color-bg) 90%, transparent);
+
+    color: var(--color-text-secondary);
+
+    text-align: center;
+}
+
+/* Thumbnails (JavaScript only): a swipeable row */
+.gallery-thumbs {
+    display: none;
+
+    gap: var(--space-2);
+
+    margin: 0;
+    padding: var(--space-3) var(--space-4);
+
+    overflow-x: auto;
+
+    border-top: 1px solid var(--color-border);
+
+    list-style: none;
+
+    scroll-snap-type: x proximity;
+}
+
+.js .gallery-thumbs {
+    display: flex;
+}
+
+.gallery-thumbs > li {
+    flex: none;
+
+    scroll-snap-align: start;
+}
+
+.gallery-thumb {
+    position: relative;
+
+    display: block;
+
+    width: 84px;
+    height: 52px;
+
+    padding: 0;
+
+    overflow: hidden;
+
+    border: 2px solid var(--color-border);
+    border-radius: var(--radius-sm);
+
+    background:
+        radial-gradient(circle at 70% 30%, color-mix(in srgb, var(--color-accent-strong) 30%, transparent), transparent 60%),
+        var(--viz-card);
+
+    cursor: pointer;
+
+    opacity: 0.75;
+
+    transition: opacity var(--duration-fast) ease, border-color var(--duration-fast) ease;
+}
+
+.gallery-thumb img {
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+}
+
+.gallery-thumb:hover,
+.gallery-thumb[aria-current="true"] {
+    opacity: 1;
+}
+
+.gallery-thumb[aria-current="true"] {
+    border-color: var(--color-primary-bright);
+}
+
+.gallery-thumb-icon {
+    position: absolute;
+
+    inset: 0;
+
+    display: grid;
+
+    place-items: center;
+
+    color: var(--color-text);
+}
+
+.gallery-thumb-icon .icon {
+    width: 22px;
+    height: 22px;
+
+    filter: drop-shadow(0 1px 3px var(--palette-black));
+}
+
+
+/* PROJECT INFO */
+
+.explorer-info {
+    display: flex;
+
+    gap: var(--space-3);
+
+    padding: var(--space-5);
+
+    flex-direction: column;
+
+    border-top: 1px solid var(--color-border);
+}
+
+.project-meta {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: var(--space-2) var(--space-4);
+
+    margin: 0;
+
+    align-items: center;
+
+    font-family: var(--font-mono);
+    font-size: var(--text-mono);
+    font-weight: 500;
+
+    letter-spacing: var(--tracking-label);
+
+    text-transform: uppercase;
+}
+
+.project-category {
+    color: var(--palette-violet-300);
+}
+
+.project-year {
+    color: var(--color-text-secondary);
+}
+
+/* "Final degree project" (from `type`) */
+.project-badge {
+    padding: 3px 10px;
+
+    border: 1px solid color-mix(in srgb, var(--color-accent) 55%, transparent);
+    border-radius: var(--radius-pill);
+
+    color: var(--palette-violet-300);
+
+    font-size: 0.6875rem;
+}
+
+/* `subtitle`: a short tagline under the title (explorer and detail page) */
+.project-subtitle {
+    margin: calc(var(--space-1) * -1) 0 0;
+
+    color: var(--color-text-secondary);
+
+    font-size: var(--text-body);
+    font-weight: 500;
+
+    line-height: var(--leading-ui);
+}
+
+.explorer-title {
+    margin: 0;
+
+    color: var(--palette-gray-100);
+
+    font-family: var(--font-display);
+    font-size: var(--text-h3);
+    font-weight: 600;
+
+    line-height: var(--leading-h3);
+
+    letter-spacing: var(--tracking-h3);
+}
+
+.explorer-excerpt {
+    max-width: 60ch;
+
+    margin: 0;
+
+    color: var(--color-text-body);
+
+    font-size: var(--text-body);
+
+    line-height: var(--leading-body);
+}
+
+/* Technologies: directly under the description, with a readable heading */
+.explorer-tech {
+    margin-top: var(--space-1);
+}
+
+.explorer-tech-label {
+    margin: 0 0 var(--space-2);
+
+    color: var(--color-text-secondary);
+
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    font-weight: 600;
+
+}
+
+.explorer-info .project-actions {
+    margin-top: var(--space-2);
+}
+
+/* Phones: one clear, full-width main action */
+.explorer-info .project-actions .button:first-child {
+    flex: 1 1 100%;
+}
+
+
+/* TECHNOLOGY BADGES */
+
+.tech-list {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 6px;
+
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+}
+
+.tech-badge {
+    padding: 5px 12px;
+
+    border: 1px solid var(--color-tag-border);
+    border-radius: var(--radius-pill);
+
+    background: var(--color-tag-bg);
+
+    color: var(--color-tag-text);
+
+    font-size: 0.875rem;
+    font-weight: 500;
+
+    line-height: 1.5;
+}
+
+.tech-badge.is-more {
+    border-color: var(--color-border-strong);
+
+    background: transparent;
+
+    color: var(--color-text-secondary);
+}
+
+
+/* PROJECT ACTIONS */
+
+.project-actions {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: var(--space-2);
+}
+
+
+/* LIGHTBOX (native <dialog>) */
+
+.lightbox {
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    max-height: none;
+
+    margin: 0;
+    padding: 0;
+
+    border: 0;
+
+    background: transparent;
+
+    color: var(--color-text);
+}
+
+.lightbox::backdrop {
+    background: color-mix(in srgb, var(--palette-navy-1000) 94%, transparent);
+}
+
+.lightbox-inner {
+    position: relative;
+
+    touch-action: pan-y pinch-zoom;
+
+    display: grid;
+
+    grid-template-rows: auto minmax(0, 1fr);
+
+    height: 100%;
+
+    gap: var(--space-3);
+
+    padding: var(--space-3) var(--space-3) var(--space-5);
+}
+
+.lightbox-bar {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+}
+
+.lightbox-count {
+    margin: 0;
+
+    color: var(--color-text-secondary);
+
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+}
+
+.lightbox-figure {
+    display: grid;
+
+    min-height: 0;
+
+    margin: 0;
+
+    grid-template-rows: minmax(0, 1fr) auto;
+
+    gap: var(--space-3);
+
+    place-items: center;
+}
+
+/* Fills the viewer, so small images (diagrams) are enlarged too */
+.lightbox-image {
+    width: 100%;
+    height: 100%;
+
+    max-width: 100%;
+    max-height: 100%;
+
+    border-radius: var(--radius-sm);
+
+    object-fit: contain;
+}
+
+.lightbox-caption {
+    color: var(--color-text-secondary);
+
+    font-size: 0.9rem;
+
+    text-align: center;
+}
+
+.lightbox-button {
+    display: grid;
+
+    width: 44px;
+    height: 44px;
+
+    place-items: center;
+
+    border: 1px solid var(--color-border-strong);
+    border-radius: 50%;
+
+    background: var(--color-surface);
+
+    color: var(--color-text);
+
+    font-size: 1.1rem;
+
+    cursor: pointer;
+}
+
+.lightbox-button:hover {
+    border-color: var(--color-primary);
+}
+
+.lightbox-nav {
+    position: absolute;
+
+    top: 50%;
+
+    transform: translateY(-50%);
+}
+
+.lightbox-nav .icon {
+    width: 20px;
+    height: 20px;
+}
+
+.lightbox-nav.is-prev {
+    left: var(--space-3);
+}
+
+.lightbox-nav.is-next {
+    right: var(--space-3);
+}
+
+.lightbox-nav[hidden] {
+    display: none;
+}
+
+
+/* TABLET (651px+): wider media, info in two columns */
+
+@media (min-width: 651px) {
+
+    .js .project-filters {
+        flex-wrap: wrap;
+
+        margin: 0 0 var(--space-5);
+        padding: 0;
+
+        overflow: visible;
+    }
+
+    .project-filters {
+        -webkit-mask-image: none;
+        mask-image: none;
+    }
+
+    .gallery-stage {
+        aspect-ratio: 2 / 1;
+    }
+
+    .gallery.is-illustration-only .gallery-stage {
+        aspect-ratio: 16 / 5;
+    }
+
+    .explorer-info {
+        padding: var(--space-5) var(--space-6) var(--space-6);
+    }
+
+    .explorer-info .project-actions .button:first-child {
+        flex: 0 1 auto;
+    }
+
+    /* Portrait screenshots: a media column beside the text; the stage takes
+       the text's height, so the screenshot and the description balance */
+    .explorer-panel.has-portrait-media {
+        display: grid;
+
+        grid-template-columns: minmax(200px, 36%) minmax(0, 1fr);
+    }
+
+    /* When the text is taller than the screenshot needs (651-800px and
+       1024-1150px), the image and thumbnails stay together, centred */
+    .explorer-panel.has-portrait-media .gallery {
+        display: flex;
+
+        flex-direction: column;
+        justify-content: center;
+
+        container-type: inline-size;
+    }
+
+    /* Never taller than the tallest screenshot (2.17 : 1) needs at this
+       width, so no empty band opens under the image */
+    .explorer-panel.has-portrait-media .gallery .gallery-stage {
+        flex: 1;
+
+        min-height: 340px;
+        max-height: calc((100cqi - 2 * var(--space-3)) * 2.17 + 2 * var(--space-3));
+
+        aspect-ratio: auto;
+    }
+
+    .explorer-panel.has-portrait-media .explorer-info {
+        border-top: 0;
+        border-left: 1px solid var(--color-border);
+    }
+
+    .lightbox-inner {
+        padding: var(--space-4) var(--space-7) var(--space-6);
+    }
+
+    .lightbox-nav.is-prev {
+        left: var(--space-4);
+    }
+
+    .lightbox-nav.is-next {
+        right: var(--space-4);
+    }
+}
+
+
+/* DESKTOP (1024px+): vertical picker beside the preview */
+
+@media (min-width: 1024px) {
+
+    .explorer {
+        grid-template-columns: minmax(240px, 290px) minmax(0, 1fr);
+
+        gap: var(--space-6);
+
+        align-items: start;
+    }
+
+    .explorer-list {
+        -webkit-mask-image: none;
+        mask-image: none;
+
+        position: sticky;
+
+        top: calc(var(--nav-height) + var(--space-4));
+
+        margin: 0;
+        padding: 0;
+
+        overflow: visible;
+
+        flex-direction: column;
+
+        gap: var(--space-1);
+    }
+
+    /* With JavaScript (projects.js measures the selected preview): as many entries
+       as fit beside it, the rest scroll inside the list. Page scrolling carries on
+       at either end. 1px of padding keeps the selected marker from being clipped,
+       and 1px below lets the list scroll fully past a last entry of fractional height. */
+    .js .explorer-list {
+        padding-left: 1px;
+        padding-bottom: 1px;
+
+        overflow: hidden auto;
+
+        scrollbar-gutter: stable;
+    }
+
+    /* Scrollbar on the left: browsers place it by the list's direction. The
+       entries stay left to right, and the negative margin (the measured
+       scrollbar width, see fitList) keeps them aligned with the heading. */
+    .js .explorer-list {
+        margin-left: calc(var(--explorer-list-gutter, 0px) * -1);
+
+        direction: rtl;
+    }
+
+    .js .explorer-list > li {
+        direction: ltr;
+    }
+
+    .js .explorer-list.is-capped {
+        max-height: var(--explorer-list-max);
+    }
+
+    .js .explorer-tab:focus-visible {
+        outline-offset: -2px;
+    }
+
+    .explorer-tab {
+        gap: var(--space-3);
+
+        padding: 12px 14px 12px 16px;
+
+        align-items: flex-start;
+
+        border-color: transparent;
+        border-radius: var(--radius-md);
+
+        background: transparent;
+
+        white-space: normal;
+    }
+
+    .explorer-tab-index {
+        padding-top: 3px;
+    }
+
+    .explorer-tab[aria-selected="true"] .explorer-tab-index {
+        color: var(--color-accent);
+    }
+
+    .explorer-tab-text {
+        display: flex;
+
+        gap: 2px;
+
+        flex-direction: column;
+    }
+
+    .explorer-tab-name {
+        color: inherit;
+
+        font-size: 1rem;
+
+        line-height: 1.35;
+    }
+
+    .explorer-tab-category {
+        display: block;
+
+        color: var(--color-text-muted);
+
+        font-size: 0.78rem;
+        font-weight: 400;
+    }
+
+    .explorer-tab:hover {
+        border-color: transparent;
+
+        background: color-mix(in srgb, var(--color-surface) 60%, transparent);
+    }
+
+    .explorer-tab[aria-selected="true"] {
+        border-color: var(--color-border);
+
+        background: var(--color-surface);
+    }
+
+    /* Selected marker: a short gradient bar on the left edge */
+    .explorer-tab[aria-selected="true"]::before {
+        content: "";
+
+        position: absolute;
+
+        top: 12px;
+        bottom: 12px;
+        left: -1px;
+
+        width: 3px;
+
+        border-radius: 3px;
+
+        background: var(--gradient-accent-line);
+    }
+
+    /* A wide, compact media strip beside the picker; real screenshots and
+       video get 5:2, an illustration alone about 37% less */
+    .gallery-stage {
+        aspect-ratio: 5 / 2;
+    }
+
+    .gallery.is-illustration-only .gallery-stage {
+        aspect-ratio: 4 / 1;
+    }
+}
+
+
+/* PROJECT DETAIL PAGE
+ * Markup: layouts/project.njk (one template for every project with
+ * `detailPage: true`). Gallery and lightbox are the shared components.
+ * Mobile first: base = phone, then 651px+ and 1024px+. */
+
+.project-page {
+    padding: var(--space-6) 0 var(--space-7);
+}
+
+.project-back {
+    display: inline-flex;
+
+    gap: var(--space-2);
+
+    min-height: 44px;
+
+    margin-bottom: var(--space-4);
+
+    align-items: center;
+
+    color: var(--color-link);
+
+    font-size: var(--text-sm);
+    font-weight: 600;
+
+    text-decoration: none;
+}
+
+.project-back .icon {
+    width: 18px;
+    height: 18px;
+
+    transition: transform var(--duration-fast) ease;
+}
+
+.project-back:hover .icon {
+    transform: translateX(-3px);
+}
+
+.project-hero {
+    display: flex;
+
+    gap: var(--space-3);
+
+    margin-bottom: var(--space-6);
+
+    flex-direction: column;
+}
+
+.project-page-title {
+    color: var(--palette-gray-100);
+}
+
+.project-hero .project-subtitle {
+    margin: 0;
+
+    font-size: var(--text-lead);
+}
+
+.project-intro {
+    max-width: var(--measure-lead);
+
+    margin: var(--space-1) 0 0;
+
+    color: var(--color-text-body);
+
+    font-size: var(--text-lead);
+
+    line-height: var(--leading-lead);
+}
+
+.project-hero .project-actions {
+    margin-top: var(--space-2);
+}
+
+.project-hero .project-actions .button:first-child {
+    flex: 1 1 100%;
+}
+
+/* Media: real screenshots get a generous but bounded stage;
+   an illustration alone stays a compact strip */
+.project-page-media {
+    margin-bottom: var(--space-6);
+
+    overflow: hidden;
+
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+
+    background: var(--color-surface);
+
+    box-shadow: var(--shadow-card);
+}
+
+.project-page-media .gallery-stage {
+    aspect-ratio: 16 / 10;
+}
+
+.project-page-media .gallery.is-illustration-only .gallery-stage {
+    aspect-ratio: 5 / 2;
+}
+
+/* Content: phones stack the details card above the sections */
+.project-layout {
+    display: grid;
+
+    gap: var(--space-6);
+}
+
+.project-aside {
+    display: grid;
+
+    gap: var(--space-4);
+
+    align-content: start;
+}
+
+.aside-card {
+    padding: var(--space-5);
+
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+
+    background: var(--color-surface);
+}
+
+.aside-title {
+    margin: 0 0 var(--space-2);
+
+    color: var(--color-text-secondary);
+
+    font-family: var(--font-body);
+    font-size: var(--text-sm);
+    line-height: var(--leading-ui);
+    font-weight: 600;
+
+}
+
+.aside-facts {
+    display: grid;
+
+    gap: var(--space-3);
+
+    margin: 0;
+}
+
+.aside-facts dt {
+    color: var(--color-text-muted);
+
+    font-size: 0.8rem;
+}
+
+.aside-facts dd {
+    margin: 0;
+
+    color: var(--color-text);
+}
+
+.project-toc ol {
+    display: grid;
+
+    gap: 2px;
+
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+
+    counter-reset: toc;
+}
+
+.project-toc a {
+    position: relative;
+
+    display: flex;
+
+    gap: var(--space-2);
+
+    min-height: 44px;
+
+    padding: 6px var(--space-2);
+
+    align-items: center;
+
+    border-radius: var(--radius-sm);
+
+    color: var(--color-text-secondary);
+
+    font-size: 0.9rem;
+
+    text-decoration: none;
+
+    counter-increment: toc;
+
+    transition:
+        background var(--duration-fast) ease,
+        color var(--duration-fast) ease;
+}
+
+.project-toc a::before {
+    content: counter(toc, decimal-leading-zero);
+
+    color: var(--color-accent);
+
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+}
+
+.project-toc a:hover {
+    background: var(--color-surface-raised);
+
+    color: var(--color-text);
+}
+
+/* The section being read (main.js): same marker as the selected explorer entry */
+.project-toc a[aria-current="location"] {
+    background: var(--color-surface-raised);
+
+    color: var(--color-text);
+}
+
+.project-toc a[aria-current="location"]::after {
+    content: "";
+
+    position: absolute;
+
+    top: 10px;
+    bottom: 10px;
+    left: 0;
+
+    width: 3px;
+
+    border-radius: 3px;
+
+    background: var(--gradient-accent-line);
+}
+
+.project-main {
+    display: grid;
+
+    min-width: 0;
+
+    gap: var(--space-5);
+}
+
+.project-section {
+    padding: var(--space-5);
+
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+
+    background: var(--color-surface);
+
+    scroll-margin-top: calc(var(--nav-height) + var(--space-4));
+}
+
+.project-section-title {
+    margin: 0 0 var(--space-4);
+
+    color: var(--palette-gray-100);
+
+    font-family: var(--font-display);
+    font-size: var(--text-h3);
+    font-weight: 600;
+
+    line-height: var(--leading-h3);
+
+    letter-spacing: var(--tracking-h3);
+}
+
+/* Long-form Markdown */
+.prose {
+    max-width: var(--measure-body);
+
+    color: var(--color-text-body);
+
+    font-size: var(--text-body);
+
+    line-height: var(--leading-body);
+}
+
+.prose > :first-child {
+    margin-top: 0;
+}
+
+.prose > :last-child {
+    margin-bottom: 0;
+}
+
+.prose p,
+.prose ul,
+.prose ol {
+    margin: 0 0 var(--space-4);
+}
+
+.prose h3 {
+    margin: var(--space-5) 0 var(--space-2);
+
+    color: var(--color-text);
+
+    font-size: 1.125rem;
+}
+
+.prose a {
+    color: var(--color-link);
+}
+
+.prose strong {
+    color: var(--color-text);
+}
+
+.prose code {
+    padding: 1px 6px;
+
+    border-radius: var(--radius-sm);
+
+    background: var(--color-surface-raised);
+
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+}
+
+.prose li + li {
+    margin-top: var(--space-1);
+}
+
+/* Markdown tables (wrapped in .table-scroll by eleventy.config.js): a framed
+   box that scrolls sideways on its own when the table is wider than the
+   column; the first column stays in view while scrolling */
+.table-scroll {
+    max-width: 100%;
+
+    margin: 0 0 var(--space-4);
+
+    overflow-x: auto;
+
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+
+    overscroll-behavior-x: contain;
+}
+
+.table-scroll:focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+}
+
+.prose table {
+    width: 100%;
+
+    border-collapse: separate;
+    border-spacing: 0;
+
+    font-size: var(--text-sm);
+    font-variant-numeric: tabular-nums;
+
+    line-height: var(--leading-ui);
+}
+
+.prose th,
+.prose td {
+    padding: 10px 14px;
+
+    border-bottom: 1px solid var(--color-border);
+
+    text-align: left;
+
+    white-space: nowrap;
+}
+
+.prose th {
+    background: var(--color-surface-raised);
+
+    color: var(--color-text);
+
+    font-weight: 600;
+}
+
+.prose tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+/* Row labels: may wrap (long configuration names), stay visible while the
+   numbers scroll */
+.prose th:first-child,
+.prose td:first-child {
+    position: sticky;
+
+    left: 0;
+
+    z-index: 1;
+
+    min-width: 8.5rem;
+
+    border-right: 1px solid var(--color-border);
+
+    white-space: normal;
+}
+
+.prose td:first-child {
+    background: var(--color-surface);
+
+    color: var(--color-text);
+}
+
+.prose td strong {
+    color: var(--color-text);
+}
+
+.feature-list {
+    display: grid;
+
+    gap: var(--space-3);
+
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+}
+
+.feature-list li {
+    position: relative;
+
+    padding-left: var(--space-6);
+
+    color: var(--color-text-body);
+
+    font-size: var(--text-body);
+
+    line-height: var(--leading-body);
+}
+
+/* Small check-style marker */
+.feature-list li::before {
+    content: "";
+
+    position: absolute;
+
+    left: 2px;
+    top: 0.45em;
+
+    width: 14px;
+    height: 8px;
+
+    border-left: 2px solid var(--color-primary-bright);
+    border-bottom: 2px solid var(--color-primary-bright);
+
+    transform: rotate(-45deg);
+}
+
+.challenge-list {
+    display: grid;
+
+    gap: var(--space-4);
+}
+
+.challenge {
+    padding: var(--space-4);
+
+    border: 1px solid var(--color-border);
+    border-left: 3px solid var(--color-accent);
+    border-radius: var(--radius-md);
+
+    background: color-mix(in srgb, var(--color-surface-raised) 50%, transparent);
+}
+
+.challenge-label {
+    margin: 0 0 var(--space-1);
+
+    color: var(--palette-violet-300);
+
+    font-family: var(--font-mono);
+    font-size: var(--text-mono);
+    font-weight: 500;
+
+    letter-spacing: var(--tracking-label);
+
+    text-transform: uppercase;
+}
+
+.challenge-label.is-solution {
+    margin-top: var(--space-3);
+
+    color: var(--color-tag-text);
+}
+
+/* Custom sections (caseStudy.sections). Layouts follow the section's own
+   width (container queries), since the main column is narrower beside the
+   sticky details column than on tablets. Phones: everything stacks. */
+.case-section {
+    container: case / inline-size;
+}
+
+/* One column that never grows past the section (minmax 0), so wide content
+   such as a table scrolls inside its own box instead of widening the page */
+.case-body {
+    display: grid;
+
+    grid-template-columns: minmax(0, 1fr);
+
+    gap: var(--space-5);
+}
+
+/* A single screenshot beside the text (overview) can be a little larger */
+.case-section.has-side-media .case-body {
+    --strip-portrait-width: 220px;
+}
+
+/* Items: feature rows and video cards */
+/* Same single column as .case-body: minmax(0) keeps wide content inside an
+   item (a table) scrolling in its own box instead of widening every item */
+.case-items {
+    display: grid;
+
+    grid-template-columns: minmax(0, 1fr);
+
+    gap: var(--space-5);
+}
+
+.case-body + .case-items,
+.case-note + .case-items {
+    margin-top: var(--space-6);
+}
+
+/* `note`: small print after the media (sources, caveats) */
+.case-note {
+    max-width: var(--measure-body);
+
+    color: var(--color-text-muted);
+
+    font-size: var(--text-sm);
+
+    line-height: var(--leading-body);
+}
+
+.case-body + .case-note {
+    margin-top: var(--space-4);
+}
+
+.case-note p {
+    margin: 0;
+}
+
+.case-note p + p {
+    margin-top: var(--space-2);
+}
+
+.case-item:not(.is-video) + .case-item:not(.is-video) {
+    padding-top: var(--space-5);
+
+    border-top: 1px solid var(--color-border);
+}
+
+.case-item.is-image {
+    display: grid;
+
+    grid-template-columns: minmax(0, 1fr);
+
+    gap: var(--space-4);
+}
+
+.case-item-title {
+    display: flex;
+
+    gap: var(--space-2);
+
+    margin: 0 0 var(--space-3);
+
+    align-items: center;
+
+    color: var(--color-text);
+
+    font-family: var(--font-display);
+    font-size: var(--text-h4);
+    font-weight: 600;
+
+    line-height: var(--leading-h4);
+}
+
+/* The blue -> violet marker of the Skills and About headings */
+.case-item-title::before {
+    content: "";
+
+    flex: none;
+
+    width: 3px;
+    height: 1em;
+
+    border-radius: 2px;
+
+    background: linear-gradient(180deg, var(--color-primary), var(--color-accent-strong));
+}
+
+/* Video cards: one frame size for landscape and portrait, the video shown
+   whole inside it (letterboxed, never cropped or stretched) */
+.case-item.is-video {
+    overflow: hidden;
+
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+
+    background: color-mix(in srgb, var(--color-surface-raised) 50%, transparent);
+}
+
+.case-item.is-video .case-item-text {
+    padding: var(--space-4) var(--space-5) var(--space-5);
+}
+
+.case-media.is-video {
+    border-bottom: 1px solid var(--color-border);
+}
+
+.case-media.is-video .gallery-stage {
+    aspect-ratio: 1 / 1;
+}
+
+/* A video placed directly in a section (the main demo, not a card): a framed
+   player shaped like the video (from its poster, 16:9 without one), at most
+   34rem tall, full width on phones */
+.case-body > .case-media.is-video {
+    width: min(100%, calc(34rem * var(--media-aspect, 1.7778)));
+
+    overflow: hidden;
+
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+}
+
+.case-body > .case-media.is-video .gallery-stage {
+    aspect-ratio: var(--media-aspect, 16 / 9);
+}
+
+/* A single image inside an item (not a row, not portrait): at most 34rem tall,
+   so a near-square screenshot doesn't dominate its block */
+.case-item .gallery.is-strip:not(.is-row):not(.is-portrait) .gallery-item {
+    max-width: min(100%, calc(34rem * var(--media-aspect, 1)));
+}
+
+/* Tools: technology badge + what it was used for */
+.case-tools {
+    display: grid;
+
+    gap: var(--space-4);
+
+    margin: var(--space-6) 0 0;
+    padding: 0;
+
+    list-style: none;
+}
+
+/* Phones: the badge above its description, the same for every row */
+.case-tools li {
+    display: flex;
+
+    gap: var(--space-2);
+
+    flex-direction: column;
+
+    align-items: flex-start;
+}
+
+.case-tool-use {
+    color: var(--color-text-body);
+
+    font-size: var(--text-body);
+
+    line-height: var(--leading-ui);
+}
+
+.case-links {
+    margin-top: var(--space-5);
+}
+
+/* Narrow sections: photo rows stack, one image per line, each centred and
+   capped in height so a portrait photo doesn't fill the whole screen */
+@container case (max-width: 29.99rem) {
+
+    .gallery.is-strip.is-row .gallery-stage {
+        flex-direction: column;
+
+        gap: var(--space-5);
+
+        align-items: center;
+    }
+
+    .gallery.is-strip.is-row .gallery-item {
+        flex: none;
+
+        width: 100%;
+        max-width: min(100%, calc(22rem * var(--media-aspect, 1)));
+    }
+}
+
+/* Video cards side by side once both fit */
+@container case (min-width: 30rem) {
+
+    .case-items:has(.is-video) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .case-items .case-item:not(.is-video) {
+        grid-column: 1 / -1;
+    }
+}
+
+/* Text beside portrait screenshots (wide charts and photo rows stay below
+   their text); tools as a two-column list */
+@container case (min-width: 36rem) {
+
+    .case-section.has-side-media .case-body,
+    .case-item.is-image.has-portrait-media {
+        grid-template-columns: minmax(0, 1fr) auto;
+
+        gap: var(--space-6);
+
+        align-items: start;
+    }
+
+    .case-tools {
+        grid-template-columns: max-content minmax(0, 1fr);
+
+        gap: var(--space-3) var(--space-5);
+    }
+
+    .case-tools li {
+        display: grid;
+
+        gap: var(--space-5);
+
+        grid-column: 1 / -1;
+        grid-template-columns: subgrid;
+
+        align-items: center;
+    }
+
+    .case-tools .tech-badge {
+        justify-self: start;
+    }
+}
+
+/* Previous / next: compact controls as wide as their content. They share a
+   row when they fit and wrap when they don't (long names, phones). */
+.project-pager {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: var(--space-3);
+
+    margin-top: var(--space-6);
+
+    justify-content: space-between;
+}
+
+.pager-link {
+    display: grid;
+
+    min-width: 0;
+    max-width: 100%;
+    min-height: 44px;
+
+    padding: var(--space-2) 14px;
+
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+
+    background: var(--color-surface);
+
+    color: var(--color-text);
+
+    text-decoration: none;
+
+    transition: border-color var(--duration-fast) ease;
+}
+
+.pager-link:hover {
+    border-color: var(--color-primary);
+}
+
+.pager-label {
+    display: inline-flex;
+
+    gap: var(--space-2);
+
+    align-items: center;
+
+    color: var(--color-text-muted);
+
+    font-size: var(--text-small);
+}
+
+.pager-label .icon {
+    width: 14px;
+    height: 14px;
+}
+
+.pager-title {
+    font-family: var(--font-display);
+    font-size: var(--text-ui);
+
+    line-height: var(--leading-h4);
+    font-weight: 600;
+
+    overflow-wrap: anywhere;
+}
+
+.pager-link.is-next {
+    margin-left: auto;
+
+    text-align: right;
+
+    justify-items: end;
+}
+
+.project-footer-back {
+    margin: var(--space-6) 0 0;
+}
+
+
+/* Tablet (651px+) */
+
+@media (min-width: 651px) {
+
+    .project-page {
+        padding-top: var(--space-7);
+    }
+
+    .project-hero .project-actions .button:first-child {
+        flex: 0 1 auto;
+    }
+
+    .project-page-media .gallery-stage {
+        aspect-ratio: 16 / 9;
+    }
+
+    .project-page-media .gallery.is-illustration-only .gallery-stage {
+        aspect-ratio: 4 / 1;
+    }
+
+    .project-section {
+        padding: var(--space-6);
+    }
+
+    /* Technologies and contents side by side above the sections */
+    .project-aside {
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    }
+
+    .pager-link {
+        max-width: min(340px, calc(50% - var(--space-3) / 2));
+    }
+}
+
+
+/* Desktop (1024px+): sections with a sticky details column */
+
+@media (min-width: 1024px) {
+
+    /* Full card width at a bounded height (a capped aspect ratio would
+       shrink the width and leave an empty band) */
+    .project-page-media .gallery-stage {
+        height: clamp(360px, 38vw, 540px);
+
+        aspect-ratio: auto;
+    }
+
+    .project-page-media .gallery.is-illustration-only .gallery-stage {
+        height: auto;
+
+        aspect-ratio: 5 / 1;
+    }
+
+    .project-layout {
+        grid-template-columns: minmax(0, 1fr) 300px;
+
+        gap: var(--space-6);
+
+        align-items: start;
+    }
+
+    /* A page with very many sections scrolls the column instead of cutting it off */
+    .project-aside {
+        position: sticky;
+
+        top: calc(var(--nav-height) + var(--space-4));
+
+        order: 2;
+
+        max-height: calc(100vh - var(--nav-height) - 2 * var(--space-4));
+
+        overflow-y: auto;
+
+        scrollbar-width: thin;
+        scrollbar-color: var(--color-border-strong) transparent;
+
+        grid-template-columns: 1fr;
+    }
+
+    .project-main {
+        order: 1;
+    }
+
+    /* Summary only: no sections, so no sticky column beside empty space */
+    .project-layout.is-summary-only {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .project-layout.is-summary-only .project-aside {
+        position: static;
+
+        max-height: none;
+
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+}
+
+
+/* SKILLS
+ * Horizontal category rows separated by thin lines (no cards): the name with
+ * the blue -> violet marker from the About line, then the technologies.
+ * Featured tags (with logos) are always shown; the rest of a category is
+ * revealed in place by "Show more" (main.js). Mobile first: the name sits above
+ * its tags; 651px+ beside them; 1200px+ full-size featured tags. */
+
+.skills-list {
+    border-bottom: 1px solid var(--color-border);
+}
+
+.skill-row {
+    display: grid;
+
+    gap: var(--space-3);
+
+    /* the tags' own bottom margin completes the bottom spacing */
+    padding: var(--space-4) 0 calc(var(--space-4) - 8px);
+
+    border-top: 1px solid var(--color-border);
+}
+
+.skill-heading {
+    display: flex;
+
+    gap: var(--space-2);
+
+    margin: 0;
+
+    align-items: center;
+
+    color: var(--color-text);
+
+    font-family: var(--font-display);
+
+    font-size: var(--text-h4);
+    font-weight: 600;
+
+    line-height: var(--leading-h4);
+}
+
+/* Small accent marker, matching the About accent line */
+.skill-heading::before {
+    content: "";
+
+    flex: none;
+
+    width: 3px;
+    height: 1em;
+
+    border-radius: 2px;
+
+    background: linear-gradient(180deg, var(--color-primary), var(--color-accent-strong));
+}
+
+/* Tags and the toggle share one line flow, so the button always follows the
+   last visible tag */
+.skill-body {
+    min-width: 0;
+}
+
+.skill-tags {
+    display: inline;
+
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+}
+
+/* Featured: logo and name, the most visible tier (a little more compact on
+   phones, full size from 651px) */
+.skill-tag {
+    display: inline-flex;
+
+    gap: 6px;
+
+    margin: 0 6px 8px 0;
+
+    padding: 4px 11px;
+
+    align-items: center;
+
+    vertical-align: middle;
+
+    border: 1px solid var(--color-tag-border);
+    border-radius: var(--radius-pill);
+
+    background: var(--color-tag-bg);
+
+    color: var(--color-text);
+
+    font-size: 0.8125rem;
+    font-weight: 500;
+
+    line-height: 1.4;
+
+    white-space: nowrap;
+}
+
+.skill-tag.has-logo {
+    padding-left: 7px;
+}
+
+.skill-tag img {
+    flex: none;
+
+    width: 18px;
+    height: 18px;
+}
+
+/* Additional skills: quieter and more compact */
+.skill-tag.is-extra {
+    padding: 3px 10px;
+
+    border-color: var(--color-border);
+
+    background: transparent;
+
+    color: var(--color-text-secondary);
+
+    font-size: 0.8125rem;
+}
+
+.skill-tag.is-extra.has-logo {
+    padding-left: 7px;
+}
+
+.skill-tag.is-extra img {
+    width: 18px;
+    height: 18px;
+}
+
+/* With JavaScript the extras wait behind "Show more"; without it all show */
+.js .skill-row:not(.is-expanded) .skill-tag.is-extra {
+    display: none;
+}
+
+html:not(.js) .skill-toggle {
+    display: none;
+}
+
+/* "Show more" / "Show less": a quiet text button in the tag flow, with a
+   44px tall hit area */
+.skill-toggle {
+    position: relative;
+
+    display: inline-flex;
+
+    margin: 0 0 8px;
+
+    padding: 4px 10px;
+
+    align-items: center;
+
+    vertical-align: middle;
+
+    border: 1px solid transparent;
+    border-radius: var(--radius-pill);
+
+    background: transparent;
+
+    color: var(--color-link);
+
+    font: inherit;
+    font-size: var(--text-small);
+    font-weight: 600;
+
+    line-height: var(--leading-ui);
+
+    white-space: nowrap;
+
+    cursor: pointer;
+
+    transition:
+        background-color var(--duration-fast) ease,
+        border-color var(--duration-fast) ease;
+}
+
+.skill-toggle::after {
+    content: "";
+
+    position: absolute;
+
+    inset: -8px 0;
+}
+
+.skill-toggle:hover {
+    border-color: var(--color-tag-border);
+
+    background: var(--color-tag-bg);
+}
+
+@media (min-width: 651px) {
+
+    /* 224px fits the longest category name ("Programming Languages") */
+    .skill-row {
+        grid-template-columns: 224px minmax(0, 1fr);
+
+        gap: var(--space-6);
+
+        align-items: start;
+    }
+
+    /* Level the name with the first line of tags */
+    .skill-heading {
+        min-height: 30px;
+    }
+}
+
+/* Wide screens: full-size featured tags (most categories still fit one line) */
+@media (min-width: 1200px) {
+
+    .skill-row {
+        grid-template-columns: 240px minmax(0, 1fr);
+
+        gap: var(--space-7);
+    }
+
+    .skill-heading {
+        min-height: 32px;
+    }
+
+    .skill-tag.is-featured {
+        gap: 7px;
+
+        padding: 5px 12px;
+
+        font-size: 0.875rem;
+    }
+
+    .skill-tag.is-featured.has-logo {
+        padding-left: 8px;
+    }
+
+    .skill-tag.is-featured img {
+        width: 20px;
+        height: 20px;
+    }
+}
+
+
+/* CONTACT
+ * A compact closing band on the inverse surface (grid texture and a soft
+ * glow). Phones and tablet: text, then actions. Desktop (1024px+): text
+ * left, actions right. Email is the primary action; CV, GitHub and
+ * LinkedIn share the row below it. */
+
+.contact {
+    position: relative;
+
+    padding: var(--space-7) 0;
+
+    overflow: hidden;
+
+    border-top: 1px solid var(--color-inverse-divider);
+
+    background: var(--color-inverse-bg);
+
+    color: var(--color-inverse-text);
+
+    isolation: isolate;
+}
+
+.contact::before {
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    z-index: -2;
+
+    background-image:
+        linear-gradient(color-mix(in srgb, var(--color-inverse-text) 4%, transparent) 1px, transparent 1px),
+        linear-gradient(90deg, color-mix(in srgb, var(--color-inverse-text) 4%, transparent) 1px, transparent 1px);
+
+    background-size: 56px 56px;
+
+    -webkit-mask-image: radial-gradient(ellipse at 80% 50%, black 10%, transparent 70%);
+    mask-image: radial-gradient(ellipse at 80% 50%, black 10%, transparent 70%);
+}
+
+.contact-glow {
+    position: absolute;
+
+    width: 560px;
+    height: 560px;
+
+    right: -200px;
+    top: 50%;
+
+    z-index: -1;
+
+    /* A soft radial gradient (no blur filter, so nothing spills past the box) */
+    background: radial-gradient(
+        closest-side,
+        color-mix(in srgb, var(--color-primary-bright) 24%, transparent),
+        transparent
+    );
+
+    transform: translateY(-50%);
+
+    /* Fade out before the band ends, so no clipped edge shows against the footer */
+    -webkit-mask-image: linear-gradient(180deg, black 30%, transparent 75%);
+    mask-image: linear-gradient(180deg, black 30%, transparent 75%);
+
+    animation: glow-breathe 9s ease-in-out infinite;
+}
+
+.contact-content {
+    display: grid;
+
+    gap: var(--space-6);
+}
+
+.contact h2 {
+    max-width: 18ch;
+
+    text-wrap: balance;
+}
+
+.contact-text > p {
+    max-width: 52ch;
+
+    margin: var(--space-4) 0 0;
+
+    color: var(--color-inverse-text-muted);
+
+    font-size: var(--text-body);
+
+    line-height: var(--leading-body);
+}
+
+/* The headline's last word in the blue -> violet accent */
+.contact-accent {
+    color: var(--color-accent);
+}
+
+@supports (background-clip: text) or (-webkit-background-clip: text) {
+    .contact-accent {
+        background: linear-gradient(90deg, var(--color-link), var(--color-accent));
+        -webkit-background-clip: text;
+        background-clip: text;
+
+        color: transparent;
+    }
+}
+
+/* Phones: Email and CV full width, GitHub and LinkedIn side by side */
+.contact-buttons {
+    display: grid;
+
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: var(--space-3);
+}
+
+.contact-buttons .button {
+    gap: var(--space-2);
+
+    padding: 0 var(--space-4);
+}
+
+.contact-email-wrap,
+.contact-buttons .button[download] {
+    grid-column: 1 / -1;
+}
+
+/* Room above the button for the mascot's head (46px visible) */
+.contact-email-wrap {
+    position: relative;
+
+    margin-top: 50px;
+}
+
+/* Main action: a touch taller than the secondary buttons; above the
+   mascot's body, below its hands */
+.contact-email {
+    position: relative;
+    z-index: 1;
+
+    width: 100%;
+    min-height: 54px;
+
+    font-size: 0.98rem;
+}
+
+.button.light {
+    border-color: var(--color-inverse-text);
+
+    background: var(--color-inverse-text);
+
+    color: var(--color-inverse-bg);
+}
+
+.button.light:hover {
+    color: var(--color-primary-deep);
+
+    box-shadow: var(--shadow-inverse);
+}
+
+.button.dark-outline {
+    border-color: var(--color-inverse-border);
+
+    color: var(--color-inverse-text);
+}
+
+.button.dark-outline:hover {
+    border-color: var(--color-inverse-text);
+
+    color: var(--color-inverse-text);
+}
+
+/* 404 PAGE */
+
+.not-found {
+    display: flex;
+
+    min-height: calc(100vh - var(--nav-height) - 72px);
+
+    padding: var(--space-8) 0;
+
+    align-items: center;
+}
+
+.not-found-code {
+    margin: 0 0 var(--space-2);
+
+    color: var(--color-accent);
+
+    font-family: var(--font-mono);
+    font-size: var(--text-mono);
+
+    letter-spacing: var(--tracking-label);
+}
+
+.not-found-text {
+    max-width: var(--measure-body);
+
+    margin: var(--space-3) 0 var(--space-5);
+
+    color: var(--color-text-secondary);
+
+    font-size: var(--text-body);
+    line-height: var(--leading-body);
+}
+
+.not-found-actions {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: var(--space-3);
+}
+
+@media (max-width: 480px) {
+
+    .not-found-actions .button {
+        flex: 1 1 100%;
+    }
+}
+
+
+/* CONTACT MASCOT (partials/contact-mascot.njk, behaviour in main.js)
+ * A small lavender square peeking over the Email Me button. The body sits
+ * behind the button (its lower part hidden by the button's top edge), the
+ * hands in front, on that edge. The wrapper has no z-index, so body (0),
+ * button (1) and hands (2) share one stacking order. Purely decorative:
+ * no pointer events, hidden from assistive technology.
+ *
+ * Poses and faces follow data-mood (idle · email · approve · cheer) through
+ * CSS transitions; one-shot moves (entrance, nods, the entrance tap) are Web
+ * Animations from main.js, so the two never compete for the same property
+ * at the same time. */
+
+.mascot {
+    display: block;
+
+    height: 0;
+
+    pointer-events: none;
+}
+
+.mascot svg {
+    position: absolute;
+
+    right: 28px;
+
+    overflow: visible;
+
+    pointer-events: none;
+}
+
+/* 18px of the 64px body stays hidden behind the button */
+.mascot-body {
+    bottom: calc(100% - 18px);
+    z-index: 0;
+
+    transform-origin: 50% 100%;
+
+    transition: transform 0.24s var(--ease-out);
+}
+
+.mascot-hands {
+    top: -6px;
+    z-index: 2;
+}
+
+.mascot-head,
+.mascot-hand {
+    transform-box: fill-box;
+    transform-origin: 50% 100%;
+}
+
+.mascot-skin {
+    fill: var(--mascot-body);
+}
+
+/* Darker strip where the body disappears behind the button */
+.mascot-shadow {
+    fill: var(--mascot-shade);
+}
+
+.mascot-brows path,
+.mascot-mouth {
+    fill: none;
+
+    stroke: var(--mascot-face);
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.mascot-brows {
+    transition: transform 0.2s var(--ease-out);
+}
+
+/* Eyes look within ~2.5px (--look-x / --look-y from main.js) */
+.mascot-eyes {
+    transform: translate(calc(var(--look-x, 0) * 1px), calc(var(--look-y, 0) * 1px));
+
+    transition: transform 0.14s ease-out;
+}
+
+.mascot-eye {
+    fill: var(--mascot-face);
+
+    transform-box: fill-box;
+    transform-origin: center;
+
+    animation: mascot-blink 5.5s infinite;
+
+    transition: ry 0.15s ease;
+}
+
+.mascot-eye + .mascot-eye {
+    animation-delay: 0.04s;
+}
+
+.mascot-mouth {
+    opacity: 0;
+
+    transition: opacity 0.15s ease;
+}
+
+/* the happy mouth is a small open smile */
+.mascot-mouth.is-happy {
+    fill: var(--mascot-face);
+}
+
+.mascot-hand {
+    transition: transform 0.22s var(--ease-out);
+}
+
+.mascot-hand rect {
+    fill: var(--mascot-body);
+
+    stroke: var(--mascot-shade);
+    stroke-width: 1;
+}
+
+.mascot-hand path {
+    fill: none;
+
+    stroke: var(--mascot-shade);
+    stroke-width: 1.2;
+    stroke-linecap: round;
+}
+
+/* Faces */
+.mascot[data-mood="idle"] .is-soft,
+.mascot[data-mood="approve"] .is-pleased,
+.mascot:is([data-mood="email"], [data-mood="cheer"]) .is-happy {
+    opacity: 1;
+}
+
+.mascot:is([data-mood="email"], [data-mood="cheer"]) .mascot-brows {
+    transform: translateY(-2.5px);
+}
+
+.mascot[data-mood="approve"] .mascot-brows {
+    transform: translateY(-1.5px);
+}
+
+/* smiling eyes */
+.mascot:is([data-mood="email"], [data-mood="cheer"]) .mascot-eye {
+    ry: 2.6px;
+}
+
+/* Poses: up for Email Me; for a secondary button a smaller lift, leaning
+   toward it, with the nearer hand lifted in a little gesture */
+.mascot[data-mood="email"] .mascot-body {
+    transform: translateY(-6px) rotate(-3deg);
+}
+
+.mascot[data-mood="approve"] .mascot-body {
+    transform: translateY(-3px) rotate(-4deg);
+}
+
+.mascot[data-mood="approve"][data-point="right"] .mascot-body {
+    transform: translateY(-3px) rotate(3deg);
+}
+
+.mascot[data-mood="approve"][data-point="left"] .mascot-hand.is-left {
+    transform: translate(-3px, -5px) rotate(-24deg);
+}
+
+.mascot[data-mood="approve"][data-point="right"] .mascot-hand.is-right {
+    transform: translate(3px, -5px) rotate(24deg);
+}
+
+/* Entrance: with JavaScript (and motion allowed) it waits mostly hidden behind
+   the button until the section is in view; without JavaScript it simply
+   rests in place. During the entrance the Web Animation drives the body. */
+@media (prefers-reduced-motion: no-preference) {
+
+    .js .mascot[data-entrance="pending"] .mascot-body {
+        transform: translateY(36px);
+    }
+
+    .js .mascot[data-entrance="pending"] .mascot-hands {
+        opacity: 0;
+    }
+}
+
+.mascot[data-entrance="playing"] .mascot-body {
+    transition: none;
+}
+
+@keyframes mascot-blink {
+    0%,
+    93%,
+    100% {
+        transform: scaleY(1);
+    }
+
+    95% {
+        transform: scaleY(0.1);
+    }
+}
+
+/* Reduced motion: no poses or gestures (blinking and transitions are off
+   site-wide); the face still changes, statically. !important so it beats
+   every mood / point pose, like the site-wide reduced-motion rule. */
+@media (prefers-reduced-motion: reduce) {
+
+    .mascot .mascot-body,
+    .mascot .mascot-hand {
+        transform: none !important;
+    }
+}
+
+/* 651px+: Email on top, the three secondary actions in one row */
+@media (min-width: 651px) {
+
+    .contact {
+        padding: var(--space-8) 0 var(--space-7);
+    }
+
+    .contact-buttons {
+        max-width: 500px;
+
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .contact-buttons .button[download] {
+        grid-column: auto;
+    }
+}
+
+@media (min-width: 1024px) {
+
+    .contact-content {
+        grid-template-columns: minmax(0, 1fr) 500px;
+
+        gap: var(--space-7);
+
+        align-items: center;
+    }
+}
+
+
+/* FOOTER */
+
+footer {
+    background: var(--color-inverse-bg);
+
+    color: var(--color-inverse-text-subtle);
+
+    border-top: 1px solid var(--color-inverse-divider);
+}
+
+.footer-inner {
+    display: flex;
+
+    gap: var(--space-1) var(--space-4);
+
+    min-height: 72px;
+
+    flex-wrap: wrap;
+
+    align-items: center;
+    justify-content: space-between;
+
+    font-size: var(--text-small);
+}
+
+/* Homepage: the footer continues the contact band, so a container-width
+   divider replaces the full-bleed border */
+body:has(.contact) footer {
+    border-top-color: transparent;
+}
+
+body:has(.contact) .footer-inner {
+    border-top: 1px solid var(--color-inverse-divider);
+}
+
+
+/* KEYFRAMES */
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-accent) 55%, transparent);
+    }
+
+    70%,
+    100% {
+        box-shadow: 0 0 0 10px color-mix(in srgb, var(--color-accent) 0%, transparent);
+    }
+}
+
+@keyframes drift-one {
+    0%,
+    100% {
+        transform: translate(0, 0);
+    }
+
+    50% {
+        transform: translate(-60px, 50px);
+    }
+}
+
+@keyframes drift-two {
+    0%,
+    100% {
+        transform: translate(0, 0);
+    }
+
+    50% {
+        transform: translate(70px, -40px);
+    }
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes caret-blink {
+    50% {
+        opacity: 0;
+    }
+}
+
+@keyframes glow-breathe {
+    0%,
+    100% {
+        opacity: 0.7;
+        transform: translateY(-50%) scale(1);
+    }
+
+    50% {
+        opacity: 1;
+        transform: translateY(-50%) scale(1.12);
+    }
+}
+
+
+/* SMALL DESKTOP / TABLET: hero stacks, editor below the introduction */
+
+@media (max-width: 1199px) {
+
+    .hero-layout {
+        grid-template-columns: minmax(0, 1fr);
+
+        gap: var(--space-7);
+    }
+
+    .hero-editor {
+        max-width: 640px;
+    }
+}
+
+
+/* MOBILE */
+
+@media (max-width: 650px) {
+
+    .hero {
+        min-height: auto;
+    }
+
+    .hero-layout {
+        padding: 72px 0 80px;
+    }
+
+    .hero-label {
+        margin-bottom: var(--space-5);
+    }
+
+    .hero h1 {
+        font-size: clamp(2.9rem, 15vw, 5rem);
+    }
+
+    .hero-subtitle {
+        margin-top: var(--space-5);
+    }
+
+    .hero-editor {
+        --gutter: 2.25rem;
+    }
+
+    .editor-dots {
+        display: none;
+    }
+
+    .editor-bar {
+        padding-left: var(--space-2);
+    }
+
+    .editor-tab {
+        padding: 0 10px;
+    }
+
+    .editor-stack {
+        padding-right: var(--space-4);
+    }
+
+    /* Phones: wrap long lines so the snippet can be read without swiping.
+       Hanging indent: they continue under the code, not at column 0. */
+    .editor-code {
+        white-space: pre-wrap;
+
+        overflow-x: visible;
+    }
+
+    .code-line {
+        padding-left: calc(var(--gutter) + (var(--ws, 0) + 2) * 1ch);
+
+        text-indent: calc((var(--ws, 0) + 2) * -1ch);
+    }
+
+    .code-line::before,
+    .code-caret {
+        text-indent: 0;
+    }
+
+    /* Mobile: full-width main actions, profile links share one row */
+    .hero-buttons .button.primary,
+    .hero-buttons .button.secondary {
+        flex: 1 1 100%;
+    }
+
+    .hero-links {
+        margin-left: 0;
+    }
+
+    .hero-links .button.ghost {
+        flex: 1 1 0;
+    }
+
+
+    .footer-inner {
+        padding: var(--space-5) 0;
+
+        flex-direction: column;
+
+        align-items: flex-start;
+        justify-content: center;
+    }
+}
+
+
+/* PHONES: four tabs and a title don't fit one row, so the title gets its own */
+
+@media (max-width: 480px) {
+
+    .editor-bar {
+        flex-wrap: wrap;
+
+        gap: 0;
+    }
+
+    .editor-tab {
+        min-height: 44px;
+    }
+
+    .editor-title {
+        flex-basis: 100%;
+
+        margin-left: 0;
+
+        padding: 6px 10px;
+
+        border-top: 1px solid var(--color-border);
+    }
+}

@@ -1,0 +1,14 @@
+[
+    {
+        "id": "ai-ml",
+        "label": "AI & Machine Learning"
+    },
+    {
+        "id": "applications",
+        "label": "Applications"
+    },
+    {
+        "id": "software-engineering",
+        "label": "Software Engineering"
+    }
+]

@@ -1,0 +1,95 @@
+{% from "partials/components.njk" import button %}
+{% set hero = home.hero %}
+
+<section id="home" class="hero">
+
+    <div class="hero-grid" aria-hidden="true"></div>
+    <div class="hero-spotlight" aria-hidden="true"></div>
+    <div class="hero-blob hero-blob-one" aria-hidden="true"></div>
+    <div class="hero-blob hero-blob-two" aria-hidden="true"></div>
+
+    <div class="container hero-layout" data-stagger>
+
+        <div class="hero-content">
+
+            <p class="hero-label reveal">
+                <span class="status-dot"></span>
+                {{ hero.label }}
+            </p>
+
+            <h1 class="hero-name reveal">
+                {{ hero.nameLines | join("<br>") | safe }}
+            </h1>
+
+            <p class="hero-subtitle reveal">
+                {{ hero.subtitle }}
+            </p>
+
+            <div class="hero-buttons reveal">
+                {{ button("View Projects", "#projects", "primary", trailingIcon = "arrow-down") }}
+                {{ button("Download CV", site.cv, "secondary", "download", site.cvFilename, icon = "download") }}
+
+                {#- Profile links wrap together as one group #}
+                <div class="hero-links">
+                    {{ button("GitHub", site.social.github, "ghost", "external", icon = "github") }}
+                    {{ button("LinkedIn", site.social.linkedin, "ghost", "external", icon = "linkedin") }}
+                </div>
+            </div>
+
+        </div>
+
+        {% if hero.editor %}
+        {#-
+            Code editor. The samples are highlighted at build time (lib/code-samples.js),
+            so they're complete without JavaScript and readable by screen readers.
+            assets/js/editor.js adds the tabs and the typing effect.
+        #}
+        {% set editor = hero.editor | codeEditor %}
+        {% set initial = editor.languages | selectattr("isDefault") | first %}
+
+        <div class="hero-editor reveal" data-editor>
+
+            <div class="editor-bar">
+                <span class="editor-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+
+                <div class="editor-tabs" role="tablist" aria-label="Code sample language">
+                    {%- for lang in editor.languages %}
+                    <button
+                        type="button"
+                        class="editor-tab"
+                        role="tab"
+                        id="editor-tab-{{ lang.id }}"
+                        aria-controls="editor-panel-{{ lang.id }}"
+                        aria-selected="{{ 'true' if lang.isDefault else 'false' }}"
+                        tabindex="{{ '0' if lang.isDefault else '-1' }}"
+                        data-lang="{{ lang.id }}"
+                    >{{ lang.label }}</button>
+                    {%- endfor %}
+                </div>
+
+                <span class="editor-title" data-editor-title>{{ initial.title }}</span>
+            </div>
+
+            <div class="editor-body">
+                <div class="editor-stack">
+                    {%- for lang in editor.languages %}
+                    <pre
+                        class="editor-code{{ ' is-active' if lang.isDefault }}"
+                        id="editor-panel-{{ lang.id }}"
+                        role="tabpanel"
+                        aria-labelledby="editor-tab-{{ lang.id }}"
+                        tabindex="0"
+                        data-lang="{{ lang.id }}"
+                        data-title="{{ lang.title }}"
+                    ><code>{{ lang.html | safe }}</code></pre>
+                    {%- endfor %}
+                    <pre class="editor-code editor-typing" aria-hidden="true"><code></code></pre>
+                </div>
+            </div>
+
+        </div>
+        {% endif %}
+
+    </div>
+
+</section>

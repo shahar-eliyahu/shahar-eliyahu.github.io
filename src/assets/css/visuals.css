@@ -1,0 +1,794 @@
+/*
+ * PROJECT VISUALS
+ * Animated illustrations, one block per project. The matching markup lives
+ * in src/_includes/partials/visuals/<id>.njk and the shared frame
+ * (.project-visual, .visual-label, .visual-center) lives in sections.css.
+ */
+
+
+/* EASYFILL VISUAL */
+
+.easyfill-visual {
+    background:
+        radial-gradient(
+            circle at 70% 35%,
+            color-mix(in srgb, var(--color-primary) 16%, transparent),
+            transparent 33%
+        ),
+        var(--viz-card);
+}
+
+.ef-fields {
+    position: absolute;
+
+    top: 70px;
+    left: 26px;
+
+    display: grid;
+
+    width: 46%;
+
+    gap: 12px;
+}
+
+.ef-field {
+    position: relative;
+
+    height: 10px;
+
+    overflow: hidden;
+
+    border-radius: var(--radius-pill);
+
+    background: var(--color-primary-soft);
+}
+
+.ef-field.short {
+    width: 60%;
+}
+
+.ef-field::after {
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    background: var(--color-primary);
+
+    transform: scaleX(0);
+    transform-origin: left;
+
+    animation: fill-field 5s var(--ease-out) infinite;
+}
+
+.ef-field:nth-child(2)::after {
+    animation-delay: 0.6s;
+}
+
+.ef-field:nth-child(3)::after {
+    animation-delay: 1.2s;
+}
+
+.ef-pulse {
+    position: absolute;
+
+    left: 0;
+    bottom: 12%;
+
+    width: 100%;
+    height: 70px;
+}
+
+.ef-pulse path {
+    fill: none;
+
+    stroke: var(--color-accent);
+
+    stroke-width: 2;
+
+    stroke-dasharray: 1;
+
+    vector-effect: non-scaling-stroke;
+
+    animation: pulse-draw 3.2s linear infinite;
+}
+
+@keyframes fill-field {
+    0% {
+        transform: scaleX(0);
+        opacity: 1;
+    }
+
+    35%,
+    85% {
+        transform: scaleX(1);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scaleX(1);
+        opacity: 0;
+    }
+}
+
+@keyframes pulse-draw {
+    from {
+        stroke-dashoffset: 1;
+    }
+
+    to {
+        stroke-dashoffset: -1;
+    }
+}
+
+
+/* COMPUTER VISION VISUAL */
+
+.vision-visual {
+    background:
+        linear-gradient(
+            145deg,
+            var(--viz-dark-bg),
+            var(--viz-vision-bg-end)
+        );
+
+    color: var(--viz-light);
+}
+
+.vision-visual::before {
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    background-image:
+        linear-gradient(color-mix(in srgb, var(--viz-light) 5%, transparent) 1px, transparent 1px),
+        linear-gradient(90deg, color-mix(in srgb, var(--viz-light) 5%, transparent) 1px, transparent 1px);
+
+    background-size: 32px 32px;
+}
+
+.vision-visual .visual-label {
+    color: var(--viz-dark-label);
+}
+
+.vision-visual .visual-center strong {
+    color: var(--viz-light);
+}
+
+.scan-line {
+    position: absolute;
+
+    left: 0;
+    right: 0;
+    top: -90px;
+
+    z-index: 1;
+
+    height: 90px;
+
+    background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--color-accent) 16%, transparent));
+
+    border-bottom: 1px solid color-mix(in srgb, var(--color-accent) 65%, transparent);
+
+    animation: scan 4.5s linear infinite;
+}
+
+.detection-box {
+    position: absolute;
+
+    z-index: 2;
+
+    border: 2px solid var(--color-accent);
+}
+
+.detection-box::before {
+    content: attr(data-label);
+
+    position: absolute;
+
+    bottom: 100%;
+    left: -2px;
+
+    padding: 2px 7px;
+
+    background: var(--color-accent);
+
+    color: var(--color-on-accent);
+
+    font-family: var(--font-mono);
+
+    font-size: 0.65rem;
+
+    white-space: nowrap;
+}
+
+.box-one {
+    width: 120px;
+    height: 190px;
+
+    left: 14%;
+    top: 26%;
+
+    animation: track-one 7s ease-in-out infinite;
+}
+
+.box-two {
+    width: 150px;
+    height: 90px;
+
+    right: 12%;
+    bottom: 16%;
+
+    animation: track-two 6s ease-in-out infinite;
+}
+
+/* Short strips (phones): smaller boxes on swapped sides (person right,
+   vehicle low left), so neither the label nor the tracking motion makes
+   them collide */
+@container (max-height: 170px) {
+    .box-one {
+        width: 64px;
+        height: 62%;
+
+        left: auto;
+        right: 16%;
+        top: 46px;
+    }
+
+    .box-two {
+        width: 100px;
+        height: 40px;
+
+        left: 18%;
+        right: auto;
+        bottom: 14%;
+    }
+}
+
+@keyframes scan {
+    to {
+        top: 100%;
+    }
+}
+
+@keyframes track-one {
+    0%,
+    100% {
+        transform: translate(0, 0);
+    }
+
+    50% {
+        transform: translate(26px, -10px);
+    }
+}
+
+@keyframes track-two {
+    0%,
+    100% {
+        transform: translate(0, 0) scale(1);
+    }
+
+    50% {
+        transform: translate(-30px, 6px) scale(1.06);
+    }
+}
+
+
+/* DATA VISUAL */
+
+.data-visual {
+    background:
+        linear-gradient(
+            135deg,
+            var(--viz-data-bg-start),
+            var(--viz-data-bg-end)
+        );
+}
+
+.stream-line {
+    position: absolute;
+
+    left: 12%;
+
+    height: 2px;
+
+    background: color-mix(in srgb, var(--color-primary) 25%, transparent);
+}
+
+.stream-line::after {
+    content: "";
+
+    position: absolute;
+
+    top: -3px;
+    left: 0;
+
+    width: 8px;
+    height: 8px;
+
+    border-radius: 50%;
+
+    background: var(--color-accent);
+
+    box-shadow: 0 0 12px var(--color-accent);
+
+    animation: stream 3s linear infinite;
+}
+
+.line-one {
+    width: 70%;
+
+    top: 28%;
+}
+
+.line-two {
+    width: 50%;
+
+    top: 43%;
+}
+
+.line-two::after {
+    animation-delay: 1s;
+    animation-duration: 2.4s;
+}
+
+.line-three {
+    width: 62%;
+
+    bottom: 27%;
+}
+
+.line-three::after {
+    animation-delay: 1.8s;
+    animation-duration: 3.6s;
+}
+
+.data-bars {
+    position: absolute;
+
+    right: 8%;
+    bottom: 10%;
+
+    display: flex;
+
+    height: 64px;
+
+    gap: 6px;
+
+    align-items: flex-end;
+}
+
+.data-bars span {
+    width: 10px;
+    height: var(--h);
+
+    background: var(--color-primary);
+
+    transform-origin: bottom;
+
+    animation: bar-grow 2.8s ease-in-out var(--d) infinite;
+}
+
+.data-bars span:last-child {
+    background: var(--color-accent);
+}
+
+@keyframes stream {
+    0% {
+        left: 0;
+        opacity: 0;
+    }
+
+    10%,
+    85% {
+        opacity: 1;
+    }
+
+    100% {
+        left: 100%;
+        opacity: 0;
+    }
+}
+
+@keyframes bar-grow {
+    0%,
+    100% {
+        transform: scaleY(0.4);
+    }
+
+    50% {
+        transform: scaleY(1);
+    }
+}
+
+
+/* NLP VISUAL */
+
+.nlp-visual {
+    background:
+        radial-gradient(
+            circle at center,
+            color-mix(in srgb, var(--color-accent) 14%, transparent),
+            transparent 40%
+        ),
+        var(--viz-card);
+}
+
+.token {
+    position: absolute;
+
+    top: var(--y);
+    left: var(--x);
+
+    padding: 4px 10px;
+
+    border: 1px solid currentColor;
+    border-radius: var(--radius-sm);
+
+    background: var(--viz-chip);
+
+    font-family: var(--font-mono);
+
+    font-size: 0.72rem;
+
+    opacity: 0;
+
+    /* Shift by the same share of the token's own size, so a token at 86%
+       still ends inside the frame */
+    translate: calc(var(--x) * -1) calc(var(--y) * -1);
+
+    animation: token-float 6s ease-in-out var(--d) infinite;
+}
+
+/* Short strips (phones): keep the tokens below the label */
+@container (max-height: 170px) {
+    .token {
+        top: calc(28px + var(--y) * 0.7);
+    }
+}
+
+.token.pos {
+    color: var(--color-primary-bright);
+}
+
+.token.neg {
+    color: var(--color-accent);
+}
+
+@keyframes token-float {
+    0% {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    20%,
+    60% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    80%,
+    100% {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+}
+
+
+/* CARKEEP VISUAL */
+
+.carkeep-visual {
+    background:
+        linear-gradient(
+            155deg,
+            var(--viz-card),
+            var(--viz-carkeep-bg-end)
+        );
+}
+
+.ck-badges {
+    position: absolute;
+
+    top: 64px;
+    right: 26px;
+
+    display: flex;
+
+    gap: 8px;
+
+    flex-direction: column;
+
+    align-items: flex-end;
+}
+
+.ck-badges span {
+    padding: 5px 10px;
+
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius-sm);
+
+    background: var(--viz-chip);
+
+    color: var(--color-text-muted);
+
+    font-family: var(--font-mono);
+
+    font-size: 0.68rem;
+}
+
+/* Short strips: one row just above the road */
+@container (max-height: 170px) {
+    .ck-badges {
+        top: auto;
+        left: 20px;
+        bottom: calc(16% + 12px);
+
+        flex-direction: row;
+
+        justify-content: flex-end;
+    }
+}
+
+/* Too narrow for three in a row: keep the two that tell the story */
+@container (max-height: 170px) and (max-width: 340px) {
+    .ck-badges span:first-child {
+        display: none;
+    }
+}
+
+.ck-badges .due {
+    border-color: var(--color-accent);
+
+    color: var(--color-accent);
+
+    animation: due-pulse 2.2s ease-in-out infinite;
+}
+
+.road {
+    position: absolute;
+
+    left: 0;
+    right: 0;
+    bottom: 16%;
+
+    height: 2px;
+
+    background: repeating-linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--color-primary) 40%, transparent) 0 24px,
+        transparent 24px 44px
+    );
+
+    background-size: 44px 2px;
+
+    animation: road 1s linear infinite;
+}
+
+@keyframes due-pulse {
+    0%,
+    100% {
+        box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-accent) 35%, transparent);
+    }
+
+    50% {
+        box-shadow: 0 0 0 6px color-mix(in srgb, var(--color-accent) 0%, transparent);
+    }
+}
+
+@keyframes road {
+    to {
+        background-position: -44px 0;
+    }
+}
+
+
+/* PACMAN AI VISUAL */
+
+.pacai-visual {
+    background:
+        linear-gradient(
+            150deg,
+            var(--viz-dark-bg),
+            var(--viz-pacman-bg-end)
+        );
+
+    color: var(--viz-light);
+}
+
+.pacai-visual .visual-label {
+    color: var(--viz-dark-label);
+}
+
+.pac-maze {
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+}
+
+.pac-walls rect {
+    fill: color-mix(in srgb, var(--viz-light) 9%, transparent);
+}
+
+.pac-coins circle {
+    fill: var(--color-accent);
+
+    opacity: 0.85;
+}
+
+.pac-path {
+    fill: none;
+
+    stroke: var(--viz-pacman-ghost);
+    stroke-width: 4;
+    stroke-linecap: round;
+    stroke-dasharray: 0.1 14;
+
+    opacity: 0.8;
+
+    animation: pac-plan 1.2s linear infinite;
+}
+
+.pac-chaser-edge {
+    fill: var(--viz-pacman-ghost-edge);
+}
+
+.pac-chaser-body {
+    fill: var(--viz-pacman-ghost);
+}
+
+.pac-light {
+    fill: var(--viz-light);
+}
+
+.pac-runner-body {
+    fill: var(--color-primary-bright);
+}
+
+.pac-halo {
+    fill: color-mix(in srgb, var(--viz-pacman-ghost) 22%, transparent);
+
+    transform-box: fill-box;
+    transform-origin: center;
+
+    animation: pac-halo 1.8s ease-in-out infinite;
+}
+
+@keyframes pac-plan {
+    to {
+        stroke-dashoffset: -14.1;
+    }
+}
+
+@keyframes pac-halo {
+    0%, 100% {
+        transform: scale(0.85);
+        opacity: 0.6;
+    }
+
+    50% {
+        transform: scale(1.1);
+        opacity: 1;
+    }
+}
+
+
+/* TACTICAL AI BATTLE VISUAL */
+
+.battle-visual {
+    background:
+        linear-gradient(
+            160deg,
+            var(--viz-battle-bg-start),
+            var(--viz-battle-bg-end)
+        );
+}
+
+.battle-map {
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+}
+
+.bt-rocks rect {
+    fill: var(--viz-battle-rock);
+}
+
+.bt-trees circle {
+    fill: var(--viz-battle-tree);
+}
+
+.bt-cone {
+    fill: color-mix(in srgb, var(--color-primary-bright) 20%, transparent);
+}
+
+.bt-tracer {
+    stroke: var(--color-primary-bright);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-dasharray: 26 220;
+
+    animation: bt-shot 1.6s linear infinite;
+}
+
+.bt-blast {
+    fill: color-mix(in srgb, var(--viz-battle-blast) 18%, transparent);
+
+    stroke: var(--viz-battle-blast-edge);
+    stroke-width: 2;
+
+    transform-box: fill-box;
+    transform-origin: center;
+
+    animation: bt-blast 2.4s ease-out infinite;
+}
+
+.bt-team-blue circle {
+    fill: var(--color-primary-bright);
+
+    stroke: var(--viz-light);
+    stroke-width: 3;
+}
+
+.bt-team-orange circle {
+    fill: var(--viz-battle-team-b);
+
+    stroke: var(--viz-light);
+    stroke-width: 3;
+}
+
+.battle-visual .bt-cmd-ring {
+    fill: none;
+
+    stroke: var(--viz-battle-commander);
+    stroke-width: 4;
+}
+
+@keyframes bt-shot {
+    from {
+        stroke-dashoffset: 26;
+    }
+
+    to {
+        stroke-dashoffset: -220;
+    }
+}
+
+@keyframes bt-blast {
+    0% {
+        transform: scale(0.3);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1.15);
+        opacity: 0;
+    }
+}
+
+
+/* REDUCED MOTION */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .token {
+        opacity: 1;
+    }
+
+    .ef-field::after {
+        transform: scaleX(1);
+    }
+
+    .stream-line::after,
+    .scan-line {
+        display: none;
+    }
+}

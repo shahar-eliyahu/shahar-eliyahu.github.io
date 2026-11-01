@@ -1,0 +1,303 @@
+---
+layout: layouts/base.njk
+---
+{#-
+    Project detail page: one shared template for every project with
+    `detailPage: true` (see projects.11tydata.js). Every section is optional
+    and only rendered when the project has real content for it:
+
+    - Markdown body             → Overview
+    - caseStudy.features        → Key features (list)
+    - caseStudy.architecture    → Architecture & implementation (Markdown)
+    - caseStudy.challenges      → Challenges & solutions ({ challenge, solution })
+    - caseStudy.results         → Results & evaluation (Markdown)
+    - caseStudy.lessons         → Lessons learned (Markdown)
+    - caseStudy.sections        → custom sections, in order, each with its own
+                                  title, text, media (images / videos), items,
+                                  tools and links (see README)
+    - role / team               → "At a glance"
+
+    With `caseStudy.sections` the sections carry the media, so the gallery
+    under the header and the summary introduction are left out (no duplicates),
+    and a section `tools` list replaces the Technologies card.
+#}
+{%- from "partials/project/macros.njk" import techTags, projectActions %}
+{%- from "partials/components.njk" import button %}
+{%- from "partials/icons.njk" import icon %}
+
+{%- set project = collections.projects | findProject(page.url) %}
+{%- set cs = caseStudy or {} %}
+{%- set custom = cs.sections or [] %}
+{%- set hasTools = custom | selectattr("tools") | length %}
+{%- set video = project | projectVideo %}
+{%- set pager = collections.projects | projectNeighbors(page.url) %}
+{%- set overview = content | striptags | trim %}
+
+{#- Sections present on this page, in order (drives the "On this page" list) #}
+{%- set sections = [] %}
+{%- if overview %}{% set _ = sections.push({ id: "overview", label: "Overview" }) %}{% endif %}
+{%- for section in custom %}{% set _ = sections.push({ id: section.id, label: section.title }) %}{% endfor %}
+{%- if cs.features and cs.features.length %}{% set _ = sections.push({ id: "features", label: "Key features" }) %}{% endif %}
+{%- if cs.architecture %}{% set _ = sections.push({ id: "architecture", label: "Architecture & implementation" }) %}{% endif %}
+{%- if cs.challenges and cs.challenges.length %}{% set _ = sections.push({ id: "challenges", label: "Challenges & solutions" }) %}{% endif %}
+{%- if cs.results %}{% set _ = sections.push({ id: "results", label: "Results & evaluation" }) %}{% endif %}
+{%- if cs.lessons %}{% set _ = sections.push({ id: "lessons", label: "Lessons learned" }) %}{% endif %}
+
+<article class="project-page" data-project="{{ slug }}" aria-labelledby="project-page-title">
+
+    <div class="container">
+
+        {#- Back to the explorer with this project selected #}
+        <a class="project-back" href="/?project={{ slug }}#projects">
+            {{ icon("arrow-left") }}
+            <span>Back to Projects</span>
+        </a>
+
+        <header class="project-hero">
+            <p class="project-meta">
+                {%- for category in categories | categoryDetails %}
+                <span class="project-category">{{ category.label }}</span>
+                {%- endfor %}
+                {%- if year %}
+                <span class="project-year">{{ year }}</span>
+                {%- endif %}
+                {%- if type %}
+                <span class="project-badge">{{ type }}</span>
+                {%- endif %}
+            </p>
+
+            <h1 class="section-heading project-page-title" id="project-page-title">{{ title }}</h1>
+
+            {%- if subtitle %}
+            <p class="project-subtitle">{{ subtitle }}</p>
+            {%- endif %}
+
+            {%- if not custom.length %}
+            <p class="project-intro">{{ summary }}</p>
+            {%- endif %}
+
+            {{ projectActions(project, "primary", video and video.provider == "external", false) }}
+        </header>
+
+        {%- if not custom.length %}
+        <div class="project-page-media">
+            {% include "partials/project/gallery.njk" %}
+        </div>
+        {%- endif %}
+
+        {#- With no sections yet (summary only), the details span the full width
+            instead of sitting beside an empty column #}
+        <div class="project-layout{{ ' is-summary-only' if not sections.length }}">
+
+            <aside class="project-aside" aria-label="Project details">
+
+                {%- if technologies.length and not hasTools %}
+                <div class="aside-card">
+                    <h2 class="aside-title">Technologies</h2>
+                    {{ techTags(technologies) }}
+                </div>
+                {%- endif %}
+
+                {%- if role or team %}
+                <div class="aside-card">
+                    <h2 class="aside-title">At a glance</h2>
+                    <dl class="aside-facts">
+                        {%- if role %}
+                        <div><dt>Role</dt><dd>{{ role }}</dd></div>
+                        {%- endif %}
+                        {%- if team %}
+                        <div><dt>Team</dt><dd>{{ team }}{{ " people" if team is number }}</dd></div>
+                        {%- endif %}
+                    </dl>
+                </div>
+                {%- endif %}
+
+                {%- if sections.length >= 3 %}
+                <nav class="aside-card project-toc" aria-label="On this page">
+                    <h2 class="aside-title">On this page</h2>
+                    <ol>
+                        {%- for section in sections %}
+                        <li><a href="#{{ section.id }}">{{ section.label }}</a></li>
+                        {%- endfor %}
+                    </ol>
+                </nav>
+                {%- endif %}
+
+            </aside>
+
+            {%- if sections.length %}
+            <div class="project-main">
+
+                {%- if overview %}
+                <section class="project-section" id="overview" aria-labelledby="overview-title">
+                    <h2 class="project-section-title" id="overview-title">Overview</h2>
+                    <div class="prose">{{ content | safe }}</div>
+                </section>
+                {%- endif %}
+
+                {#- Custom sections (caseStudy.sections). Portrait screenshots sit
+                    beside the text when there is room; other media goes below it.
+                    An optional `note` (small print: sources, caveats) follows the
+                    media of its section or item. #}
+                {%- for section in custom %}
+                {%- set bodyMedia = section.media | sectionMedia(project) %}
+                <section
+                    class="project-section case-section{{ ' has-side-media' if section.text and bodyMedia | mediaIsPortrait }}"
+                    id="{{ section.id }}"
+                    aria-labelledby="{{ section.id }}-title"
+                >
+                    <h2 class="project-section-title" id="{{ section.id }}-title">{{ section.title }}</h2>
+
+                    {%- if section.text or bodyMedia.length %}
+                    <div class="case-body">
+                        {%- if section.text %}
+                        <div class="prose">{{ section.text | markdown(section.title) | safe }}</div>
+                        {%- endif %}
+                        {%- set caseMedia = bodyMedia %}
+                        {% include "partials/project/case-media.njk" %}
+                    </div>
+                    {%- endif %}
+
+                    {%- if section.note %}
+                    <div class="case-note">{{ section.note | markdown | safe }}</div>
+                    {%- endif %}
+
+                    {%- if section.items and section.items.length %}
+                    <div class="case-items">
+                        {%- for item in section.items %}
+                        {%- set itemMedia = item.media | sectionMedia(project) %}
+                        {%- set itemKind = itemMedia[0].kind if itemMedia.length else "text" %}
+                        <article class="case-item is-{{ itemKind }}{{ ' has-portrait-media' if itemMedia | mediaIsPortrait }}" aria-labelledby="{{ section.id }}-item-{{ loop.index }}">
+                            {%- if itemKind == "video" %}
+                            {%- set caseMedia = itemMedia %}
+                            {% include "partials/project/case-media.njk" %}
+                            {%- endif %}
+                            <div class="case-item-text">
+                                <h3 class="case-item-title" id="{{ section.id }}-item-{{ loop.index }}">{{ item.title }}</h3>
+                                {%- if item.text %}
+                                <div class="prose">{{ item.text | markdown(item.title) | safe }}</div>
+                                {%- endif %}
+                                {%- if item.note and itemKind != "image" %}
+                                <div class="case-note">{{ item.note | markdown | safe }}</div>
+                                {%- endif %}
+                            </div>
+                            {%- if itemKind == "image" %}
+                            {%- set caseMedia = itemMedia %}
+                            {% include "partials/project/case-media.njk" %}
+                            {%- if item.note %}
+                            <div class="case-note">{{ item.note | markdown | safe }}</div>
+                            {%- endif %}
+                            {%- endif %}
+                        </article>
+                        {%- endfor %}
+                    </div>
+                    {%- endif %}
+
+                    {%- if section.tools and section.tools.length %}
+                    <ul class="case-tools">
+                        {%- for tool in section.tools %}
+                        <li>
+                            <span class="tech-badge">{{ tool.name }}</span>
+                            {%- if tool.use %}
+                            <span class="case-tool-use">{{ tool.use }}</span>
+                            {%- endif %}
+                        </li>
+                        {%- endfor %}
+                    </ul>
+                    {%- endif %}
+
+                    {%- if section.links and section.links.length %}
+                    <div class="project-actions case-links">
+                        {%- for link in section.links %}
+                        {{ button(link.label | escape, link.url, "secondary small", "external", icon = "github" if "github.com" in link.url else "arrow-up-right") }}
+                        {%- endfor %}
+                    </div>
+                    {%- endif %}
+                </section>
+                {%- endfor %}
+
+                {%- if cs.features and cs.features.length %}
+                <section class="project-section" id="features" aria-labelledby="features-title">
+                    <h2 class="project-section-title" id="features-title">Key features</h2>
+                    <ul class="feature-list">
+                        {%- for feature in cs.features %}
+                        <li>{{ feature | markdownInline | safe }}</li>
+                        {%- endfor %}
+                    </ul>
+                </section>
+                {%- endif %}
+
+                {%- if cs.architecture %}
+                <section class="project-section" id="architecture" aria-labelledby="architecture-title">
+                    <h2 class="project-section-title" id="architecture-title">Architecture &amp; implementation</h2>
+                    <div class="prose">{{ cs.architecture | markdown | safe }}</div>
+                </section>
+                {%- endif %}
+
+                {%- if cs.challenges and cs.challenges.length %}
+                <section class="project-section" id="challenges" aria-labelledby="challenges-title">
+                    <h2 class="project-section-title" id="challenges-title">Challenges &amp; solutions</h2>
+                    <div class="challenge-list">
+                        {%- for item in cs.challenges %}
+                        <div class="challenge">
+                            <p class="challenge-label">Challenge</p>
+                            <div class="prose">{{ item.challenge | markdown | safe }}</div>
+                            <p class="challenge-label is-solution">Solution</p>
+                            <div class="prose">{{ item.solution | markdown | safe }}</div>
+                        </div>
+                        {%- endfor %}
+                    </div>
+                </section>
+                {%- endif %}
+
+                {%- if cs.results %}
+                <section class="project-section" id="results" aria-labelledby="results-title">
+                    <h2 class="project-section-title" id="results-title">Results &amp; evaluation</h2>
+                    <div class="prose">{{ cs.results | markdown | safe }}</div>
+                </section>
+                {%- endif %}
+
+                {%- if cs.lessons %}
+                <section class="project-section" id="lessons" aria-labelledby="lessons-title">
+                    <h2 class="project-section-title" id="lessons-title">Lessons learned</h2>
+                    <div class="prose">{{ cs.lessons | markdown | safe }}</div>
+                </section>
+                {%- endif %}
+
+            </div>
+            {%- endif %}
+
+        </div>
+
+        {#- Previous / next only among projects that have a detail page #}
+        {%- if pager.prev or pager.next %}
+        <nav class="project-pager" aria-label="More projects">
+            {%- if pager.prev %}
+            <a class="pager-link is-prev" href="{{ pager.prev.url }}">
+                <span class="pager-label">{{ icon("arrow-left") }} Previous project</span>
+                <span class="pager-title">{{ pager.prev.data.title }}</span>
+            </a>
+            {%- endif %}
+            {%- if pager.next %}
+            <a class="pager-link is-next" href="{{ pager.next.url }}">
+                <span class="pager-label">Next project {{ icon("arrow-right") }}</span>
+                <span class="pager-title">{{ pager.next.data.title }}</span>
+            </a>
+            {%- endif %}
+        </nav>
+        {%- endif %}
+
+        <p class="project-footer-back">
+            <a class="button secondary small" href="/?project={{ slug }}#projects">
+                {{ icon("arrow-left") }}
+                <span>Back to all projects</span>
+            </a>
+        </p>
+
+    </div>
+
+</article>
+
+<p class="sr-only" aria-live="polite" data-gallery-status></p>
+
+{% include "partials/project/lightbox.njk" %}

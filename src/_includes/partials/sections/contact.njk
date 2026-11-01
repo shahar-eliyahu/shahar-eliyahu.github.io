@@ -1,0 +1,35 @@
+{% from "partials/components.njk" import button, profileButtons %}
+{% set contact = home.contact %}
+
+<section id="contact" class="contact">
+
+    <div class="contact-glow" aria-hidden="true"></div>
+
+    {#- Text left, actions right on desktop; stacked below 1024px #}
+    <div class="container contact-content reveal">
+
+        <div class="contact-text">
+            {#- The last word ("useful.") gets the accent; the copy stays in home.json #}
+            {%- set words = contact.title.split(" ") %}
+            <h2 class="section-heading">
+                {{ words.slice(0, -1).join(" ") }} <span class="contact-accent">{{ words | last }}</span>
+            </h2>
+
+            <p>
+                {{ contact.text }}
+            </p>
+        </div>
+
+        {#- Email is the primary action (with the mascot peeking over it); CV and
+            profiles share the row below #}
+        <div class="contact-buttons">
+            <div class="contact-email-wrap">
+                {{ button("Email Me", "mailto:" + site.email, "light contact-email", icon = "mail") }}
+                {% include "partials/contact-mascot.njk" %}
+            </div>
+            {{ profileButtons(site, "dark-outline", "dark-outline") }}
+        </div>
+
+    </div>
+
+</section>

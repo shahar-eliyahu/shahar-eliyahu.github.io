@@ -1,0 +1,31 @@
+{#- On the homepage, links point at sections (#about). Elsewhere they point back home (/#about). -#}
+{%- set homePrefix = "" if page.url == "/" else "/" -%}
+
+<nav class="navbar">
+    <div class="container nav-inner">
+
+        <a class="logo" href="{{ homePrefix }}#home">
+            <span class="logo-mark">{{ site.initials }}</span>
+            {{ site.name }}
+        </a>
+
+        <button
+            class="menu-button"
+            aria-label="Open navigation"
+            aria-expanded="false"
+            aria-controls="nav-links"
+        >
+            ☰
+        </button>
+
+        <div class="nav-links" id="nav-links">
+            {%- for item in site.nav %}
+            {%- set isCurrent = item.id == "projects" and page.url and page.url.startsWith("/projects/") %}
+            <a href="{{ homePrefix }}#{{ item.id }}"{% if isCurrent %} class="active" aria-current="page"{% endif %}>{{ item.label }}</a>
+            {%- endfor %}
+        </div>
+
+    </div>
+
+    <div class="scroll-progress" aria-hidden="true"></div>
+</nav>

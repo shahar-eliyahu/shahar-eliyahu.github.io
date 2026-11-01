@@ -1,0 +1,55 @@
+{#
+    One project preview in the explorer. Expects `project` and `isFirst`.
+    Order: media gallery → meta, title, excerpt → technologies → actions.
+#}
+{%- from "partials/project/macros.njk" import techTags, projectActions %}
+{%- set data = project.data %}
+{%- set video = project | projectVideo %}
+
+{#- Portrait screenshots sit beside the text from tablet width up #}
+<div
+    role="group"
+    class="explorer-panel{{ ' is-selected' if isFirst }}{{ ' has-portrait-media' if project | projectMedia | mediaIsPortrait }}"
+    id="project-{{ data.slug }}"
+    data-panel
+    data-project="{{ data.slug }}"
+    data-categories="{{ data.categories | join(' ') }}"
+    aria-labelledby="project-{{ data.slug }}-title"
+>
+
+    {% include "partials/project/gallery.njk" %}
+
+    <div class="explorer-info">
+
+        <p class="project-meta">
+            {%- for category in data.categories | categoryDetails %}
+            <span class="project-category">{{ category.label }}</span>
+            {%- endfor %}
+            {%- if data.year %}
+            <span class="project-year">{{ data.year }}</span>
+            {%- endif %}
+            {%- if data.type %}
+            <span class="project-badge">{{ data.type }}</span>
+            {%- endif %}
+        </p>
+
+        <h3 class="explorer-title" id="project-{{ data.slug }}-title">{{ data.title }}</h3>
+
+        {%- if data.subtitle %}
+        <p class="project-subtitle">{{ data.subtitle }}</p>
+        {%- endif %}
+
+        <p class="explorer-excerpt">{{ data.excerpt or data.summary }}</p>
+
+        <div class="explorer-tech">
+            <h4 class="explorer-tech-label">Technologies</h4>
+            {{ techTags(data.technologies) }}
+        </div>
+
+        {#- "Explore Project" (primary) appears automatically once the project has a
+            detail page (project.url, Phase 4B); GitHub always stays directly available. #}
+        {{ projectActions(project, "primary", video and video.provider == "external") }}
+
+    </div>
+
+</div>

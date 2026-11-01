@@ -1,0 +1,77 @@
+{#
+    Small project UI pieces. Import with:
+    {% from "partials/project/macros.njk" import techTags, categoryList, projectActions %}
+#}
+{% from "partials/components.njk" import button %}
+
+
+{#
+    Technology badges: ["Kotlin", "Android"]. With `limit`, only the first N
+    are shown plus a "+N" badge (the Project Explorer shows all, no limit); the hidden
+    text keeps the full list available to screen readers.
+#}
+{% macro techTags(technologies, limit = 0) %}
+{%- if technologies.length %}
+{%- set shown = technologies | batch(limit) | first if limit else technologies %}
+{%- set extra = technologies.length - shown.length %}
+<ul class="tech-list" aria-label="Technologies">
+    {%- for item in shown %}
+    <li class="tech-badge">{{ item }}</li>
+    {%- endfor %}
+    {%- if extra > 0 %}
+    <li class="tech-badge is-more" title="{{ technologies | join(', ') }}">+{{ extra }}<span class="sr-only"> more: {{ (technologies | batch(limit) | last) | join(', ') if technologies.length > limit }}</span></li>
+    {%- endif %}
+</ul>
+{%- endif %}
+{% endmacro %}
+
+
+{#
+    Category labels for a project. Pass the resolved category objects:
+    categoryList(project.data.categories | categoryDetails)
+#}
+{% macro categoryList(categories) %}
+{%- if categories.length %}
+<ul class="project-categories">
+    {%- for category in categories %}
+    <li data-category="{{ category.id }}">{{ category.label }}</li>
+    {%- endfor %}
+</ul>
+{%- endif %}
+{% endmacro %}
+
+
+{#
+    Project actions, shown only when the data exists:
+    - "Explore Project": the internal detail page (only once it exists,
+      i.e. project.url is set). The primary action when present.
+    - GitHub: always directly available. "View on GitHub" and primary when
+      there is no detail page yet, otherwise a secondary "GitHub" button.
+    - Live demo (links.demo), and "Watch video" only when the video can't
+      play inside the gallery (`externalVideo`).
+    `showExplore = false` on the detail page itself (no link to the same page).
+    Hidden text names the project so repeated links stay distinct.
+#}
+{% macro projectActions(project, leadVariant = "secondary", externalVideo = false, showExplore = true) %}
+{%- set links = project.data.links %}
+{%- set context = '<span class="sr-only">: ' + (project.data.title | escape) + '</span>' %}
+{%- set explore = project.url and showExplore %}
+{%- if explore %}{% set lead = "explore" %}
+{%- elif links.github %}{% set lead = "github" %}
+{%- elif links.demo %}{% set lead = "demo" %}
+{%- else %}{% set lead = "video" %}{% endif %}
+<div class="project-actions">
+    {%- if explore %}
+    {{ button("Explore Project" + context, project.url, leadVariant + " small", trailingIcon = "arrow-right") }}
+    {%- endif %}
+    {%- if links.github %}
+    {{ button(("View on GitHub" if lead == "github" else "GitHub") + context, links.github, (leadVariant if lead == "github" else "secondary") + " small", "external", icon = "github") }}
+    {%- endif %}
+    {%- if links.demo %}
+    {{ button("Live demo" + context, links.demo, (leadVariant if lead == "demo" else "ghost") + " small", "external", icon = "arrow-up-right") }}
+    {%- endif %}
+    {%- if externalVideo %}
+    {{ button("Watch video" + context, links.video, (leadVariant if lead == "video" else "ghost") + " small", "external", icon = "play") }}
+    {%- endif %}
+</div>
+{% endmacro %}

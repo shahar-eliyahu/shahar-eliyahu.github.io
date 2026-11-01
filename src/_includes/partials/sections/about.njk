@@ -1,0 +1,25 @@
+{% from "partials/components.njk" import sectionTitle %}
+{% set about = home.about %}
+
+<section id="about" class="section about-section">
+
+    {#-
+        The heading sits beside the text on desktop, above it below 1024px. The basketball
+        is decorative: under the heading on desktop, beside it on tablets, hidden on phones.
+    #}
+    <div class="container about-layout">
+
+        <div class="about-aside">
+            {{ sectionTitle(about.title) }}
+            {% include "partials/about-ball.njk" %}
+        </div>
+
+        <div class="about-text reveal">
+            {%- for paragraph in about.paragraphs %}
+            <p>{{ paragraph | safe }}</p>
+            {%- endfor %}
+        </div>
+
+    </div>
+
+</section>
