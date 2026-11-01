@@ -164,7 +164,8 @@ Follow README → "Adding a New Project". Don't re-derive the process; these rul
 - Defined only in `src/_data/projectCategories.json`: ordered list of `{ id, label }`.
   Current categories, in this order: `ai-ml` (AI & Machine Learning), `applications`
   (Applications) and `software-engineering` (Software Engineering; owner-added for Zoo
-  Management System. Pacman AI and Tactical AI Battle stay in AI & ML).
+  Management System, now also Car Management System. Pacman AI and Tactical AI Battle stay
+  in AI & ML).
 - Projects reference ids in `categories: [...]`. Multiple ids are allowed.
 - `collections.projectCategories` = each category plus `projects` and `count`. Empty categories
   stay in the list with `count: 0`. UIs should hide or disable them.
@@ -465,8 +466,8 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
 
 - **Layout:** filters on top. **Desktop (1024px+):** a vertical picker (290px, sticky) of numbered
   project names plus category, with the selected one marked by a gradient bar; the preview panel on
-  the right. **Numbers are relative to the visible (filtered) list**: All 01–09, Applications
-  01–03, AI & ML 01–05, Software Engineering 01. `projects.js` renumbers on every filter change; the order and data never
+  the right. **Numbers are relative to the visible (filtered) list**: All 01–10, Applications
+  01–03, AI & ML 01–05, Software Engineering 01–02. `projects.js` renumbers on every filter change; the order and data never
   change, and the number is `aria-hidden` so tab names stay clean. **Below 1024px:** the picker is a swipeable strip of full-name pills (edge-faded,
   scroll-snap), auto-scrolled to the selection, with the preview below at full width. Filters are a
   swipeable row on phones and wrap from 651px.
@@ -493,7 +494,7 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   directly available in the explorer as a separate button (secondary once Explore exists), so
   visitors never have to open the detail page to reach the repository. Until detail pages exist,
   Explore is *not rendered* (no broken links or placeholder pages) and "View on GitHub" is the
-  primary button. **All nine projects now have a page**, so every panel shows Explore Project
+  primary button. **All ten projects now have a page**, so every panel shows Explore Project
   (primary) + GitHub (secondary, new tab); a project added without `detailPage` falls back to
   "View on GitHub" automatically. Demo if
   `links.demo`; "Watch video" only for videos that can't play inline.
@@ -549,7 +550,7 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   no per-project HTML files.
 - **Opt-in per project:** `detailPage: true`. `projects.11tydata.js` computes
   `permalink: /projects/<slug>/` only then (otherwise `false`). The URL makes `project.url` truthy,
-  which turns on "Explore Project" (primary) with GitHub secondary in the explorer. **All nine
+  which turns on "Explore Project" (primary) with GitHub secondary in the explorer. **All ten
   projects are enabled** (EasyFill first as the reviewed example, then the other six, owner
   request; Anyone Can Cook and Zoo Management System were added later with their full
   write-ups). Every page now has its
@@ -848,6 +849,37 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   `src/assets/js/projects.js`: the shared `revealIn` helper, which keeps the selected
   category chip visible in the swipeable filter row on phones (see Filters). No CSS or
   template changes.
+- **Car Management System integration (Implemented and owner-reviewed):** the tenth project, written in C. File `src/projects/car-management-system-c.md`,
+  slug and URL `car-management-system-c`, `software-engineering`, `order: 9` (last; so Zoo's
+  "Next" links to it), `type` "C Programming Project", no `year`, no `visual`. Positioned as an
+  independent software engineering project (owner rule): **never mention a course,
+  university or assignment**, no commercial or production claims, no bug-fix history (the
+  repository README's AddressSanitizer list stays out). The only history on the page is one
+  owner-approved Overview sentence: the original numbered menu, and the dashboard added later.
+  The emphasis is the implementation (memory, pointers, data structures, sorting and searching,
+  function pointers, modules, persistence, input validation); the terminal dashboard is secondary
+  (one short section). **Writing style (owner rule, applies to all project pages):** a
+  professional, high-level overview, not source-code documentation; no individual function
+  names, exact field restrictions, edge-case exceptions or internal loops; simplify or remove
+  over-specific sentences rather than lengthening them. Background facts the copy must stay
+  consistent with: customers are a **dynamic array**, only their purchase histories are
+  doubly linked lists; garages are a singly linked list; cars are sorted and `bsearch`ed by
+  price, brand and serial (sorted by the same key first), parts are sorted by price or brand
+  with `qsort` and found by serial with a **linear** scan; the comma check is in the dashboard
+  only, and garage addresses may contain commas; `freeCarInventory` is never called. Subtitle
+  "Data Structures and Memory Management in C" (owner decision: "System Programming" overstated
+  it). Portability: only Windows with MSYS2 GCC is verified, so the page says "compiled with
+  GCC" and names no operating systems. Media: the five PNG screenshots from the repository's
+  `docs/screenshots/` (1419 px wide, landscape, 130-170 KB, copied unchanged, SHA-256
+  verified) in `src/assets/projects_media/car-management-system-c/images/`. Explorer 01
+  dashboard (cover) → 02 cars search → 03 customers → 04 sell; page 01 (Overview), 03
+  ("Customers and Purchase Histories"), 02 / 05 (sub-blocks "Searching the Car Inventory",
+  "Sorting the Parts Inventory"), 04 (System Interaction). The sample customer IDs fail the
+  Israeli ID check digit (owner-checked). Eight sections: Project Overview, Dynamic Memory
+  Management and Data Structures, Sorting, Searching, and Function Pointers, Modular
+  Architecture and System Operations, Text and Binary File Persistence, System Interaction,
+  Technology & Methodology, Explore the Source Code. Copy checked against
+  Car-Management-C-Project commit `d8526c3`. No code changes.
 - **Pushed to `origin/portfolio-redesign` (owner-approved backup, 2026-10-31, up to
   `64b3d23`):** not a release; `main` and the live site are unchanged. The owner accepted
   that the earlier Computer Vision commit `f66c3f5`, which still contains the three
@@ -862,15 +894,16 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
 
 3. **Dark design system.** 3A (tokens, surfaces) and 3B (hero, editor, hierarchy) are done.
    The palette will be re-evaluated after the layout redesign.
-4. **New sections.** 4A (Project Explorer) and 4B (project detail pages) are done; all nine
+4. **New sections.** 4A (Project Explorer) and 4B (project detail pages) are done; all ten
    projects have a page. About, Skills and Contact have been redesigned. Possible later: expanded
    About (education, hackathon, experience timeline), skills linked to projects.
-5. **Project content.** Nine project pages (EasyFill, Anyone Can Cook, Computer Vision,
+5. **Project content.** Ten project pages (EasyFill, Anyone Can Cook, Computer Vision,
    Real-Time Retail Trend Detection, NLP Sentiment Analysis, CarKeep, Pacman AI, Tactical AI
-   Battle, Zoo Management System), each with owner-approved copy and media in
-   `src/assets/projects_media/<slug>/`. All nine are reviewed and committed. The first
-   eight are also pushed to `origin/portfolio-redesign` (up to `64b3d23`); Zoo Management
-   System is committed locally (`1c85a5b`) but not yet pushed. More projects may follow.
+   Battle, Zoo Management System, Car Management System), each with owner-approved copy and
+   media in `src/assets/projects_media/<slug>/`. The first nine are reviewed and committed.
+   The first eight are also pushed to `origin/portfolio-redesign` (up to `64b3d23`); Zoo
+   Management System is committed locally (`1c85a5b`) but not yet pushed. Car Management
+   System is implemented and owner-reviewed. More projects may follow.
    Still open per project: `role` / `team` where wanted.
 6. **Polish:** accessibility (keyboard, focus, contrast), performance, Open Graph tags, favicon, 404, sitemap.
 7. **Launch (with approval only):** GitHub Actions deploy workflow, switch the Pages source to
