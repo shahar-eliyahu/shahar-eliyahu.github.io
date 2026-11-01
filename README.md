@@ -77,7 +77,7 @@ for example `npx serve _site`.
 │       ├── projects_media/<slug>/  # Project media: images/ and videos/ (create when needed)
 │       └── js/
 │           ├── main.js         # Navigation, scroll effects, reveal, active link, pointer effects
-│           ├── editor.js       # Hero Java / Python / C++ editor (tabs, typing)
+│           ├── editor.js       # Hero code editor (tabs, typing)
 │           ├── gallery.js      # Shared gallery, lightbox and video (explorer and detail pages)
 │           └── projects.js     # Project Explorer (filters, picker tabs)
 └── _site/                      # Build output (generated, git-ignored)

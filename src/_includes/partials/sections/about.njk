@@ -3,10 +3,16 @@
 
 <section id="about" class="section about-section">
 
-    {#- Text only: the heading sits beside the text on desktop, above it below 1024px #}
+    {#-
+        The heading sits beside the text on desktop, above it below 1024px. The basketball
+        is decorative: under the heading on desktop, beside it on tablets, hidden on phones.
+    #}
     <div class="container about-layout">
 
-        {{ sectionTitle(about.title) }}
+        <div class="about-aside">
+            {{ sectionTitle(about.title) }}
+            {% include "partials/about-ball.njk" %}
+        </div>
 
         <div class="about-text reveal">
             {%- for paragraph in about.paragraphs %}

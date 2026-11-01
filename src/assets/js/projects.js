@@ -17,6 +17,12 @@
     const desktop = window.matchMedia("(min-width: 1024px)");
     const EASE = "cubic-bezier(0.22, 1, 0.36, 1)";
 
+    // Desktop list: as tall as the selected preview, showing the complete entries
+    // that fit plus a sliver of the next one as a hint that there are more. An
+    // unusually tall preview can't stretch it past this many window heights.
+    const LIST_PEEK = 0.35;
+    const LIST_MAX_WINDOWS = 1.25;
+
     const status = root.querySelector("[data-explorer-status]");
     const filterRow = root.querySelector("[data-project-filters]");
     const filterButtons = [...root.querySelectorAll("[data-filter]")];
@@ -24,6 +30,7 @@
     const listItems = [...list.children];
     const tabs = listItems.map((item) => item.querySelector(".explorer-tab"));
     const panels = [...root.querySelectorAll("[data-panel]")];
+    const panelArea = root.querySelector(".explorer-panels");
 
     const panelFor = (slug) => panels.find((panel) => panel.dataset.project === slug);
     const tabFor = (slug) => tabs.find((tab) => tab.dataset.project === slug);
@@ -70,7 +77,11 @@
         list.setAttribute("aria-orientation", desktop.matches ? "vertical" : "horizontal");
 
     setOrientation();
-    desktop.addEventListener("change", setOrientation);
+    desktop.addEventListener("change", () => {
+        setOrientation();
+        fitList();
+        revealTab(tabFor(current), false);
+    });
 
     listItems.forEach((item) => item.setAttribute("role", "presentation"));
 
@@ -109,9 +120,68 @@
         }
     }
 
-    // The project strip (phones/tablets)
-    function revealTab(tab) {
-        if (!desktop.matches) {
+    // Desktop: the selected preview sets the room available. If all the visible
+    // entries fit they simply end; otherwise the list stops at the last entry that
+    // fits (plus the hint) and scrolls. Only the list changes, never the preview, so
+    // this can't feed back into its own measurement. Returns true if the height changed.
+    function fitList() {
+        const visible = listItems.filter((item) => !item.hidden);
+        const panel = panelFor(current);
+
+        if (!desktop.matches || !panel || !visible.length) {
+            list.classList.remove("is-capped");
+            return false;
+        }
+
+        list.style.setProperty("--explorer-list-gutter", `${list.offsetWidth - list.clientWidth}px`);
+
+        const room = Math.min(panel.getBoundingClientRect().height, window.innerHeight * LIST_MAX_WINDOWS);
+        const first = visible[0].offsetTop;
+        const last = visible[visible.length - 1];
+        const capped = last.offsetTop + last.offsetHeight - first > room;
+        const before = list.classList.contains("is-capped") ? list.style.getPropertyValue("--explorer-list-max") : "";
+        let after = "";
+
+        if (capped) {
+            let height = 0;
+
+            visible.slice(1).forEach((item) => {
+                const candidate = item.offsetTop - first + item.offsetHeight * LIST_PEEK;
+
+                if (!height || candidate <= room) {
+                    height = candidate;
+                }
+            });
+
+            after = `${height}px`;
+            list.style.setProperty("--explorer-list-max", after);
+        }
+
+        list.classList.toggle("is-capped", capped);
+
+        return before !== after;
+    }
+
+    // Scroll the capped list (never the page) so an entry is fully in view. Measured
+    // from the rendered boxes and rounded outward, because entry heights are fractional
+    // and whole-pixel measurements (offsetTop) left entries clipped by up to a pixel.
+    function revealInList(tab, smooth) {
+        const box = list.getBoundingClientRect();
+        const entry = tab.getBoundingClientRect();
+        const above = entry.top - box.top;
+        const below = entry.bottom - box.bottom;
+        const target = above < 0 ? Math.floor(list.scrollTop + above) : below > 0 ? Math.ceil(list.scrollTop + below) : null;
+
+        if (target !== null) {
+            list.scrollTo({ top: target, behavior: smooth && !reducedMotion.matches ? "smooth" : "auto" });
+        }
+    }
+
+    // Keep the selection visible: the capped list (desktop) or the strip (phones/tablets)
+    function revealTab(tab, smooth = true) {
+        if (desktop.matches) {
+            revealInList(tab, smooth);
+        } else {
             revealIn(list, tab);
         }
     }
@@ -148,10 +218,12 @@
             current = slug;
         }
 
-        revealTab(tab);
+        // The new preview may have a different height
+        fitList();
+        revealTab(tab, motion);
 
         if (focus) {
-            tab.focus();
+            tab.focus({ preventScroll: desktop.matches });
         }
 
         if (updateUrl) {
@@ -211,12 +283,20 @@
             item.querySelector(".explorer-tab-index").textContent = String(i + 1).padStart(2, "0");
         });
 
+        fitList();
+
         // Always keep a valid selection: the first visible project if the
         // current one was filtered out
         const visible = visibleTabs();
 
         if (!visible.some((tab) => tab.dataset.project === current)) {
             select(visible[0].dataset.project, { updateUrl: false });
+        }
+
+        // A new list starts from the top, with the selection still in view
+        if (desktop.matches) {
+            list.scrollTop = 0;
+            revealInList(tabFor(current), false);
         }
 
         listItems.filter((item) => !item.hidden).forEach((item, i) => {
@@ -263,5 +343,20 @@
 
     if (requestedProject && tabFor(requestedProject) && isVisible(tabFor(requestedProject))) {
         select(requestedProject, { motion: false, updateUrl: false });
+    }
+
+    // The preview's height can change after selection (images, fonts, width), and
+    // entry heights with the width. Keep the selection in view if the list changes.
+    function refitList() {
+        if (fitList()) {
+            revealTab(tabFor(current), false);
+        }
+    }
+
+    window.addEventListener("resize", refitList);
+    document.fonts?.ready.then(refitList);
+
+    if ("ResizeObserver" in window) {
+        new ResizeObserver(refitList).observe(panelArea);
     }
 })();

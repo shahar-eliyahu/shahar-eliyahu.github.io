@@ -38,13 +38,13 @@
 
         </div>
 
-        {% if hero.profile %}
+        {% if hero.editor %}
         {#-
-            Profile editor. The code for every language is generated at build time
-            (lib/profile-code.js), so it's complete without JavaScript and readable
-            by screen readers. assets/js/editor.js adds the tabs and typing effect.
+            Code editor. The samples are highlighted at build time (lib/code-samples.js),
+            so they're complete without JavaScript and readable by screen readers.
+            assets/js/editor.js adds the tabs and the typing effect.
         #}
-        {% set editor = hero.profile | profileEditor %}
+        {% set editor = hero.editor | codeEditor %}
         {% set initial = editor.languages | selectattr("isDefault") | first %}
 
         <div class="hero-editor reveal" data-editor>
@@ -52,7 +52,7 @@
             <div class="editor-bar">
                 <span class="editor-dots" aria-hidden="true"><i></i><i></i><i></i></span>
 
-                <div class="editor-tabs" role="tablist" aria-label="Profile code language">
+                <div class="editor-tabs" role="tablist" aria-label="Code sample language">
                     {%- for lang in editor.languages %}
                     <button
                         type="button"
@@ -67,7 +67,7 @@
                     {%- endfor %}
                 </div>
 
-                <span class="editor-file" data-editor-file>{{ initial.filename }}</span>
+                <span class="editor-title" data-editor-title>{{ initial.title }}</span>
             </div>
 
             <div class="editor-body">
@@ -80,7 +80,7 @@
                         aria-labelledby="editor-tab-{{ lang.id }}"
                         tabindex="0"
                         data-lang="{{ lang.id }}"
-                        data-filename="{{ lang.filename }}"
+                        data-title="{{ lang.title }}"
                     ><code>{{ lang.html | safe }}</code></pre>
                     {%- endfor %}
                     <pre class="editor-code editor-typing" aria-hidden="true"><code></code></pre>

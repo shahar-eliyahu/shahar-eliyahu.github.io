@@ -81,10 +81,10 @@ src/projects/projects.11tydata.js   defaults for all projects; slug = file name;
                                     /projects/<slug>/ only with `detailPage: true` (else false)
 src/_includes/layouts/base.njk      page shell
 src/_includes/layouts/project.njk   project detail page (one template for all projects)
-src/_includes/partials/   nav, footer, components.njk (macros), contact-mascot.njk, sections/, project/, visuals/
+src/_includes/partials/   nav, footer, components.njk (macros), contact-mascot.njk, about-ball.njk, sections/, project/, visuals/
 src/assets/css/           tokens.css → base.css → sections.css → visuals.css (load order matters)
 src/assets/js/main.js     nav, scroll progress, reveal, active link, pointer effects
-src/assets/js/editor.js   hero profile editor (tabs, typing)
+src/assets/js/editor.js   hero code editor (tabs, typing)
 src/assets/js/gallery.js  shared media: gallery, lightbox, video (explorer and detail pages)
 src/assets/js/projects.js Project Explorer (filters, picker tabs); uses ProjectGallery
 src/assets/projects_media/<slug>/   project media: images/ and videos/ (owner-supplied, permanent;
@@ -282,34 +282,49 @@ redesigned (Phase 3B), not as a separate churn pass.
   `isAtBottom()`: at the bottom of the page the last section (Contact) is always active, because on
   tall screens a short Contact never reaches the band.
 
-## Hero profile editor
+## Hero code editor
 
-- **Data:** `home.json → hero.profile` holds `facts` (the only copy of the profile facts: string
-  or list-of-strings values, camelCase keys), `languages` (`java`, `python`, `cpp`) and
-  `defaultLanguage` (**`java`**). Only verified facts go here. Never add invented stats or skills.
-- **Code generation:** `lib/profile-code.js` (the `profileEditor` filter) derives Java
-  (`ShaharEliyahu.java`, class plus `List.of`), Python (`profile.py`, frozen dataclass plus tuple) and
-  C++ (`profile.cpp`, struct plus `std::vector`) at build time, as highlighted HTML
-  (`.code-line` > `.tok-keyword|type|name|field|string|punct|meta`, indentation in `.tok-ws`,
-  `--ws` = indent width). A new fact appears in all three languages automatically. The generated
-  code compiles (checked with javac, Python and MSVC).
+Four short personal snippets (owner decision) that introduce the owner, the software engineering
+background, the AI studies and the graduation project. The header shows a section title, never a
+filename.
+
+- **Data:** `home.json → hero.editor` holds `defaultLanguage` (**`cpp`**) and `samples`, in tab
+  order: `{ language, title, code: [lines] }`. C++ "Developer Profile" (not "About Me": the site has an
+  About section), Java "Software Engineering", Python "AI Specialization", Kotlin "EasyFill Project". Copy is the owner's, verbatim. The Python topics
+  are academic studies, not claims of professional expertise, and Neural Networks is a studied
+  topic, not necessarily a separate course. Never describe EasyFill as a medical diagnostic system
+  or imply that its detection is guaranteed.
+- **Highlighting:** no library. `lib/code-samples.js` (the `codeEditor` filter) highlights at build
+  time, as HTML (`.code-line` > `.tok-keyword|type|name|field|string|punct|meta`, indentation in
+  `.tok-ws`). Each language only lists its keywords; shared rules classify the rest (a name after
+  `class` / `interface` / `struct` or before `(` is `name`; capitalised or `std::` is `type`;
+  numbers use the `string` colour). The rules only need to suit these samples; a new language needs
+  one line in `LANGUAGES`, and an unknown language fails the build.
 - **Markup** (`hero.njk`): WAI-ARIA tabs (`role="tablist"` / `tab` / `tabpanel`, roving
   tabindex). All language `<pre>`s share one grid cell, so the height is that of the longest snippet
   and never jumps. Inactive panels are `visibility: hidden`. Tabs only show with JS; without JS
-  the full Java code is shown with its filename.
+  the full C++ snippet is shown with its title.
 - **Behaviour** (`assets/js/editor.js`, vanilla): click or arrow / Home / End switches language,
-  updates `aria-selected`, the filename and the panel, and restarts typing. Re-selecting the
-  current tab does nothing. There's no auto-cycling.
+  updates `aria-selected`, the title and the panel at once, and types the new snippet from the
+  start (owner request). Re-selecting the current tab does nothing. There's no auto-cycling.
 - **Typing:** plays in an `aria-hidden` overlay (`.editor-typing`) over the real code. The real
   code stays in the accessibility tree (opacity 0 while typing), and there's no `aria-live`, so nothing
   is announced per character. Per-character steps with slight jitter; indentation appears at once;
-  short pause per line. Duration scales with length, clamped to 2–3.4s (about 2.7s per snippet). A
-  `runId` plus `cancelAnimationFrame` cancels any previous run, so rapid switching never mixes languages.
-  Initial typing starts when the editor scrolls into view (IntersectionObserver). The caret is solid
+  short pause per line. About 22ms per character, capped at 1.8s per snippet (with the current
+  snippets the cap always applies). A `runId` plus `cancelAnimationFrame` cancels any previous run,
+  so rapid switching never mixes languages. The overlay scrolls itself to keep the caret visible on
+  long lines.
+  Initial typing waits until the editor is in view (IntersectionObserver) and its entrance fade has
+  reached 90% opacity (read from the computed style, no fixed delay); choosing a tab cancels that wait
+  and types at once. The caret is solid
   while typing and blinks at the end.
 - **Reduced motion:** code appears complete immediately and the caret doesn't blink.
-- **Wrapping:** `pre-wrap` with a hanging indent, so narrow screens wrap lines under the code
-  instead of scrolling. The line-number gutter is 3rem (2.25rem on mobile).
+- **Long lines:** from 651px up, lines don't wrap (`white-space: pre`, and `overflow-x: auto` as a
+  safeguard; everything fits at the tested widths). At 650px and below, long lines wrap with a
+  hanging indent (`--ws` = indent width), because the personal details in the snippets must be
+  readable without swiping. The line-number gutter is 3rem (2.25rem on mobile).
+- **Phones (480px and below):** four tabs and a title don't fit one row, so the title takes
+  its own row under the tabs. The description uses `text-wrap: balance` to avoid a lone last word (`pretty` didn't).
 - Syntax colours are tokens (`--color-code-*`). Strings use a mint (`--palette-mint-300`) that
   appears nowhere else. All tokens meet AA on the (lighter) panel: lowest is keyword 4.98:1,
   punctuation and line numbers 5.6:1.
@@ -321,12 +336,23 @@ unchanged except the Skills heading ("Tech Stack" → "Skills", matching the nav
 
 - **Split grid:** `--split-columns` (`tokens.css`: `minmax(220px, 0.42fr) minmax(0, 1fr)`) places
   the About heading beside its text at 1024px+.
-- **About:** text only. The Focus / Interests / Approach list was removed (template, CSS and
+- **About:** three owner-written paragraphs (verbatim; no em dashes) and a decorative basketball.
+  The Focus / Interests / Approach list was removed (template, CSS and
   `home.json → about.facts`). `.about-text`: max 68ch, a 2px blue→violet accent line on the left,
   the first paragraph as a slightly larger lead (`--text-lead`). Below 1024px the heading sits
   above the text. In the two-column layout (1024px+) the section (`.about-section`) has 72px
   bottom padding instead of 104: the content is short there, and 104 + the next section's 104
   read as an empty gap (owner request). Tablet and phones keep the normal padding.
+  - **Basketball (owner request):** `partials/about-ball.njk`, inline SVG in `.about-aside`, no
+    library. A technical wireframe: the seams (two great circles, two curved side seams) were
+    computed on a rotated, perspective-projected sphere and split into visible lines (twin, the
+    seam's groove) and hidden lines (faint), so edit it as geometry, not by hand. Blue→violet
+    gradient on `--color-primary-bright` / `--color-accent`, low opacity, no fill or glow. Under the
+    heading at 1024px+ (at most 216px, so the column stays shorter than the text at every width, so it adds no
+    height), 112px beside the heading at 768-1023px (adds about 20px), `display: none` below 768px.
+    `main.js` adds `.is-drawn` once when 35% of it is in view; CSS draws the lines with
+    `stroke-dashoffset` (`pathLength="1"`) in about 1.5s, then it stays static. It never replays.
+    With reduced motion or without JS the lines are simply complete. The text isn't tied to it.
 - **Skills (category rows, featured + "Show more", logos):** 61 technologies, the owner's CV list
   (exact names; never add skills that aren't on the CV), in **five broad categories** (owner's
   order): Programming Languages (9) · AI & Machine Learning (25, includes computer vision and
@@ -479,6 +505,18 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   stacked. JS upgrades them to ARIA tabs (`tablist` with orientation vertical / horizontal by
   breakpoint, roving tabindex, arrows / Home / End over *visible* projects) and `tabpanel`s
   (`.is-selected` plus `hidden`). CSS hides unselected panels under `.js` to avoid a flash.
+- **List height follows the preview (desktop, with JS, owner request):** `fitList` in `projects.js`
+  measures the selected preview and shows the complete entries that fit, plus 35% of the next as a
+  hint; if all of them fit, the list just ends with no scrollbar. Never a fixed count. Entries are
+  not stretched. The preview is never affected, so a `ResizeObserver` on `.explorer-panels` can't
+  loop. It reruns on selection, filter, resize, font load and preview size changes. An unusually
+  tall preview can't stretch the list past 1.25 window heights. The scrollbar is thin and on the
+  left (`direction: rtl` on the list, `ltr` on its items, and a negative margin of the measured
+  scrollbar width keeps entries aligned with the heading).
+  Selection scrolls only the list (`revealInList`, `focus({ preventScroll })`), measured from the
+  rendered boxes and rounded outward (entry heights are fractional; `offsetTop` left 1px clipped), a filter change
+  resets it to the top with the selection in view, and page scrolling carries on at both ends
+  (no `overscroll-behavior`). Below 1024px the swipeable strip is unchanged.
 - **Filters:** generated from `categoryCounts` plus a virtual "All Projects". They hide picker items;
   if the selected project is filtered out, the first visible one is selected (always valid).
   A polite live region announces "Showing N projects in X. Selected: Y". URL:
@@ -642,6 +680,26 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   vision boxes shrink and swap sides (person right, vehicle low left) so their tracking motion
   never collides with the label or each other. Taller cards keep the original design. This also
   fixed the same clipping in the explorer on phones.
+- **Previous / next (`.project-pager`):** compact controls (about 58px tall), as wide as their
+  content, at most `min(340px, 50% - gap)` from 651px, wrapping when they don't fit. Links still
+  come from `projectNeighbors`; the first and last project show only the one that exists.
+- **"On this page" tracking (`main.js`):** the link of the section being read gets
+  `aria-current="location"` (background plus the gradient marker). rAF-throttled, position-based,
+  driven only by the page's own links and section ids. A section is active once its top passes a line
+  at nav + 25% of the window; that line slides down over the last stretch of scrolling and meets
+  the final section at the page end, so short closing sections are reachable and nothing flickers
+  (one threshold per position). A clicked link or hash stays marked until the visitor scrolls
+  away. At 1024px+ a column too tall for the window scrolls itself and keeps the marker in view.
+- **Direct links:** portrait strip items have an explicit `width`. Without it a still-loading image
+  collapses its item to 2×2px, the page grows by up to 918px as images arrive, and a jump to a section
+  (already aimed) lands short. Keep space reserved for any new media type; no scripted re-scroll exists.
+- **Nav height:** `.navbar.scrolled` shrinks to 66px with a `margin-bottom` giving the height back, so
+  the page doesn't move. It used to: at the 20px threshold the shift crossed the threshold again and
+  the position oscillated, and it also shifted section positions during jumps.
+- **Page length:** no `min-height`, spacer or stretching exists on these pages. The right column
+  below the sticky details and the space beside tall portrait screenshots are structural (see
+  Portrait media); only the stacked gaps at the page end were reduced (pager margin 32px, page
+  bottom padding 48px).
 - **Shared JS:** `gallery.js` exposes `window.ProjectGallery.create(scope, { announce })`. The
   explorer creates one per panel; galleries outside `[data-explorer]` set themselves up and
   announce through `[data-gallery-status]`. `partials/project/lightbox.njk` is included once per

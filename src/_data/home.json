@@ -5,34 +5,102 @@
             "Shahar",
             "Eliyahu"
         ],
-        "subtitle": "Interested in Artificial Intelligence, Machine Learning, and building practical systems that solve real-world problems.",
-        "profile": {
-            "defaultLanguage": "java",
-            "languages": [
-                "java",
-                "python",
-                "cpp"
-            ],
-            "facts": {
-                "name": "Shahar Eliyahu",
-                "role": "Software Engineer",
-                "degree": "B.Sc. Software Engineering",
-                "college": "Afeka Academic College",
-                "specialization": "Artificial Intelligence",
-                "interests": [
-                    "Machine Learning",
-                    "Computer Vision",
-                    "Intelligent Systems"
-                ]
-            }
+        "subtitle": "Building practical software, from mobile and desktop applications to AI-powered systems.",
+        "editor": {
+            "defaultLanguage": "cpp",
+            "samples": [
+                {
+                    "language": "cpp",
+                    "title": "Developer Profile",
+                    "code": [
+                        "#include <string>",
+                        "",
+                        "class ShaharEliyahu {",
+                        "public:",
+                        "    std::string role = \"Software Engineer\";",
+                        "    std::string degree = \"B.Sc. Software Engineering\";",
+                        "    std::string college = \"Afeka Academic College\";",
+                        "    std::string specialization = \"Machine Learning & AI\";",
+                        "};"
+                    ]
+                },
+                {
+                    "language": "java",
+                    "title": "Software Engineering",
+                    "code": [
+                        "import java.util.Set;",
+                        "",
+                        "public class SoftwareEngineering {",
+                        "    private final Set<String> foundations = Set.of(",
+                        "        \"OOP\", \"Design Patterns\",",
+                        "        \"Data Structures\", \"Algorithms\"",
+                        "    );",
+                        "",
+                        "    public String architecture() {",
+                        "        return \"Modular and maintainable\";",
+                        "    }",
+                        "",
+                        "    public String development() {",
+                        "        return \"Databases, Testing, System Design\";",
+                        "    }",
+                        "}"
+                    ]
+                },
+                {
+                    "language": "python",
+                    "title": "AI Specialization",
+                    "code": [
+                        "class AIStudies:",
+                        "    specialization = \"Machine Learning & AI\"",
+                        "",
+                        "    core = (",
+                        "        \"Machine Learning\",",
+                        "        \"Neural Networks\",",
+                        "        \"Computer Vision\",",
+                        "        \"Natural Language Processing\"",
+                        "    )",
+                        "",
+                        "    applied = (",
+                        "        \"Big Data Analytics\",",
+                        "        \"AI for Game Development\",",
+                        "        \"Game Development\",",
+                        "        \"Autonomous Vehicles\"",
+                        "    )"
+                    ]
+                },
+                {
+                    "language": "kotlin",
+                    "title": "EasyFill Project",
+                    "code": [
+                        "data class GraduationProject(",
+                        "    val name: String,",
+                        "    val type: String,",
+                        "    val purpose: String,",
+                        "    val capabilities: List<String>",
+                        ")",
+                        "",
+                        "val easyFill = GraduationProject(",
+                        "    name = \"EasyFill\",",
+                        "    type = \"Android Graduation Project\",",
+                        "    purpose = \"Detect distress and assist users in real time\",",
+                        "    capabilities = listOf(",
+                        "        \"Facial analysis with MediaPipe\",",
+                        "        \"Hand tremor detection\",",
+                        "        \"Form behavior analysis\",",
+                        "        \"Voice analysis\"",
+                        "    )",
+                        ")"
+                    ]
+                }
+            ]
         }
     },
     "about": {
         "title": "About Me",
         "paragraphs": [
-            "I studied <strong>Software Engineering</strong> at Afeka Academic College, where I developed a strong interest in <strong>Artificial Intelligence</strong> and <strong>Machine Learning</strong>.",
-            "My projects span AI/ML, computer vision, big data, mobile applications, and intelligent systems.",
-            "I enjoy solving technical problems that combine software engineering, data, and practical implementation, with an emphasis on systems that can operate in real-world environments."
+            "I'm a Software Engineering graduate from Afeka Academic College, with a specialization in Artificial Intelligence and Machine Learning.",
+            "I enjoy turning ideas into working software and solving problems along the way. My projects range from Android and cross-platform applications to computer vision, NLP, and data systems. Seeing how different technologies come together to create something useful is what motivates me.",
+            "Outside of programming, basketball has been a big part of my life, both as a player and a coach. It has taught me teamwork, discipline, and the importance of continuous improvement, values that also shape how I approach engineering."
         ]
     },
     "projects": {

@@ -14,7 +14,7 @@ import {
     projectNeighbors,
     findProject,
 } from "./lib/projects.js";
-import { profileEditor } from "./lib/profile-code.js";
+import { codeEditor } from "./lib/code-samples.js";
 import { skillLogo, validateSkills } from "./lib/skills.js";
 
 export default function (eleventyConfig) {
@@ -57,8 +57,8 @@ export default function (eleventyConfig) {
     eleventyConfig.addFilter("markdown", (text) => (text ? markdownLibrary.render(String(text)) : ""));
     eleventyConfig.addFilter("markdownInline", (text) => (text ? markdownLibrary.renderInline(String(text)) : ""));
 
-    // Hero editor: profile facts -> highlighted Java / Python / C++ (lib/profile-code.js)
-    eleventyConfig.addFilter("profileEditor", profileEditor);
+    // Hero editor: code samples -> highlighted HTML (lib/code-samples.js)
+    eleventyConfig.addFilter("codeEditor", codeEditor);
 
     // Skills: logo URL per skill, and validation of the skills data (lib/skills.js)
     eleventyConfig.addFilter("skillLogo", skillLogo);

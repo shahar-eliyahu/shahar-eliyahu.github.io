@@ -182,6 +182,9 @@
     font-size: var(--text-lead);
 
     line-height: var(--leading-lead);
+
+    /* No single word left alone on the last line (phones) */
+    text-wrap: balance;
 }
 
 .hero-buttons {
@@ -209,8 +212,8 @@
 }
 
 
-/* HERO PROFILE EDITOR
- * Markup: partials/sections/hero.njk. Code: lib/profile-code.js.
+/* HERO CODE EDITOR
+ * Markup: partials/sections/hero.njk. Code: lib/code-samples.js.
  * Behaviour (tabs, typing): assets/js/editor.js. */
 
 .hero-editor {
@@ -338,7 +341,7 @@
     outline-offset: -3px;
 }
 
-.editor-file {
+.editor-title {
     min-width: 0;
 
     margin-left: auto;
@@ -361,6 +364,8 @@
 .editor-stack {
     display: grid;
 
+    grid-template-columns: minmax(0, 1fr);
+
     padding: var(--space-5) var(--space-5) var(--space-5) 0;
 }
 
@@ -378,7 +383,13 @@
 
     line-height: 1.85;
 
-    white-space: pre-wrap;
+    /* Source lines are never broken; a long one scrolls inside its own panel */
+    white-space: pre;
+
+    overflow-x: auto;
+
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border-strong) transparent;
 
     tab-size: 4;
 }
@@ -403,6 +414,8 @@
 .editor-typing {
     display: none;
 
+    overflow-x: hidden;
+
     pointer-events: none;
 }
 
@@ -414,7 +427,6 @@
     opacity: 0;
 }
 
-/* Hanging indent: wrapped lines continue under the code, not at column 0 */
 .code-line {
     position: relative;
 
@@ -422,9 +434,7 @@
 
     min-height: 1.85em;
 
-    padding-left: calc(var(--gutter) + (var(--ws, 0) + 2) * 1ch);
-
-    text-indent: calc((var(--ws, 0) + 2) * -1ch);
+    padding-left: var(--gutter);
 
     counter-increment: line;
 }
@@ -441,7 +451,6 @@
     color: var(--color-code-punct);
 
     text-align: right;
-    text-indent: 0;
 }
 
 .code-line.is-pending::before {
@@ -488,8 +497,6 @@
 
     background: var(--color-accent);
 
-    text-indent: 0;
-
     animation: caret-blink 1.1s steps(1) infinite;
 }
 
@@ -500,10 +507,11 @@
 
 
 /* ABOUT
- * Text only. Phones and tablet: heading above the text. Desktop (1024px+):
- * heading in a narrow column beside the text, so the line length stays
- * comfortable without leaving half the row empty. The tag column in Skills
- * uses the same grid, so both sections line up. */
+ * Phones and tablet: heading above the text. Desktop (1024px+): heading in a
+ * narrow column beside the text, so the line length stays comfortable without
+ * leaving half the row empty. The tag column in Skills uses the same grid, so
+ * both sections line up. The basketball sits under the heading on desktop and
+ * beside it on tablets; phones (below 768px) don't show it. */
 
 .about-text {
     position: relative;
@@ -565,6 +573,110 @@
     font-weight: 600;
 }
 
+/* Basketball: thin lines, low opacity. Paths: partials/about-ball.njk */
+.about-ball {
+    --ball-line: 1.6;
+
+    display: none;
+
+    pointer-events: none;
+}
+
+.about-ball-stop-a {
+    stop-color: var(--color-primary-bright);
+}
+
+.about-ball-stop-b {
+    stop-color: var(--color-accent);
+}
+
+.ball-line {
+    stroke-width: var(--ball-line);
+}
+
+.ball-outline {
+    stroke-opacity: 0.6;
+}
+
+.ball-seam {
+    stroke-width: calc(var(--ball-line) * 0.8);
+    stroke-opacity: 0.55;
+}
+
+.ball-hidden {
+    stroke-width: calc(var(--ball-line) * 0.7);
+    stroke-opacity: 0.14;
+}
+
+.ball-hatch {
+    stroke-width: calc(var(--ball-line) * 0.7);
+    stroke-opacity: 0.2;
+}
+
+.ball-tick {
+    stroke-opacity: 0.35;
+}
+
+/* Drawn once (about 1.5s in total), then static. Without JavaScript or with
+   reduced motion, the lines are simply complete. */
+@media (prefers-reduced-motion: no-preference) {
+
+    .js .about-ball .ball-line {
+        stroke-dasharray: 1 1;
+        stroke-dashoffset: 1;
+
+        transition: stroke-dashoffset 0.7s ease-in-out;
+    }
+
+    .js .about-ball.is-drawn .ball-line {
+        stroke-dashoffset: 0;
+    }
+
+    .js .about-ball .ball-hidden {
+        transition-delay: 0.2s;
+    }
+
+    .js .about-ball .ball-seam {
+        transition-delay: 0.35s;
+    }
+
+    .js .about-ball .ball-seam-side {
+        transition-delay: 0.55s;
+    }
+
+    .js .about-ball .ball-hatch,
+    .js .about-ball .ball-tick {
+        transition-delay: 0.8s;
+    }
+}
+
+@media (min-width: 768px) {
+
+    .about-aside {
+        display: flex;
+
+        margin-bottom: var(--space-2);
+
+        align-items: flex-start;
+        justify-content: space-between;
+
+        gap: var(--space-5);
+    }
+
+    .about-aside .section-title {
+        margin-bottom: 0;
+    }
+
+    .about-ball {
+        display: block;
+
+        flex: none;
+
+        width: 112px;
+        height: 112px;
+    }
+}
+
 @media (min-width: 1024px) {
 
     .about-layout {
@@ -579,6 +691,21 @@
 
     .about-layout .section-title {
         margin-bottom: 0;
+    }
+
+    .about-aside {
+        display: block;
+
+        margin-bottom: 0;
+    }
+
+    .about-ball {
+        --ball-line: 1;
+
+        width: min(100%, 216px);
+        height: auto;
+
+        margin-top: var(--space-6);
     }
 
     /* Side by side, the content is short, so the usual 104px under it (plus
@@ -977,8 +1104,13 @@ html:not(.js) .explorer-panel + .explorer-panel {
     max-width: 100%;
 }
 
+/* The explicit width holds the space while an image is still loading: without it
+   the item collapses, the page grows as images arrive, and links to a section land
+   short because the browser has already aimed its jump. */
 .gallery.is-strip.is-portrait .gallery-item {
     flex-basis: var(--strip-portrait-width, 170px);
+
+    width: var(--strip-portrait-width, 170px);
 }
 
 .gallery.is-strip .gallery-zoom {
@@ -1852,6 +1984,40 @@ html:not(.js) .explorer-panel + .explorer-panel {
         gap: var(--space-1);
     }
 
+    /* With JavaScript (projects.js measures the selected preview): as many entries
+       as fit beside it, the rest scroll inside the list. Page scrolling carries on
+       at either end. 1px of padding keeps the selected marker from being clipped,
+       and 1px below lets the list scroll fully past a last entry of fractional height. */
+    .js .explorer-list {
+        padding-left: 1px;
+        padding-bottom: 1px;
+
+        overflow: hidden auto;
+
+        scrollbar-gutter: stable;
+    }
+
+    /* Scrollbar on the left: browsers place it by the list's direction. The
+       entries stay left to right, and the negative margin (the measured
+       scrollbar width, see fitList) keeps them aligned with the heading. */
+    .js .explorer-list {
+        margin-left: calc(var(--explorer-list-gutter, 0px) * -1);
+
+        direction: rtl;
+    }
+
+    .js .explorer-list > li {
+        direction: ltr;
+    }
+
+    .js .explorer-list.is-capped {
+        max-height: var(--explorer-list-max);
+    }
+
+    .js .explorer-tab:focus-visible {
+        outline-offset: -2px;
+    }
+
     .explorer-tab {
         gap: var(--space-3);
 
@@ -1943,7 +2109,7 @@ html:not(.js) .explorer-panel + .explorer-panel {
  * Mobile first: base = phone, then 651px+ and 1024px+. */
 
 .project-page {
-    padding: var(--space-6) 0 var(--space-8);
+    padding: var(--space-6) 0 var(--space-7);
 }
 
 .project-back {
@@ -2109,6 +2275,8 @@ html:not(.js) .explorer-panel + .explorer-panel {
 }
 
 .project-toc a {
+    position: relative;
+
     display: flex;
 
     gap: var(--space-2);
@@ -2128,6 +2296,10 @@ html:not(.js) .explorer-panel + .explorer-panel {
     text-decoration: none;
 
     counter-increment: toc;
+
+    transition:
+        background var(--duration-fast) ease,
+        color var(--duration-fast) ease;
 }
 
 .project-toc a::before {
@@ -2143,6 +2315,29 @@ html:not(.js) .explorer-panel + .explorer-panel {
     background: var(--color-surface-raised);
 
     color: var(--color-text);
+}
+
+/* The section being read (main.js): same marker as the selected explorer entry */
+.project-toc a[aria-current="location"] {
+    background: var(--color-surface-raised);
+
+    color: var(--color-text);
+}
+
+.project-toc a[aria-current="location"]::after {
+    content: "";
+
+    position: absolute;
+
+    top: 10px;
+    bottom: 10px;
+    left: 0;
+
+    width: 3px;
+
+    border-radius: 3px;
+
+    background: var(--gradient-accent-line);
 }
 
 .project-main {
@@ -2648,24 +2843,31 @@ html:not(.js) .explorer-panel + .explorer-panel {
     }
 }
 
-/* Previous / next */
+/* Previous / next: compact controls as wide as their content. They share a
+   row when they fit and wrap when they don't (long names, phones). */
 .project-pager {
-    display: grid;
+    display: flex;
+
+    flex-wrap: wrap;
 
     gap: var(--space-3);
 
-    margin-top: var(--space-7);
+    margin-top: var(--space-6);
+
+    justify-content: space-between;
 }
 
 .pager-link {
     display: grid;
 
-    gap: var(--space-1);
+    min-width: 0;
+    max-width: 100%;
+    min-height: 44px;
 
-    padding: var(--space-4) var(--space-5);
+    padding: var(--space-2) 14px;
 
     border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-md);
 
     background: var(--color-surface);
 
@@ -2699,13 +2901,17 @@ html:not(.js) .explorer-panel + .explorer-panel {
 
 .pager-title {
     font-family: var(--font-display);
-    font-size: var(--text-h4);
+    font-size: var(--text-ui);
 
     line-height: var(--leading-h4);
     font-weight: 600;
+
+    overflow-wrap: anywhere;
 }
 
 .pager-link.is-next {
+    margin-left: auto;
+
     text-align: right;
 
     justify-items: end;
@@ -2745,12 +2951,8 @@ html:not(.js) .explorer-panel + .explorer-panel {
         grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     }
 
-    .project-pager {
-        grid-template-columns: 1fr 1fr;
-    }
-
-    .pager-link.is-next:only-child {
-        grid-column: 2;
+    .pager-link {
+        max-width: min(340px, calc(50% - var(--space-3) / 2));
     }
 }
 
@@ -2781,12 +2983,20 @@ html:not(.js) .explorer-panel + .explorer-panel {
         align-items: start;
     }
 
+    /* A page with very many sections scrolls the column instead of cutting it off */
     .project-aside {
         position: sticky;
 
         top: calc(var(--nav-height) + var(--space-4));
 
         order: 2;
+
+        max-height: calc(100vh - var(--nav-height) - 2 * var(--space-4));
+
+        overflow-y: auto;
+
+        scrollbar-width: thin;
+        scrollbar-color: var(--color-border-strong) transparent;
 
         grid-template-columns: 1fr;
     }
@@ -2802,6 +3012,8 @@ html:not(.js) .explorer-panel + .explorer-panel {
 
     .project-layout.is-summary-only .project-aside {
         position: static;
+
+        max-height: none;
 
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     }
@@ -3618,6 +3830,25 @@ body:has(.contact) .footer-inner {
         padding-right: var(--space-4);
     }
 
+    /* Phones: wrap long lines so the snippet can be read without swiping.
+       Hanging indent: they continue under the code, not at column 0. */
+    .editor-code {
+        white-space: pre-wrap;
+
+        overflow-x: visible;
+    }
+
+    .code-line {
+        padding-left: calc(var(--gutter) + (var(--ws, 0) + 2) * 1ch);
+
+        text-indent: calc((var(--ws, 0) + 2) * -1ch);
+    }
+
+    .code-line::before,
+    .code-caret {
+        text-indent: 0;
+    }
+
     /* Mobile: full-width main actions, profile links share one row */
     .hero-buttons .button.primary,
     .hero-buttons .button.secondary {
@@ -3640,5 +3871,31 @@ body:has(.contact) .footer-inner {
 
         align-items: flex-start;
         justify-content: center;
+    }
+}
+
+
+/* PHONES: four tabs and a title don't fit one row, so the title gets its own */
+
+@media (max-width: 480px) {
+
+    .editor-bar {
+        flex-wrap: wrap;
+
+        gap: 0;
+    }
+
+    .editor-tab {
+        min-height: 44px;
+    }
+
+    .editor-title {
+        flex-basis: 100%;
+
+        margin-left: 0;
+
+        padding: 6px 10px;
+
+        border-top: 1px solid var(--color-border);
     }
 }

@@ -117,6 +117,27 @@ revealElements.forEach((element) => {
 });
 
 
+// About basketball: draws itself once when it comes into view (CSS does the
+// drawing and skips it for reduced motion). Hidden on phones, so never triggered there.
+const aboutBall = document.querySelector("[data-about-ball]");
+
+if (aboutBall) {
+    const ballObserver = new IntersectionObserver(
+        ([entry], observer) => {
+            if (entry.isIntersecting) {
+                aboutBall.classList.add("is-drawn");
+                observer.disconnect();
+            }
+        },
+        {
+            threshold: 0.35,
+        }
+    );
+
+    ballObserver.observe(aboutBall);
+}
+
+
 // Highlight active navigation section (homepage only: on other pages the nav
 // links point back home and "Projects" is marked as current in the markup)
 const sections = onHomepage ? document.querySelectorAll("section[id]") : [];
@@ -138,6 +159,144 @@ const sectionObserver = new IntersectionObserver(
 sections.forEach((section) => {
     sectionObserver.observe(section);
 });
+
+
+// Project pages: mark the section being read in "On this page". Everything comes
+// from the links and sections on the page. A section counts once its top passes a
+// line near the top of the window. Short sections at the very end may never reach
+// that line, so it slides down over the last stretch of scrolling and meets the
+// final section exactly at the end of the page.
+const tocEntries = [...document.querySelectorAll('.project-toc a[href^="#"]')]
+    .map((link) => ({ link, section: document.getElementById(link.hash.slice(1)) }))
+    .filter((entry) => entry.section);
+
+if (tocEntries.length) {
+    const aside = document.querySelector(".project-aside");
+    // The nav's own height changes as it shrinks, so the line uses the fixed token
+    const navHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--nav-height"));
+    let active = null;
+    let clicked = null;
+    let settledAt = null;
+    let settleTimer = null;
+    let lastMovedAt = 0;
+    let frame = 0;
+
+    const entryFor = (hash) => tocEntries.find((entry) => entry.link.hash === hash) || null;
+
+    function setActive(entry) {
+        if (entry === active) {
+            return;
+        }
+
+        active?.link.removeAttribute("aria-current");
+        entry.link.setAttribute("aria-current", "location");
+        active = entry;
+
+        // A column too tall for the window scrolls itself to keep the marker in view
+        if (aside.scrollHeight > aside.clientHeight) {
+            const link = entry.link.getBoundingClientRect();
+            const box = aside.getBoundingClientRect();
+
+            if (link.top < box.top) {
+                aside.scrollTop -= box.top - link.top;
+            } else if (link.bottom > box.bottom) {
+                aside.scrollTop += link.bottom - box.bottom;
+            }
+        }
+    }
+
+    function sectionBeingRead() {
+        const tops = tocEntries.map((entry) => entry.section.getBoundingClientRect().top);
+        const remaining = Math.max(0, document.documentElement.scrollHeight - window.innerHeight - window.scrollY);
+        const baseLine = navHeight + window.innerHeight * 0.25;
+        const lastTopAtEnd = tops[tops.length - 1] - remaining;
+        const line = baseLine + Math.max(0, lastTopAtEnd - baseLine + 1 - remaining);
+
+        let reading = tocEntries[0];
+
+        tops.forEach((top, index) => {
+            if (top <= line) {
+                reading = tocEntries[index];
+            }
+        });
+
+        return reading;
+    }
+
+    function updateActive() {
+        frame = 0;
+
+        // A chosen section stays marked until the visitor scrolls away from it
+        if (clicked && settledAt !== null && Math.abs(window.scrollY - settledAt) > 4) {
+            clicked = null;
+        }
+
+        setActive(clicked || sectionBeingRead());
+    }
+
+    function scheduleUpdate() {
+        frame ||= requestAnimationFrame(updateActive);
+    }
+
+    // The jump to a chosen section has finished once scrolling pauses. The first
+    // wait is longer, because a jump can take a moment to start.
+    function waitForSettle(delay = 150) {
+        lastMovedAt = window.scrollY;
+        clearTimeout(settleTimer);
+
+        settleTimer = setTimeout(() => {
+            settledAt = window.scrollY;
+
+            // Scrolled away during the jump: the section never arrived, so go back to tracking
+            if (clicked) {
+                const box = clicked.section.getBoundingClientRect();
+                const atEnd = document.documentElement.scrollHeight - window.innerHeight - window.scrollY < 2;
+
+                if (!atEnd && (box.top > window.innerHeight / 2 || box.bottom < navHeight)) {
+                    clicked = null;
+                    scheduleUpdate();
+                }
+            }
+        }, delay);
+    }
+
+    function follow(entry) {
+        if (entry) {
+            clicked = entry;
+            settledAt = null;
+            waitForSettle(400);
+            setActive(entry);
+        }
+    }
+
+    tocEntries.forEach((entry) => {
+        entry.link.addEventListener("click", () => follow(entry));
+    });
+
+    window.addEventListener("hashchange", () => follow(entryFor(window.location.hash)));
+
+    window.addEventListener(
+        "scroll",
+        () => {
+            // A pixel or two of movement doesn't count as still scrolling
+            if (clicked && settledAt === null && Math.abs(window.scrollY - lastMovedAt) > 4) {
+                waitForSettle();
+            }
+
+            scheduleUpdate();
+        },
+        { passive: true }
+    );
+
+    window.addEventListener("resize", scheduleUpdate);
+
+    if ("ResizeObserver" in window) {
+        new ResizeObserver(scheduleUpdate).observe(document.querySelector(".project-main"));
+    }
+
+    follow(entryFor(window.location.hash));
+    updateActive();
+}
 
 
 // Skills: "Show more" reveals the rest of a category's technologies in place.

@@ -112,13 +112,18 @@ button:focus-visible {
 
     transition:
         height 0.35s var(--ease-out),
+        margin-bottom 0.35s var(--ease-out),
         background 0.35s ease,
         border-color 0.35s ease,
         box-shadow 0.35s ease;
 }
 
+/* The margin gives back the height it loses, so the shrinking bar doesn't move the
+   page. Moving it made the scroll position cross the threshold again and oscillate. */
 .navbar.scrolled {
     height: 66px;
+
+    margin-bottom: calc(var(--nav-height) - 66px);
 
     background: color-mix(in srgb, var(--color-surface) 92%, transparent);
 
@@ -491,6 +496,8 @@ button:focus-visible {
     .navbar,
     .navbar.scrolled {
         height: 70px;
+
+        margin-bottom: 0;
     }
 
     /* Mobile header: logo | menu button (the links move into the drawer) */
