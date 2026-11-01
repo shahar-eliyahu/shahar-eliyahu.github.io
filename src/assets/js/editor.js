@@ -24,9 +24,9 @@
     caret.className = "code-caret";
     caret.setAttribute("aria-hidden", "true");
 
-    // Typing speed: about 22 ms per character, at most 1.8 s per snippet
-    const MS_PER_COST = 22;
-    const MAX_DURATION = 1800;
+    // Typing speed: about 11 ms per character, at most 0.9 s per snippet
+    const MS_PER_COST = 11;
+    const MAX_DURATION = 900;
     const LINE_PAUSE = 3;
 
     // First view: start typing once the entrance fade has reached this opacity

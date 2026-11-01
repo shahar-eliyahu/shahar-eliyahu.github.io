@@ -2930,6 +2930,74 @@ html:not(.js) .explorer-panel + .explorer-panel {
     margin: var(--space-6) 0 0;
 }
 
+/* Phones: Previous, Next and Back are three identical small buttons, the same
+   as .button.secondary.small. Only the action labels show; the project names
+   stay available to screen readers. Padding scales so that Previous and Next
+   share a row down to 320px. */
+@media (max-width: 650px) {
+
+    .project-pager {
+        gap: var(--space-2);
+    }
+
+    .pager-link {
+        position: relative;
+
+        display: inline-flex;
+
+        min-height: 44px;
+        max-width: none;
+
+        padding: 0 clamp(8px, 5.33vw - 9px, 16px);
+
+        align-items: center;
+
+        border-color: var(--color-border-strong);
+
+        background: var(--color-surface-raised);
+    }
+
+    .pager-label {
+        gap: 8px;
+
+        color: inherit;
+
+        font-family: var(--font-display);
+        font-size: var(--text-sm);
+        font-weight: 600;
+
+        white-space: nowrap;
+    }
+
+    .pager-label .icon {
+        flex: none;
+
+        width: 16px;
+        height: 16px;
+    }
+
+    .pager-title {
+        position: absolute;
+
+        width: 1px;
+        height: 1px;
+
+        overflow: hidden;
+
+        clip-path: inset(50%);
+
+        white-space: nowrap;
+    }
+
+    .project-pager + .project-footer-back {
+        margin-top: var(--space-3);
+    }
+
+    .project-footer-back .button {
+        padding: 0 clamp(8px, 5.33vw - 9px, 16px);
+    }
+}
+
 
 /* Tablet (651px+) */
 

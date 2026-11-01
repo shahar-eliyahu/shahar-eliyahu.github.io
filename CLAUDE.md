@@ -293,7 +293,7 @@ filename.
 
 - **Data:** `home.json → hero.editor` holds `defaultLanguage` (**`cpp`**) and `samples`, in tab
   order: `{ language, title, code: [lines] }`. C++ "Developer Profile" (not "About Me": the site has an
-  About section), Java "Software Engineering", Python "AI Specialization", Kotlin "EasyFill Project". Copy is the owner's, verbatim. The Python topics
+  About section), Python "AI Specialization", Java "Software Engineering", Kotlin "EasyFill Project". Copy is the owner's, verbatim. The Python topics
   are academic studies, not claims of professional expertise, and Neural Networks is a studied
   topic, not necessarily a separate course. Never describe EasyFill as a medical diagnostic system
   or imply that its detection is guaranteed.
@@ -313,7 +313,7 @@ filename.
 - **Typing:** plays in an `aria-hidden` overlay (`.editor-typing`) over the real code. The real
   code stays in the accessibility tree (opacity 0 while typing), and there's no `aria-live`, so nothing
   is announced per character. Per-character steps with slight jitter; indentation appears at once;
-  short pause per line. About 22ms per character, capped at 1.8s per snippet (with the current
+  short pause per line. About 11ms per character, capped at 0.9s per snippet (with the current
   snippets the cap always applies). A `runId` plus `cancelAnimationFrame` cancels any previous run,
   so rapid switching never mixes languages. The overlay scrolls itself to keep the caret visible on
   long lines.
@@ -689,7 +689,10 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   fixed the same clipping in the explorer on phones.
 - **Previous / next (`.project-pager`):** compact controls (about 58px tall), as wide as their
   content, at most `min(340px, 50% - gap)` from 651px, wrapping when they don't fit. Links still
-  come from `projectNeighbors`; the first and last project show only the one that exists.
+  come from `projectNeighbors`; the first and last project show only the one that exists. Phones
+  (650px and below, owner request): Previous, Next and Back are three identical small buttons
+  matching `.button.secondary.small`, each as wide as its label, Previous left and Next right on one
+  row, Back below on the left. Project names are hidden visually but kept for screen readers.
 - **"On this page" tracking (`main.js`):** the link of the section being read gets
   `aria-current="location"` (background plus the gradient marker). rAF-throttled, position-based,
   driven only by the page's own links and section ids. A section is active once its top passes a line
