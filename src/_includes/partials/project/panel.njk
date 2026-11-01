@@ -7,7 +7,8 @@
 {%- set video = project | projectVideo %}
 
 {#- Portrait screenshots sit beside the text from tablet width up #}
-<article
+<div
+    role="group"
     class="explorer-panel{{ ' is-selected' if isFirst }}{{ ' has-portrait-media' if project | projectMedia | mediaIsPortrait }}"
     id="project-{{ data.slug }}"
     data-panel
@@ -51,4 +52,4 @@
 
     </div>
 
-</article>
+</div>

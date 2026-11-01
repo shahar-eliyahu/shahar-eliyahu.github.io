@@ -4,6 +4,7 @@ import {
     projectCategories,
     projectTechnologies,
     projectAsset,
+    socialImage,
     projectsUsing,
     categoryDetails,
     categoryCounts,
@@ -21,6 +22,9 @@ export default function (eleventyConfig) {
     // Static files copied as-is. The CV keeps its original public URL.
     eleventyConfig.addPassthroughCopy("src/assets");
     eleventyConfig.addPassthroughCopy("src/Shahar_Eliyahu_CV.pdf");
+    eleventyConfig.addPassthroughCopy("src/favicon.ico");
+    eleventyConfig.addPassthroughCopy("src/favicon.svg");
+    eleventyConfig.addPassthroughCopy("src/apple-touch-icon.png");
 
     // Rebuild when project helpers change during `npm start`
     eleventyConfig.addWatchTarget("./lib/");
@@ -32,6 +36,7 @@ export default function (eleventyConfig) {
     eleventyConfig.addCollection("projectTechnologies", projectTechnologies);
 
     eleventyConfig.addFilter("projectAsset", projectAsset);
+    eleventyConfig.addFilter("socialImage", socialImage);
     eleventyConfig.addFilter("projectsUsing", projectsUsing);
     eleventyConfig.addFilter("categoryDetails", categoryDetails);
     eleventyConfig.addFilter("categoryCounts", categoryCounts);
@@ -49,12 +54,20 @@ export default function (eleventyConfig) {
         markdownLibrary = library;
 
         // Tables scroll inside their own box on narrow screens (never the
-        // page); the box is focusable so keyboard users can scroll it too
-        library.renderer.rules.table_open = () =>
-            '<div class="table-scroll" role="region" aria-label="Table" tabindex="0">\n<table>\n';
+        // page); the box is focusable so keyboard users can scroll it too, and
+        // named after its section so each landmark on a page is distinct
+        library.renderer.rules.table_open = (tokens, idx, options, env) => {
+            const nth = tokens.slice(0, idx + 1).filter((token) => token.type === "table_open").length;
+            const name = env?.tableLabel ? `${env.tableLabel} table` : "Table";
+            const label = library.utils.escapeHtml(nth > 1 ? `${name} ${nth}` : name);
+
+            return `<div class="table-scroll" role="region" aria-label="${label}" tabindex="0">\n<table>\n`;
+        };
         library.renderer.rules.table_close = () => "</table>\n</div>\n";
     });
-    eleventyConfig.addFilter("markdown", (text) => (text ? markdownLibrary.render(String(text)) : ""));
+    eleventyConfig.addFilter("markdown", (text, tableLabel) =>
+        text ? markdownLibrary.render(String(text), { tableLabel }) : ""
+    );
     eleventyConfig.addFilter("markdownInline", (text) => (text ? markdownLibrary.renderInline(String(text)) : ""));
 
     // Hero editor: code samples -> highlighted HTML (lib/code-samples.js)

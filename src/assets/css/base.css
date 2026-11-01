@@ -6,14 +6,35 @@
 
 
 /* FONTS
- * Inter is self-hosted: one variable WOFF2 (weights 100–900, latin subset,
- * Fontsource 5.3.0, SIL OFL 1.1, see assets/fonts/inter-OFL.txt), preloaded
- * in layouts/base.njk. IBM Plex Mono (code) still comes from Google Fonts. */
+ * Both fonts are self-hosted, so no external request can delay rendering.
+ * Inter: one variable WOFF2 (weights 100–900, latin subset, Fontsource 5.3.0,
+ * SIL OFL 1.1, see assets/fonts/inter-OFL.txt), preloaded in layouts/base.njk.
+ * IBM Plex Mono (code and labels): the two weights in use, latin subset,
+ * Fontsource 5.3.0 (byte-identical to the Google Fonts files), SIL OFL 1.1, see
+ * assets/fonts/ibm-plex-mono-OFL.txt. */
 
 @font-face {
     font-family: "Inter";
     src: url("/assets/fonts/inter-latin-wght-normal.woff2") format("woff2");
     font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+    font-family: "IBM Plex Mono";
+    src: url("/assets/fonts/ibm-plex-mono-latin-400-normal.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+    unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+    font-family: "IBM Plex Mono";
+    src: url("/assets/fonts/ibm-plex-mono-latin-500-normal.woff2") format("woff2");
+    font-weight: 500;
     font-style: normal;
     font-display: swap;
     unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
@@ -264,6 +285,8 @@ button:focus-visible {
 }
 
 .menu-button {
+    position: relative;
+
     display: none;
 
     grid-column: 3;
@@ -278,6 +301,21 @@ button:focus-visible {
     font-size: 1.4rem;
 
     cursor: pointer;
+}
+
+/* A 44px touch target around the glyph, without moving anything */
+.menu-button::after {
+    content: "";
+
+    position: absolute;
+
+    top: 50%;
+    left: 50%;
+
+    width: 44px;
+    height: 44px;
+
+    transform: translate(-50%, -50%);
 }
 
 

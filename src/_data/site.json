@@ -3,6 +3,13 @@
     "initials": "SE",
     "role": "Software Engineer",
     "title": "Shahar Eliyahu | Software Engineer",
+    "url": "https://shahar-eliyahu.github.io",
+    "socialImage": {
+        "url": "/assets/img/social-preview.png",
+        "width": 1200,
+        "height": 630,
+        "alt": "Shahar Eliyahu, Software Engineer"
+    },
     "description": "Shahar Eliyahu - Software Engineer portfolio featuring projects in Artificial Intelligence, Machine Learning, Computer Vision, Big Data, and software engineering.",
     "language": "en",
 

@@ -1,0 +1,21 @@
+---
+layout: layouts/base.njk
+permalink: /404.html
+eleventyExcludeFromCollections: true
+noindex: true
+title: Page Not Found
+description: This page doesn't exist or may have moved.
+---
+{% from "partials/components.njk" import button %}
+
+<section class="not-found">
+    <div class="container">
+        <p class="not-found-code">404</p>
+        <h1 class="section-heading">Page not found</h1>
+        <p class="not-found-text">{{ description }}</p>
+        <div class="not-found-actions">
+            {{ button("Back to Home", "/", "primary") }}
+            {{ button("View Projects", "/#projects", "secondary") }}
+        </div>
+    </div>
+</section>

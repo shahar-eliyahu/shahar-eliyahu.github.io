@@ -8,7 +8,8 @@
             <button type="button" class="lightbox-button" data-lightbox-close aria-label="Close image viewer">✕</button>
         </div>
         <figure class="lightbox-figure">
-            <img class="lightbox-image" src="" alt="" data-lightbox-image>
+            {#- A transparent pixel until gallery.js sets the real image #}
+            <img class="lightbox-image" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="" data-lightbox-image>
             <figcaption class="lightbox-caption" data-lightbox-caption></figcaption>
         </figure>
         <button type="button" class="lightbox-button lightbox-nav is-prev" data-lightbox-prev aria-label="Previous image">{{ icon("arrow-right") }}</button>

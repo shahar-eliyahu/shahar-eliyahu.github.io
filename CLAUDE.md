@@ -75,7 +75,10 @@ src/_data/                site.json, home.json (homepage text), skills.json, ski
                           projectCategories.json
 lib/skills.js             skills validation and the skillLogo filter
 src/assets/img/skills/    technology logos (SVG) + CREDITS.txt
-src/assets/fonts/         Inter variable WOFF2 (self-hosted) + OFL licence
+src/assets/fonts/         Inter variable + IBM Plex Mono 400/500 WOFF2 (self-hosted) + OFL licences
+src/sitemap.njk, robots.njk, 404.njk   /sitemap.xml, /robots.txt, /404.html
+src/favicon.svg, favicon.ico, apple-touch-icon.png   site icons (passthrough, published at the root)
+.github/workflows/deploy.yml           builds and publishes _site/ to Pages on push to main
 src/projects/*.md         one file per project (front matter = data, body = description)
 src/projects/projects.11tydata.js   defaults for all projects; slug = file name; layout; permalink
                                     /projects/<slug>/ only with `detailPage: true` (else false)
@@ -445,7 +448,11 @@ unchanged except the Skills heading ("Tech Stack" → "Skills", matching the nav
   Plus Jakarta Sans in a temporary dev-only preview, since removed), self-hosted: one
   variable WOFF2 (`src/assets/fonts/inter-latin-wght-normal.woff2`, weights 100–900, latin
   subset, Fontsource 5.3.0, OFL in `inter-OFL.txt`), `@font-face` at the top of `base.css`,
-  preloaded in `layouts/base.njk`. Google Fonts now only serves IBM Plex Mono (code, labels).
+  preloaded in `layouts/base.njk`. IBM Plex Mono (code, labels) is self-hosted too: the only two
+  weights in use (400, 500), latin subset, Fontsource 5.3.0, whose files are byte-identical to
+  Google's; OFL in `ibm-plex-mono-OFL.txt`. It used to be a render-blocking Google Fonts stylesheet
+  that delayed the first paint by 6s when slow. The homepage preloads weight 400 (hero, above the
+  fold). The site now makes no third-party requests.
   Space Grotesk is gone. Tokens: `--font-body` / `--font-display` = Inter + system fallbacks.
 - **Type system** (owner-approved audit; tokens in `tokens.css` §4, use them, don't add literals):
 
@@ -724,6 +731,25 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   only 565×511. The videos keep their index at the end of the file (no fast-start); they play,
   but a "web optimized" re-export would start faster. Role and team are still missing.
 
+## Production metadata and deployment
+
+- **Production URL:** `site.url` in `site.json`. Canonical, Open Graph and Twitter/X tags come from
+  `layouts/base.njk`; the sitemap and robots.txt are templates. Sitemap order follows file dates,
+  so it can differ between builds (harmless).
+- **Social image:** the `socialImage` filter (`lib/projects.js`) uses a project's cover when it's at
+  least 1.3:1, so portrait screenshots aren't cropped to a slice; otherwise `site.socialImage`
+  (`assets/img/social-preview.png`, owner-selected: label and name on the Contact navy with the hero
+  grid and a violet glow): homepage, EasyFill, CarKeep, Anyone Can Cook.
+- **Favicon (owner-selected):** the SE monogram on the brand gradient. `favicon.svg` has the letters
+  as outlines (Inter 800), `favicon.ico` holds PNG 16 and 32, `apple-touch-icon.png` is a square 180.
+- **404:** `noindex: true` drops the canonical and sharing tags; excluded from the sitemap.
+- **Deployment:** `.github/workflows/deploy.yml` (Node 24, `npm ci`, `npm run build`, official Pages
+  actions, publishes `_site`). Requires the Pages source to be "GitHub Actions", set before the first
+  merge into `main`. Not active until then; nothing has been deployed.
+- **Gotchas:** explorer panels are `<div role="group">` (JS upgrades to `tabpanel`), never `<section>`:
+  `main.js` treats every `section[id]` as a homepage section. Table regions are named from their
+  section (`text | markdown(title)`), so each landmark on a page is unique.
+
 ## Validation workflow
 
 - `npm run build` must succeed with no errors or warnings.
@@ -732,7 +758,7 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   Screenshot diffs of a few hundred pixels around the EasyFill and data animations are
   timing noise.
 - Check the CV URL returns a PDF, all anchors and links resolve, and there are no console errors
-  (the favicon 404 is a known gap).
+  (a favicon 404 would now be a real failure).
 
 ## Status
 
@@ -983,7 +1009,8 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
    merged into `main` or deployed to the public website. Last verified project integration
    commit: `ce40a72`. More projects may follow.
    Still open per project: `role` / `team` where wanted.
-6. **Polish:** accessibility (keyboard, focus, contrast), performance, Open Graph tags, favicon, 404, sitemap.
+6. **Polish:** accessibility fixes, self-hosted fonts, Open Graph tags, 404 and sitemap are prepared.
+   Favicon and default social image added (owner-selected).
 7. **Launch (with approval only):** GitHub Actions deploy workflow, switch the Pages source to
    Actions, then merge.
 

@@ -86,6 +86,7 @@
     /* Secondary accent (violet): markers, labels, detection boxes */
     --color-accent: var(--palette-violet-400);
     --color-accent-strong: var(--palette-violet-500);
+    --color-accent-bright: var(--palette-violet-300);
     --color-on-accent: var(--palette-navy-950);
 
     /* Lines */

@@ -1007,6 +1007,11 @@
     font-size: 0.72rem;
 }
 
+/* The selected pill's blue tint needs a lighter violet to stay readable */
+.explorer-tab[aria-selected="true"] .explorer-tab-index {
+    color: var(--color-accent-bright);
+}
+
 .explorer-tab-category {
     display: none;
 }
@@ -2035,6 +2040,10 @@ html:not(.js) .explorer-panel + .explorer-panel {
 
     .explorer-tab-index {
         padding-top: 3px;
+    }
+
+    .explorer-tab[aria-selected="true"] .explorer-tab-index {
+        color: var(--color-accent);
     }
 
     .explorer-tab-text {
@@ -3433,6 +3442,56 @@ html:not(.js) .skill-toggle {
 
     color: var(--color-inverse-text);
 }
+
+/* 404 PAGE */
+
+.not-found {
+    display: flex;
+
+    min-height: calc(100vh - var(--nav-height) - 72px);
+
+    padding: var(--space-8) 0;
+
+    align-items: center;
+}
+
+.not-found-code {
+    margin: 0 0 var(--space-2);
+
+    color: var(--color-accent);
+
+    font-family: var(--font-mono);
+    font-size: var(--text-mono);
+
+    letter-spacing: var(--tracking-label);
+}
+
+.not-found-text {
+    max-width: var(--measure-body);
+
+    margin: var(--space-3) 0 var(--space-5);
+
+    color: var(--color-text-secondary);
+
+    font-size: var(--text-body);
+    line-height: var(--leading-body);
+}
+
+.not-found-actions {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: var(--space-3);
+}
+
+@media (max-width: 480px) {
+
+    .not-found-actions .button {
+        flex: 1 1 100%;
+    }
+}
+
 
 /* CONTACT MASCOT (partials/contact-mascot.njk, behaviour in main.js)
  * A small lavender square peeking over the Email Me button. The body sits

@@ -151,7 +151,7 @@ layout: layouts/base.njk
                     {%- if section.text or bodyMedia.length %}
                     <div class="case-body">
                         {%- if section.text %}
-                        <div class="prose">{{ section.text | markdown | safe }}</div>
+                        <div class="prose">{{ section.text | markdown(section.title) | safe }}</div>
                         {%- endif %}
                         {%- set caseMedia = bodyMedia %}
                         {% include "partials/project/case-media.njk" %}
@@ -175,7 +175,7 @@ layout: layouts/base.njk
                             <div class="case-item-text">
                                 <h3 class="case-item-title" id="{{ section.id }}-item-{{ loop.index }}">{{ item.title }}</h3>
                                 {%- if item.text %}
-                                <div class="prose">{{ item.text | markdown | safe }}</div>
+                                <div class="prose">{{ item.text | markdown(item.title) | safe }}</div>
                                 {%- endif %}
                                 {%- if item.note and itemKind != "image" %}
                                 <div class="case-note">{{ item.note | markdown | safe }}</div>
