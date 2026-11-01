@@ -482,7 +482,11 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   if the selected project is filtered out, the first visible one is selected (always valid).
   A polite live region announces "Showing N projects in X. Selected: Y". URL:
   `?category=<id>&project=<slug>` (`replaceState`, category always first); invalid values fall
-  back to All / the first visible project.
+  back to All / the first visible project. On phones the chips are a swipeable row:
+  `applyFilter` calls `revealIn(filterRow, chip)`, so the chosen chip (tapped, or restored
+  from `?category=`) scrolls into view, once, horizontally only; nothing happens when it's
+  already clear of the faded edges, the row is already at that end, or the chips wrap
+  (651px+). `revealTab` uses the same helper for the project strip.
 - **Actions: both are intended and kept.** **"Explore Project"** opens the project's internal
   detail page (full description, screenshots, videos, technical write-up) and becomes the
   **primary** action as soon as the page exists (`project.url`, Phase 4B). **GitHub** always stays
@@ -714,7 +718,7 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   the portfolio uses 0.827 / 0.716 / 0.564). Keep the baseline comparison (default Ultralytics
   augmentation, 0.576) and the controlled runs (0.564) separate. Shared additions: photo rows,
   captions below strips, `note`, tables.
-  - **Image cleanup (owner-approved Option A, implemented, not yet committed):** the three
+  - **Image cleanup (owner-approved Option A, done, commit `07c8190`, pushed):** the three
     Flickr30k detection photos (`object-detection1/2/3.webp`) are **no longer part of the
     current portfolio files**: removed from `projects_media`, from the Explorer gallery and
     from the Overview (the "Object Detection Examples" sub-block, its captions and the photo
@@ -816,7 +820,9 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   (205 Flutter, 148 backend). The same commit holds the portrait gallery spacing fix in
   `sections.css` (see Portrait media), the only code change. An optional smaller re-export of
   the video (about 540 wide, 30 fps, no audio) is the owner's choice.
-- **Zoo Management System integration (implemented, owner-approved plan, not yet committed):**
+- **Zoo Management System integration (done, owner-approved, committed locally in `1c85a5b`
+  "feat(portfolio): add Zoo Management System and Software Engineering category"; not yet
+  pushed to GitHub):**
   the ninth project, a Java OOP course project. File `src/projects/zoo-management-system-oop.md`,
   slug and URL `zoo-management-system-oop` (they must match the owner's media folder,
   `src/assets/projects_media/zoo-management-system-oop/images/`), `software-engineering`
@@ -837,7 +843,11 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   supplied copy: Section 1 in third person ("A Swing dashboard was later added…"), and the
   "Dashboard Actions" title. Copy checked against Zoo-OOP-Java-Project commit `ab2c880`
   (the owner's local copy at `C:\Users\shaha\Projects\Zoo-OOP-Java-Project` has 49 tracked
-  files deleted in its working tree, including `src/gui`; never touch it). No code changes.
+  files deleted in its working tree, including `src/gui`; never touch it). The same commit
+  adds the Software Engineering category and one small JavaScript change in
+  `src/assets/js/projects.js`: the shared `revealIn` helper, which keeps the selected
+  category chip visible in the swipeable filter row on phones (see Filters). No CSS or
+  template changes.
 - **Pushed to `origin/portfolio-redesign` (owner-approved backup, 2026-10-31, up to
   `64b3d23`):** not a release; `main` and the live site are unchanged. The owner accepted
   that the earlier Computer Vision commit `f66c3f5`, which still contains the three
@@ -858,8 +868,9 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
 5. **Project content.** Nine project pages (EasyFill, Anyone Can Cook, Computer Vision,
    Real-Time Retail Trend Detection, NLP Sentiment Analysis, CarKeep, Pacman AI, Tactical AI
    Battle, Zoo Management System), each with owner-approved copy and media in
-   `src/assets/projects_media/<slug>/`. The first eight are committed and pushed to
-   `origin/portfolio-redesign`; Zoo awaits review and commit. More projects may follow.
+   `src/assets/projects_media/<slug>/`. All nine are reviewed and committed. The first
+   eight are also pushed to `origin/portfolio-redesign` (up to `64b3d23`); Zoo Management
+   System is committed locally (`1c85a5b`) but not yet pushed. More projects may follow.
    Still open per project: `role` / `team` where wanted.
 6. **Polish:** accessibility (keyboard, focus, contrast), performance, Open Graph tags, favicon, 404, sitemap.
 7. **Launch (with approval only):** GitHub Actions deploy workflow, switch the Pages source to
