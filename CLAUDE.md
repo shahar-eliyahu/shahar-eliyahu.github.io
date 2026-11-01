@@ -836,8 +836,9 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   02 penguins (landscape gallery); page 01 (Overview), 05 / 02 / 04 (three data-structure
   sub-blocks), 06 (Dashboard section, full width) and a "Dashboard Actions" sub-block with a
   row of 08 add-animal, 10 next-year, 09 feeding (one shared height, about 205px at 1440;
-  stacked on phones). 03, 07, 11 and 12 stay in the folder, unreferenced and untracked
-  (owner decision; the `src/assets` passthrough would still publish them if committed).
+  stacked on phones). 03, 07, 11 and 12 are unused and kept outside the repository in
+  `C:\Users\shaha\Projects\portfolio-private-media\zoo-management-system-oop\` (owner decision,
+  SHA-256 verified; the `src/assets` passthrough would publish them if they were committed).
   Six sections: Overview, Object-Oriented Design, Hand-Written Data Structures, The Swing
   Dashboard, Technology & Methodology, Explore the Source Code. Owner-approved changes to the
   supplied copy: Section 1 in third person ("A Swing dashboard was later added…"), and the
