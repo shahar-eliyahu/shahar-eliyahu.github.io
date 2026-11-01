@@ -821,9 +821,8 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   (205 Flutter, 148 backend). The same commit holds the portrait gallery spacing fix in
   `sections.css` (see Portrait media), the only code change. An optional smaller re-export of
   the video (about 540 wide, 30 fps, no audio) is the owner's choice.
-- **Zoo Management System integration (done, owner-approved, committed locally in `1c85a5b`
-  "feat(portfolio): add Zoo Management System and Software Engineering category"; not yet
-  pushed to GitHub):**
+- **Zoo Management System integration (done, owner-approved, commit `1c85a5b`
+  "feat(portfolio): add Zoo Management System and Software Engineering category", pushed):**
   the ninth project, a Java OOP course project. File `src/projects/zoo-management-system-oop.md`,
   slug and URL `zoo-management-system-oop` (they must match the owner's media folder,
   `src/assets/projects_media/zoo-management-system-oop/images/`), `software-engineering`
@@ -899,14 +898,15 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   Design Patterns, Business Logic and Validation, Console and Swing Interfaces, Technology &
   Methodology, Explore the Source Code. Copy checked against ShiftManager-Java-Project commit
   `c1b082a`. No code changes.
-- **Pushed to `origin/portfolio-redesign` (owner-approved backup, 2026-10-31, up to
-  `64b3d23`):** not a release; `main` and the live site are unchanged. The owner accepted
+- **Pushed to `origin/portfolio-redesign` (owner-approved backups, latest 2026-11-01, up to
+  `ce40a72`, including Zoo, Car and Shift):** not a release; `main` is unchanged at `3458e39`
+  and the public website has not been deployed with the redesign. The owner accepted
   that the earlier Computer Vision commit `f66c3f5`, which still contains the three
   Flickr30k photos, is now in the public branch history. The current files no longer
   contain them. Before the site is published (merge and deploy), the owner may still decide
   on a clean publishing approach (for example a fresh squashed branch); pushing further
   commits to `portfolio-redesign` as backups is fine with approval.
-- `main` still serves the old hand-written site. This branch has no root `index.html`, so
+- `main` (`3458e39`) still serves the old hand-written site. This branch has no root `index.html`, so
   **merging before the Actions deploy exists would break the live site.**
 
 ## Roadmap
@@ -919,11 +919,10 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
 5. **Project content.** Eleven project pages (EasyFill, Anyone Can Cook, Computer Vision,
    Real-Time Retail Trend Detection, NLP Sentiment Analysis, CarKeep, Pacman AI, Tactical AI
    Battle, Zoo Management System, Car Management System, Shift Management System), each with owner-approved copy and
-   media in `src/assets/projects_media/<slug>/`. The first ten are reviewed and committed.
-   The first eight are also pushed to `origin/portfolio-redesign` (up to `64b3d23`); Zoo
-   Management System is committed locally (`1c85a5b`) but not yet pushed. Car Management
-   System is committed locally (`2b081c4`) but not yet pushed. Shift Management System is
-   implemented and owner-reviewed. More projects may follow.
+   media in `src/assets/projects_media/<slug>/`. All eleven projects are owner-reviewed,
+   committed and pushed to `origin/portfolio-redesign`. The redesign changes have not been
+   merged into `main` or deployed to the public website. Last verified project integration
+   commit: `ce40a72`. More projects may follow.
    Still open per project: `role` / `team` where wanted.
 6. **Polish:** accessibility (keyboard, focus, contrast), performance, Open Graph tags, favicon, 404, sitemap.
 7. **Launch (with approval only):** GitHub Actions deploy workflow, switch the Pages source to
