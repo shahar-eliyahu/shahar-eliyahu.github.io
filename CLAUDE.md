@@ -164,7 +164,7 @@ Follow README → "Adding a New Project". Don't re-derive the process; these rul
 - Defined only in `src/_data/projectCategories.json`: ordered list of `{ id, label }`.
   Current categories, in this order: `ai-ml` (AI & Machine Learning), `applications`
   (Applications) and `software-engineering` (Software Engineering; owner-added for Zoo
-  Management System, now also Car Management System. Pacman AI and Tactical AI Battle stay
+  Management System, now also Car Management System and Shift Management System. Pacman AI and Tactical AI Battle stay
   in AI & ML).
 - Projects reference ids in `categories: [...]`. Multiple ids are allowed.
 - `collections.projectCategories` = each category plus `projects` and `count`. Empty categories
@@ -466,8 +466,8 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
 
 - **Layout:** filters on top. **Desktop (1024px+):** a vertical picker (290px, sticky) of numbered
   project names plus category, with the selected one marked by a gradient bar; the preview panel on
-  the right. **Numbers are relative to the visible (filtered) list**: All 01–10, Applications
-  01–03, AI & ML 01–05, Software Engineering 01–02. `projects.js` renumbers on every filter change; the order and data never
+  the right. **Numbers are relative to the visible (filtered) list**: All 01–11, Applications
+  01–03, AI & ML 01–05, Software Engineering 01–03. `projects.js` renumbers on every filter change; the order and data never
   change, and the number is `aria-hidden` so tab names stay clean. **Below 1024px:** the picker is a swipeable strip of full-name pills (edge-faded,
   scroll-snap), auto-scrolled to the selection, with the preview below at full width. Filters are a
   swipeable row on phones and wrap from 651px.
@@ -494,7 +494,7 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   directly available in the explorer as a separate button (secondary once Explore exists), so
   visitors never have to open the detail page to reach the repository. Until detail pages exist,
   Explore is *not rendered* (no broken links or placeholder pages) and "View on GitHub" is the
-  primary button. **All ten projects now have a page**, so every panel shows Explore Project
+  primary button. **All eleven projects now have a page**, so every panel shows Explore Project
   (primary) + GitHub (secondary, new tab); a project added without `detailPage` falls back to
   "View on GitHub" automatically. Demo if
   `links.demo`; "Watch video" only for videos that can't play inline.
@@ -550,7 +550,7 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   no per-project HTML files.
 - **Opt-in per project:** `detailPage: true`. `projects.11tydata.js` computes
   `permalink: /projects/<slug>/` only then (otherwise `false`). The URL makes `project.url` truthy,
-  which turns on "Explore Project" (primary) with GitHub secondary in the explorer. **All ten
+  which turns on "Explore Project" (primary) with GitHub secondary in the explorer. **All eleven
   projects are enabled** (EasyFill first as the reviewed example, then the other six, owner
   request; Anyone Can Cook and Zoo Management System were added later with their full
   write-ups). Every page now has its
@@ -880,6 +880,25 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   Architecture and System Operations, Text and Binary File Persistence, System Interaction,
   Technology & Methodology, Explore the Source Code. Copy checked against
   Car-Management-C-Project commit `d8526c3`. No code changes.
+- **Shift Management System integration (Implemented and owner-reviewed):** the
+  eleventh project, written in Java. File `src/projects/shift-management-system-java.md`, slug
+  and URL `shift-management-system-java`, `software-engineering`, `order: 10` (last; so Car's
+  "Next" links to it), `type` "Java Software Engineering Project", no `year`, no `visual`, tags
+  Java, OOP, Design Patterns, Swing (owner decision: no "Software Architecture" tag). Follows
+  the writing style in the Car entry. Never mention a course or assignment. Background facts
+  the copy must stay consistent with: no strict layered architecture is claimed (the core and
+  console methods sit in the same manager classes); the management interfaces declare
+  console-style operations, not a shared service API; `ICheckInOutManagement` is implemented by
+  nothing and is not mentioned; some rank restrictions live in the managers and others in each
+  interface; data is in memory and sign-in is demo-only (both stated on the page); no automated
+  tests exist. Media: five 1380×880 PNG screenshots from the repository's `docs/screenshots/`,
+  copied unchanged, in `src/assets/projects_media/shift-management-system-java/images/`.
+  Explorer and page order: 03 schedule (cover, Overview) → 02 time clock (Time Tracking) → 05
+  assign shift (Shift Scheduling) → 08 inbox (Observer) → 07 edit employee (Business Logic and
+  Validation). Eight sections: Project Overview, Main Capabilities, Object-Oriented Design,
+  Design Patterns, Business Logic and Validation, Console and Swing Interfaces, Technology &
+  Methodology, Explore the Source Code. Copy checked against ShiftManager-Java-Project commit
+  `c1b082a`. No code changes.
 - **Pushed to `origin/portfolio-redesign` (owner-approved backup, 2026-10-31, up to
   `64b3d23`):** not a release; `main` and the live site are unchanged. The owner accepted
   that the earlier Computer Vision commit `f66c3f5`, which still contains the three
@@ -894,16 +913,17 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
 
 3. **Dark design system.** 3A (tokens, surfaces) and 3B (hero, editor, hierarchy) are done.
    The palette will be re-evaluated after the layout redesign.
-4. **New sections.** 4A (Project Explorer) and 4B (project detail pages) are done; all ten
+4. **New sections.** 4A (Project Explorer) and 4B (project detail pages) are done; all eleven
    projects have a page. About, Skills and Contact have been redesigned. Possible later: expanded
    About (education, hackathon, experience timeline), skills linked to projects.
-5. **Project content.** Ten project pages (EasyFill, Anyone Can Cook, Computer Vision,
+5. **Project content.** Eleven project pages (EasyFill, Anyone Can Cook, Computer Vision,
    Real-Time Retail Trend Detection, NLP Sentiment Analysis, CarKeep, Pacman AI, Tactical AI
-   Battle, Zoo Management System, Car Management System), each with owner-approved copy and
-   media in `src/assets/projects_media/<slug>/`. The first nine are reviewed and committed.
+   Battle, Zoo Management System, Car Management System, Shift Management System), each with owner-approved copy and
+   media in `src/assets/projects_media/<slug>/`. The first ten are reviewed and committed.
    The first eight are also pushed to `origin/portfolio-redesign` (up to `64b3d23`); Zoo
    Management System is committed locally (`1c85a5b`) but not yet pushed. Car Management
-   System is implemented and owner-reviewed. More projects may follow.
+   System is committed locally (`2b081c4`) but not yet pushed. Shift Management System is
+   implemented and owner-reviewed. More projects may follow.
    Still open per project: `role` / `team` where wanted.
 6. **Polish:** accessibility (keyboard, focus, contrast), performance, Open Graph tags, favicon, 404, sitemap.
 7. **Launch (with approval only):** GitHub Actions deploy workflow, switch the Pages source to
