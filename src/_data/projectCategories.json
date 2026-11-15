@@ -10,5 +10,9 @@
     {
         "id": "software-engineering",
         "label": "Software Engineering"
+    },
+    {
+        "id": "embedded-systems",
+        "label": "Embedded Systems"
     }
 ]

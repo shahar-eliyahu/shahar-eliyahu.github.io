@@ -166,9 +166,10 @@ Follow README → "Adding a New Project". Don't re-derive the process; these rul
 
 - Defined only in `src/_data/projectCategories.json`: ordered list of `{ id, label }`.
   Current categories, in this order: `ai-ml` (AI & Machine Learning), `applications`
-  (Applications) and `software-engineering` (Software Engineering; owner-added for Zoo
-  Management System, now also Car Management System and Shift Management System. Pacman AI and Tactical AI Battle stay
-  in AI & ML).
+  (Applications), `software-engineering` (Software Engineering; owner-added for Zoo
+  Management System, now also Car Management System, Shift Management System and Property
+  Management System. Pacman AI and Tactical AI Battle stay in AI & ML) and `embedded-systems`
+  (Embedded Systems; owner-added for Caterpillar Game, its only project so far).
 - Projects reference ids in `categories: [...]`. Multiple ids are allowed.
 - `collections.projectCategories` = each category plus `projects` and `count`. Empty categories
   stay in the list with `count: 0`. UIs should hide or disable them.
@@ -499,8 +500,8 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
 
 - **Layout:** filters on top. **Desktop (1024px+):** a vertical picker (290px, sticky) of numbered
   project names plus category, with the selected one marked by a gradient bar; the preview panel on
-  the right. **Numbers are relative to the visible (filtered) list**: All 01–11, Applications
-  01–03, AI & ML 01–05, Software Engineering 01–03. `projects.js` renumbers on every filter change; the order and data never
+  the right. **Numbers are relative to the visible (filtered) list**: All 01–13, Applications
+  01–03, AI & ML 01–05, Software Engineering 01–04, Embedded Systems 01. `projects.js` renumbers on every filter change; the order and data never
   change, and the number is `aria-hidden` so tab names stay clean. **Below 1024px:** the picker is a swipeable strip of full-name pills (edge-faded,
   scroll-snap), auto-scrolled to the selection, with the preview below at full width. Filters are a
   swipeable row on phones and wrap from 651px.
@@ -539,7 +540,7 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   directly available in the explorer as a separate button (secondary once Explore exists), so
   visitors never have to open the detail page to reach the repository. Until detail pages exist,
   Explore is *not rendered* (no broken links or placeholder pages) and "View on GitHub" is the
-  primary button. **All eleven projects now have a page**, so every panel shows Explore Project
+  primary button. **All thirteen projects now have a page**, so every panel shows Explore Project
   (primary) + GitHub (secondary, new tab); a project added without `detailPage` falls back to
   "View on GitHub" automatically. Demo if
   `links.demo`; "Watch video" only for videos that can't play inline.
@@ -595,10 +596,10 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   no per-project HTML files.
 - **Opt-in per project:** `detailPage: true`. `projects.11tydata.js` computes
   `permalink: /projects/<slug>/` only then (otherwise `false`). The URL makes `project.url` truthy,
-  which turns on "Explore Project" (primary) with GitHub secondary in the explorer. **All eleven
+  which turns on "Explore Project" (primary) with GitHub secondary in the explorer. **All thirteen
   projects are enabled** (EasyFill first as the reviewed example, then the other six, owner
-  request; Anyone Can Cook and Zoo Management System were added later with their full
-  write-ups). Every page now has its
+  request; the later projects, from Anyone Can Cook to Caterpillar Game, were added with their
+  full write-ups). Every page now has its
   complete owner-approved write-up (see Status).
 - **Data cascade defaults:** `layout`, `templateEngineOverride: "md"` (bodies are plain Markdown,
   so `{{ }}` stays literal), `caseStudy: {}`, and computed `description` = `summary`.
@@ -747,8 +748,8 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   as outlines (Inter 800), `favicon.ico` holds PNG 16 and 32, `apple-touch-icon.png` is a square 180.
 - **404:** `noindex: true` drops the canonical and sharing tags; excluded from the sitemap.
 - **Deployment:** `.github/workflows/deploy.yml` (Node 24, `npm ci`, `npm run build`, official Pages
-  actions, publishes `_site`). Requires the Pages source to be "GitHub Actions", set before the first
-  merge into `main`. Not active until then; nothing has been deployed.
+  actions, publishes `_site`). The Pages source is "GitHub Actions". Active since the redesign was
+  merged into `main` (`5eb8f64`, 2026-11-01): every push to `main` builds and deploys the site.
 - **Gotchas:** explorer panels are `<div role="group">` (JS upgrades to `tabpanel`), never `<section>`:
   `main.js` treats every `section[id]` as a homepage section. Table regions are named from their
   section (`text | markdown(title)`), so each landmark on a page is unique.
@@ -986,29 +987,75 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   Design Patterns, Business Logic and Validation, Console and Swing Interfaces, Technology &
   Methodology, Explore the Source Code. Copy checked against ShiftManager-Java-Project commit
   `c1b082a`. No code changes.
-- **Pushed to `origin/portfolio-redesign` (owner-approved backups, latest 2026-11-01, up to
-  `ce40a72`, including Zoo, Car and Shift):** not a release; `main` is unchanged at `3458e39`
-  and the public website has not been deployed with the redesign. The owner accepted
-  that the earlier Computer Vision commit `f66c3f5`, which still contains the three
-  Flickr30k photos, is now in the public branch history. The current files no longer
-  contain them. Before the site is published (merge and deploy), the owner may still decide
-  on a clean publishing approach (for example a fresh squashed branch); pushing further
-  commits to `portfolio-redesign` as backups is fine with approval.
-- `main` (`3458e39`) still serves the old hand-written site. This branch has no root `index.html`, so
-  **merging before the Actions deploy exists would break the live site.**
+- **Property Management System integration (done, owner-approved, commit `7cf8fe7` "feat: add
+  property management system to portfolio", merged into `main` and deployed):** the twelfth
+  project, a team project with a primary focus on backend development (stated without first
+  person; no `role` / `team`, so no "At a glance" card). File
+  `src/projects/property-management-system.md`, slug and URL `property-management-system`,
+  `software-engineering`, `order: 7.5` (first in Software Engineering, after Tactical AI Battle),
+  `type` "Spring Boot Backend Team Project", no `year`, no `visual`. Tags Java, Spring Boot, REST
+  APIs (spelled as in `skills.json`), MySQL, JPA/Hibernate, Docker, JUnit, Testcontainers,
+  JavaScript. Never mention the course or college (owner rule) and never call it
+  "multi-tenant": every ID carries a system ID so several instances can share one database, but
+  queries aren't scoped per tenant. No password-hashing or credential discussion (owner
+  request). Media in `src/assets/projects_media/property-management-system/images/`:
+  `properties.png` (cover; a local copy with the two System ID values in the JSON response panel
+  blurred, because they contain team members' names; the repository's original is unchanged),
+  `dashboard.png` (unchanged, an empty-state strip, under Main Capabilities) and
+  `architecture.png` (the owner's diagram, Backend Architecture section only; the integration
+  tests arrow goes to the controllers over HTTP). `login.png` is not used. Eight sections:
+  Project Overview, Main Capabilities, Backend Architecture, REST API and Data Management, Testing
+  and Quality, Docker and Development Environment, Technology & Methodology, Explore the Source
+  Code. Copy checked against property-management-system commit `6145849`. No code changes.
+- **Caterpillar Game integration (done, owner-approved):** the thirteenth
+  project, bare-metal C firmware for the PIC32MX370F512L on the Digilent Basys MX3 board. File
+  `src/projects/pic32-caterpillar-game.md`, slug and URL `pic32-caterpillar-game`, new category
+  `embedded-systems` (its only project), `order: 7.6` (right after Property Management System,
+  7.5, and before Zoo, 8; so their "Next" / "Previous" link to it), `type` "Embedded Firmware
+  Project", no `year`, no `visual`, no `role` / `team`. Tags C, PIC32, Bare-Metal, Interrupts &
+  Timers, ADC, MPLAB X, XC32. The course is named once (owner rule): the Overview says it was the
+  final project for an embedded systems course at Afeka College of Engineering. Background facts
+  the copy must stay consistent with: the project's own firmware uses three timer interrupts
+  (Timers 2+3 chained as a 32-bit game tick, Timer 5 for keypad / button scanning and the RGB
+  LED's pulse-density modulation, Timer 4 for buzzer tones at a higher priority than the tick);
+  the Digilent 7-segment driver adds its own Timer 1 interrupt; the main loop only reads the
+  potentiometer (ADC) and reprograms the tick period, with a small noise threshold. `ssd.c`,
+  `rgbled.c` and `config.h` are Digilent library files and are never presented as the owner's
+  code. No RTOS, real-time guarantees or concurrency claims. Media in
+  `src/assets/projects_media/pic32-caterpillar-game/`, copied unchanged from the repository's
+  `docs/`: `images/gameplay.jpg` (cover, video poster) and `images/health.jpg` (580×332 board
+  photos, about 40 KB, `fit: contain`), `videos/demo.mp4` (3.5 MB, 44.1 s, 580×332, H.264 + AAC,
+  fast start; owner decision: kept as recorded, no audio processing). The video is also in the
+  explorer gallery (`links.video` + `videoPoster`, third item after the photos). `game-over.jpg` is left out (owner decision: the firmware's game-over text names a
+  person); that text is also visible in the video's last three seconds, accepted by the owner.
+  Six sections: Project Overview (main video), How the Game Works (`health.jpg`), Hardware &
+  Peripherals (a Markdown table, short cells so it fits from 768px), Interrupt-Driven Firmware
+  Design (five sub-blocks), Technology & Methodology, Explore the Source Code. Copy checked
+  against pic32-caterpillar-game commit `5db448d` (GitHub's `e6c04eb` only changes the README's
+  video link). The same change adds the `embedded-systems` category; no code changes.
+- **Published:** the redesign is on `main` and live on GitHub Pages: `5eb8f64` "feat: launch
+  redesigned Eleventy portfolio" (2026-11-01), then `542ba8f` (hero editor and mobile project
+  navigation) and `7cf8fe7` (Property Management System; its first deploy run failed on a GitHub
+  account billing lock and succeeded when re-run). Every push to `main` deploys. New work goes on
+  feature branches from `main`; `portfolio-redesign` (`9fefae0`) is an older backup, behind
+  `main`. The owner accepted that the earlier Computer Vision commit `f66c3f5`, which still
+  contains the three Flickr30k photos, is in the public history; the current files no longer
+  contain them.
 
 ## Roadmap
 
 3. **Dark design system.** 3A (tokens, surfaces) and 3B (hero, editor, hierarchy) are done.
    The palette will be re-evaluated after the layout redesign.
-4. **New sections.** 4A (Project Explorer) and 4B (project detail pages) are done; all eleven
+4. **New sections.** 4A (Project Explorer) and 4B (project detail pages) are done; all thirteen
    projects have a page. About, Skills and Contact have been redesigned. Possible later: expanded
    About (education, hackathon, experience timeline), skills linked to projects.
-5. **Project content.** Eleven project pages (EasyFill, Anyone Can Cook, Computer Vision,
+5. **Project content.** Thirteen project pages (EasyFill, Anyone Can Cook, Computer Vision,
    Real-Time Retail Trend Detection, NLP Sentiment Analysis, CarKeep, Pacman AI, Tactical AI
-   Battle, Zoo Management System, Car Management System, Shift Management System), each with owner-approved copy and
-   media in `src/assets/projects_media/<slug>/`. All eleven projects are owner-reviewed,
-   committed and pushed to `origin/portfolio-redesign`. The redesign changes have not been
+   Battle, Property Management System, Caterpillar Game, Zoo Management System, Car Management
+   System, Shift Management System), each with copy and media in
+   `src/assets/projects_media/<slug>/`. The original eleven are owner-reviewed, committed and
+   pushed to `origin/portfolio-redesign`; Property Management System is merged into `main`
+   (`7cf8fe7`), and Caterpillar Game is merged after it. The redesign changes have not been
    merged into `main` or deployed to the public website. Last verified project integration
    commit: `ce40a72`. More projects may follow.
    Still open per project: `role` / `team` where wanted.
