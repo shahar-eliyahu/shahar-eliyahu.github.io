@@ -2,7 +2,7 @@
     {
         "name": "Programming Languages",
         "featured": ["Python", "Java", "C++", "C", "Kotlin"],
-        "more": ["SQL", "OOP", "Data Structures & Algorithms", "REST APIs"]
+        "more": ["SQL", "Dart", "OOP", "Data Structures & Algorithms", "REST APIs"]
     },
     {
         "name": "AI & Machine Learning",
@@ -16,16 +16,19 @@
     {
         "name": "Data & Processing",
         "featured": ["Pandas", "NumPy", "Apache Spark", "Apache Kafka", "Spark Structured Streaming"],
-        "more": ["EDA", "Data Cleaning"]
+        "more": ["MySQL", "PostgreSQL", "EDA", "Data Cleaning"]
     },
     {
         "name": "Platforms & Systems",
         "featured": ["Android", "Firebase", "Linux", "Microsoft Azure", "Google Cloud Run"],
-        "more": ["Jetpack Compose", "Azure AI Document Intelligence", "Embedded Systems", "Multithreading", "OpenMP", "MPI"]
+        "more": [
+            "Jetpack Compose", "Azure AI Document Intelligence", "Flutter", "Spring Boot", "Supabase",
+            "Microcontrollers (PIC32)", "Embedded Systems", "Multithreading", "OpenMP", "MPI"
+        ]
     },
     {
         "name": "Development Tools",
         "featured": ["Git", "GitHub", "Android Studio", "Claude Code", "Cursor"],
-        "more": ["Visual Studio", "GitHub Copilot", "Claude", "ChatGPT"]
+        "more": ["Visual Studio", "MPLAB X", "Docker", "GitHub Copilot", "Claude", "ChatGPT"]
     }
 ]

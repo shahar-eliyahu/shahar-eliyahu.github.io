@@ -42,10 +42,10 @@ for example `npx serve _site`.
 ├── package.json
 ├── src/
 │   ├── index.njk               # Homepage: assembles the section partials
-│   ├── Shahar_Eliyahu_CV.pdf   # Published at /Shahar_Eliyahu_CV.pdf
+│   ├── Shahar_Eliyahu_CV.pdf   # Kept in the repository, not published on the site
 │   │
 │   ├── _data/                  # Site-wide content (JSON)
-│   │   ├── site.json           # Name, email, CV, social links, navigation
+│   │   ├── site.json           # Name, email, social links, navigation
 │   │   ├── home.json           # Homepage text: hero, about, section titles, contact
 │   │   ├── skills.json         # Skill categories: featured + more
 │   │   ├── skillLogos.json     # Skill name → logo file
@@ -87,13 +87,13 @@ for example `npx serve _site`.
 
 ## Updating content
 
-### Personal details, links, CV
+### Personal details and links
 
-Edit `src/_data/site.json`, which holds the name, production URL (`url`), email, GitHub, LinkedIn,
-CV path and navigation.
+Edit `src/_data/site.json`, which holds the name, production URL (`url`), email, GitHub, LinkedIn
+and navigation.
 
-To replace the CV, overwrite `src/Shahar_Eliyahu_CV.pdf` and keep the same filename,
-so existing links keep working.
+The site has no CV download. `src/Shahar_Eliyahu_CV.pdf` stays in the repository but isn't
+copied into the published site.
 
 ### Hero, About, Contact text
 

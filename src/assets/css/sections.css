@@ -3342,7 +3342,7 @@ html:not(.js) .skill-toggle {
 /* CONTACT
  * A compact closing band on the inverse surface (grid texture and a soft
  * glow). Phones and tablet: text, then actions. Desktop (1024px+): text
- * left, actions right. Email is the primary action; CV, GitHub and
+ * left, actions right. Email is the primary action; GitHub and
  * LinkedIn share the row below it. */
 
 .contact {
@@ -3446,7 +3446,7 @@ html:not(.js) .skill-toggle {
     }
 }
 
-/* Phones: Email and CV full width, GitHub and LinkedIn side by side */
+/* Email full width, GitHub and LinkedIn side by side below it */
 .contact-buttons {
     display: grid;
 
@@ -3461,8 +3461,7 @@ html:not(.js) .skill-toggle {
     padding: 0 var(--space-4);
 }
 
-.contact-email-wrap,
-.contact-buttons .button[download] {
+.contact-email-wrap {
     grid-column: 1 / -1;
 }
 
@@ -3779,12 +3778,6 @@ html:not(.js) .skill-toggle {
 
     .contact-buttons {
         max-width: 500px;
-
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-    }
-
-    .contact-buttons .button[download] {
-        grid-column: auto;
     }
 }
 

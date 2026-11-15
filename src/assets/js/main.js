@@ -333,8 +333,8 @@ if (canHover && !prefersReducedMotion) {
 
 // Contact mascot (partials/contact-mascot.njk). State lives in data
 // attributes that CSS turns into poses and faces:
-//   data-mood: idle · email (Email Me hovered / focused) · approve (Download
-//              CV, GitHub or LinkedIn) · cheer (entrance)
+//   data-mood: idle · email (Email Me hovered / focused) · approve (GitHub or
+//              LinkedIn) · cheer (entrance)
 //   data-entrance: pending → playing → done (once per page load)
 // One-shot moves (entrance, nods, the entrance tap) are Web Animations that are
 // cancelled whenever the state changes, so quick pointer moves can't stack up.

@@ -40,9 +40,8 @@
 {% endmacro %}
 
 
-{# CV, GitHub and LinkedIn buttons, shared by the hero and contact sections #}
-{% macro profileButtons(site, cvVariant = "", linkVariant = "") %}
-{{ button("Download CV", site.cv, cvVariant, "download", site.cvFilename, icon = "download") }}
+{# GitHub and LinkedIn buttons (contact section) #}
+{% macro profileButtons(site, linkVariant = "") %}
 {{ button("GitHub", site.social.github, linkVariant, "external", icon = "github") }}
 {{ button("LinkedIn", site.social.linkedin, linkVariant, "external", icon = "linkedin") }}
 {% endmacro %}

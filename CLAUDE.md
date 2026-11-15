@@ -96,7 +96,8 @@ src/assets/js/gallery.js  shared media: gallery, lightbox, video (explorer and d
 src/assets/js/projects.js Project Explorer (filters, picker tabs); uses ProjectGallery
 src/assets/projects_media/<slug>/   project media: images/ and videos/ (owner-supplied, permanent;
                                     copied as-is by the `src/assets` passthrough)
-src/Shahar_Eliyahu_CV.pdf           must stay published at /Shahar_Eliyahu_CV.pdf
+src/Shahar_Eliyahu_CV.pdf           kept in the repository but not published (owner decision: no CV
+                                    download on the site; no passthrough, no links)
 ```
 
 ## Architecture decisions
@@ -361,10 +362,11 @@ unchanged except the Skills heading ("Tech Stack" → "Skills", matching the nav
     `main.js` adds `.is-drawn` once when 35% of it is in view; CSS draws the lines with
     `stroke-dashoffset` (`pathLength="1"`) in about 1.5s, then it stays static. It never replays.
     With reduced motion or without JS the lines are simply complete. The text isn't tied to it.
-- **Skills (category rows, featured + "Show more", logos):** 61 technologies, the owner's CV list
-  (exact names; never add skills that aren't on the CV), in **five broad categories** (owner's
-  order): Programming Languages (9) · AI & Machine Learning (25, includes computer vision and
-  NLP) · Data & Processing (7) · Platforms & Systems (11) · Development Tools (9). New skills go
+- **Skills (category rows, featured + "Show more", logos):** 70 technologies (exact names;
+  the list started from the owner's CV, but skills the owner can genuinely demonstrate through
+  projects or technical knowledge may be added even if they aren't on the CV), in **five broad categories** (owner's
+  order): Programming Languages (10) · AI & Machine Learning (25, includes computer vision and
+  NLP) · Data & Processing (9) · Platforms & Systems (15) · Development Tools (11). New skills go
   into one of these by primary role; don't add categories or subcategories.
   - **Data:** `skills.json` → `{ name, featured: [...], more: [...] }`. Each skill appears once;
     `featured` (exactly 5 per category, owner request: recognisable tools with logos, chosen
@@ -404,15 +406,15 @@ unchanged except the Skills heading ("Tech Stack" → "Skills", matching the nav
     "Show more" (a `<button aria-expanded aria-controls=<ul id>>`, name "Show more <category>
     skills" via sr-only text; no count, owner request) always follows the last visible tag; it toggles `.is-expanded` on
     the row (main.js), the label becomes "Show less", focus stays on the button. CSS hides
-    extras only under `.js`; without JS all 61 show and the buttons are hidden. 44px hit area via
+    extras only under `.js`; without JS all 70 show and the buttons are hidden. 44px hit area via
     `::after`. No animation (only a colour transition, removed by reduced motion).
   - Collapsed height: 680px at 1440px, 757px at 1024px, 854px at 768px, 1017px at 390px,
     1089px at 320px (13–28% shorter than the earlier eight-category version).
 - **Contact:** a compact band on the inverse surface (grid texture + glow kept). Heading uses
   `--text-h2`, like every section heading. Phones and tablet: text, then actions; 1024px+: text left, a 500px
   action column right. Actions are a grid: **Email Me** (`light`, primary) full width on top;
-  Download CV, GitHub, LinkedIn (`dark-outline`) share one row from 651px (on phones CV is full
-  width and GitHub / LinkedIn share a row). The glow is a radial gradient (no `blur()`), masked to
+  GitHub and LinkedIn (`dark-outline`) share the row below it (two columns at every width). There
+  is no CV button in Contact or the hero (owner decision). The glow is a radial gradient (no `blur()`), masked to
   fade out before the band ends, so no clipped edge shows against the footer.
   - **Accent:** the headline's last word (from `home.json`, split in the template) gets a
     blue→violet gradient text (`.contact-accent`; 6.2–6.7:1 on the band). Copy unchanged.
@@ -765,7 +767,7 @@ Markup: `partials/sections/projects.njk` (filters, picker, panels, lightbox `<di
   Chrome (Playwright, installed outside the repo): DOM, computed styles, screenshots, behavior.
   Screenshot diffs of a few hundred pixels around the EasyFill and data animations are
   timing noise.
-- Check the CV URL returns a PDF, all anchors and links resolve, and there are no console errors
+- Check that all anchors and links resolve, and there are no console errors
   (a favicon 404 would now be a real failure).
 
 ## Status

@@ -20,14 +20,14 @@
             </p>
         </div>
 
-        {#- Email is the primary action (with the mascot peeking over it); CV and
+        {#- Email is the primary action (with the mascot peeking over it); the
             profiles share the row below #}
         <div class="contact-buttons">
             <div class="contact-email-wrap">
                 {{ button("Email Me", "mailto:" + site.email, "light contact-email", icon = "mail") }}
                 {% include "partials/contact-mascot.njk" %}
             </div>
-            {{ profileButtons(site, "dark-outline", "dark-outline") }}
+            {{ profileButtons(site, "dark-outline") }}
         </div>
 
     </div>

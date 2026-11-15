@@ -19,9 +19,8 @@ import { codeEditor } from "./lib/code-samples.js";
 import { skillLogo, validateSkills } from "./lib/skills.js";
 
 export default function (eleventyConfig) {
-    // Static files copied as-is. The CV keeps its original public URL.
+    // Static files copied as-is
     eleventyConfig.addPassthroughCopy("src/assets");
-    eleventyConfig.addPassthroughCopy("src/Shahar_Eliyahu_CV.pdf");
     eleventyConfig.addPassthroughCopy("src/favicon.ico");
     eleventyConfig.addPassthroughCopy("src/favicon.svg");
     eleventyConfig.addPassthroughCopy("src/apple-touch-icon.png");
