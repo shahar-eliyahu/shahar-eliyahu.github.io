@@ -5,7 +5,11 @@ Guidance for Claude Code when working on this repository. For step-by-step conte
 
 ## Development rules (permanent)
 
-1. Work on the `portfolio-redesign` branch unless the owner explicitly approves another branch.
+1. `main` is the production branch: every push to it deploys the live site. Never develop
+   directly on `main`. Start each task on a new feature branch created from the latest `main`
+   (fetch first), for example `feature/<short-name>`. Never commit, push or merge without the
+   owner's explicit approval, and never add Claude, Anthropic or AI attribution or
+   `Co-Authored-By` lines to commits.
 2. Never modify `main` without explicit approval.
 3. Never push, merge, or deploy without explicit approval. This includes GitHub Pages settings.
 4. Don't commit automatically. Wait for the owner's approval.
